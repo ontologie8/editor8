@@ -12,7 +12,10 @@ import unittest
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'scripts'))
+from rdflib import Graph, Literal
 from fixtures import DemoDataset
+from case_document import render
+from case_editor_model import N8
 from data_contract import APP_ROOT, local_root, parse_baseline
 from case_editor_model import load_case, prepare_change
 from case_index import build_case_index
@@ -68,6 +71,24 @@ class ContractTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'inzwischen'):
                 store.save('demo-eins','codex/ontology-editor-test',{**model,'expected_ref':'a'*40})
             request.assert_not_called()
+    def test_detailed_document_version_preserves_local_source_notes(self):
+        baseline=self.demo.root/'catalog/nac-baseline.json'
+        data=json.loads(baseline.read_text(encoding='utf-8'))
+        graph=Graph().parse(self.demo.root/'cases/demo-eins/ontology.ttl',format='turtle')
+        node=N8['case/demo-eins/node/demo0']
+        graph.remove((node,N8.nacNodeId,None))
+        graph.add((node,N8.lokaleNodeId,Literal('demo0')))
+        graph.add((node,N8.quellabschnitt,Literal('II')))
+        self.assertNotIn('Ergänzungen aus der Fachvorlage',render('demo-eins',graph,root=self.demo.root))
+        data['editor_document_version']=2
+        baseline.write_text(json.dumps(data),encoding='utf-8')
+        detailed=render('demo-eins',graph,root=self.demo.root)
+        self.assertIn('Ergänzungen aus der Fachvorlage',detailed)
+        self.assertIn('| II | Beispiel Angabenfrage |',detailed)
+        for bad in [True,3,'2']:
+            with self.subTest(version=bad), self.assertRaises(ValueError):
+                parse_baseline(json.dumps({**data,'editor_document_version':bad}))
+
     def test_index_requires_full_catalog_even_for_two_cases(self):
         read=lambda path:(self.demo.root/path).read_text(encoding='utf-8')
         with self.assertRaises(ValueError):

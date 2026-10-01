@@ -15,6 +15,8 @@ def parse_baseline(text: str) -> dict:
     value = json.loads(text)
     if not isinstance(value, dict) or type(value.get('editor_contract_version', 1)) is not int or value.get('editor_contract_version', 1) != CONTRACT_VERSION:
         raise ValueError('Unbekannte Datenvertragsversion')
+    if type(value.get('editor_document_version', 1)) is not int or value.get('editor_document_version', 1) not in (1, 2):
+        raise ValueError('Unbekannte Leseseitenversion')
     ids = value.get('business_case_type_ids')
     if not isinstance(ids, list) or not 1 <= len(ids) <= 1000 or any(not isinstance(item, str) or not SLUG.fullmatch(item) for item in ids) or len(ids) != len(set(ids)):
         raise ValueError('Ungültige Fallkennungen im Datenkatalog')

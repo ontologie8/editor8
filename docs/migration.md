@@ -7,3 +7,5 @@ Neu: expliziter lokaler Datenroot, getrennte Assetpfade, remote gelesener Katalo
 Die Quellzweige bleiben erhalten. Der Editorzweig enthält außerdem eine Änderung an `ontology/core.ttl`; sie wird nicht als Software veröffentlicht und bleibt als fachlicher Entwurf im Datenprojekt erhalten. Der bestehende SOP-Fachzweig wird nicht verändert. Software-PRs im Datenprojekt werden durch die Migration abgelöst.
 
 Das bestehende Azure-Deployment läuft zunächst weiter mit seinem bisherigen Image und GitHub-App-Zugang. Diese Migration startet kein Deployment und ändert keine App-Rechte. Die alten Hostingnachweise in den übernommenen Dokumenten sind historische Nachweise; ein neues Image aus editor8 und der produktive Schreib-/PR-Pilot stehen separat aus.
+
+Der bereits bestehende SOP-Entwurf enthält die `quellabschnitt`-Definition aus dem Softwarequellzweig. Sie bleibt daher in ontology PR #4; kein doppelter Fachentwurf wird angelegt. Seine Anwendungscodeänderungen werden entfernt. Das dortige zusätzliche Leseseitenformat ist über `editor_document_version: 2` getrennt von den Fachmodellen angebunden und im Editor erhalten.

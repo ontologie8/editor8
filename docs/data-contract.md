@@ -19,3 +19,7 @@ Lokale Entwicklung verlangt `EDITOR8_DATA_ROOT` als separaten Datencheckout. Clo
 Schreiben erzeugt begrenzte Änderungen auf eigenen Datenzweigen mit Revisionsprüfung. Falländerungen enthalten Turtle und die erzeugte Leseseite; Vokabularänderungen nur `ontology/core.ttl`. Ein Pull Request bleibt fachlicher Vorschlag. Datenvalidatoren und notarielle Prüfung gehören zum Datenrepository. Eigene fachliche Freigaben und ein leerer Notar-Reviewer-Kreis erlauben keine Freigabe.
 
 Technische Formatabbildungen und der Leseseiten-Adapter sind Anwendungscode. Die Integration prüft ihre Ausgabe gegen den Dokumentgenerator im Datenprojekt; dessen fachliche Daten bleiben die einzige gepflegte Quelle. Keine zweite Kopie der 20 Modelle in editor8 anlegen.
+
+## Leseseitenformat
+
+`editor_document_version` im Daten-Baseline-JSON bestimmt die Leseseite: fehlend oder `1` erhält das ursprüngliche Format; `2` erhält die zusätzlichen SOP-Quellenverweise und Erläuterungstabellen für lokale Entwurfsbausteine. Der bestehende Erbausschlagungs-SOP-Entwurf verwendet Version 2. Unbekannte Werte werden abgelehnt. Diese technische Metadatenangabe ändert weder Fallkennungen noch fachliche Turtle-Inhalte.

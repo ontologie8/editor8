@@ -1,0 +1,162 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NaC-Fallontologie · Editor</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">N8</span><div><strong>NaC-Fallontologie</strong><small>Vorgangsarten im Datenkatalog</small></div></div>
+    <div class="top-actions"><button id="global-search" class="search-trigger" type="button" aria-haspopup="dialog" aria-controls="catalog-search"><span aria-hidden="true">⌕</span> Katalog durchsuchen <kbd>Ctrl K</kbd></button><button id="vocab-nav" class="utility-nav" type="button" data-view-button="vokabular">Begriffe</button><button id="review-nav" class="utility-nav" type="button" data-view-button="fachpruefung" hidden>Prüfkorb</button><span id="branch" class="branch"></span><button id="start-branch" type="button" disabled>Änderung beginnen</button><button id="leave-draft" type="button" hidden>Entwurf ablegen</button><button id="save" class="primary" type="button">Änderung speichern</button><span id="session-user" class="session-user"></span><button id="logout" class="account-action" type="button" hidden>Abmelden</button></div>
+  </header>
+  <main>
+    <div id="notice" class="notice" role="status" aria-live="polite">Lade Fälle …</div>
+    <section id="draft-panel" class="draft-panel" aria-label="Meine gespeicherten Entwürfe" hidden>
+      <div><h2>Meine Arbeitsentwürfe</h2><p>Hier findest du eigene GitHub-Zweige ohne Pull Request. Gespeicherte Änderungen bleiben beim Wechsel des Arbeitsbereichs erhalten.</p></div>
+      <div id="draft-list" class="draft-list"></div>
+    </section>
+    <div class="workspace-shell">
+    <aside class="case-sidebar" aria-label="Vorgangsarten">
+      <p class="eyebrow">FALLKATALOG</p><h2>Vorgangsarten <span id="case-count"></span></h2>
+      <label class="visually-hidden" for="case-search">Vorgangsart suchen</label><input id="case-search" type="search" placeholder="Vorgangsart suchen …">
+      <div id="case-list" class="case-list"></div>
+    </aside>
+    <div class="workspace-main">
+    <section class="mobile-case-picker"><label for="case-select">Vorgangsart</label><select id="case-select" aria-label="Vorgangsart auswählen"></select></section>
+    <nav class="workbench-nav" aria-label="Arbeitsbereiche">
+      <button type="button" data-view-button="fall" aria-current="page">Übersicht</button>
+      <button type="button" data-view-button="bausteine">Bausteine</button>
+      <button type="button" data-view-button="verbindungen">Verbindungen</button>
+      <button type="button" data-view-button="pruefung">Einreichen</button>
+    </nav>
+    <section class="card overview" data-view="fall">
+      <div class="section-head case-hero"><div><h1 id="case-title"></h1></div><button id="source-open" class="text-action" type="button" aria-haspopup="dialog" aria-controls="case-sources">Info zum Fall</button></div>
+      <section class="graph-panel" aria-labelledby="graph-title">
+        <div class="graph-head"><div><h2 id="graph-title">Fachgraph</h2><p id="graph-status" class="graph-status"></p></div><div class="graph-actions"><button id="graph-find" type="button" aria-haspopup="dialog" aria-controls="case-node-search">Baustein suchen</button><button id="graph-scope" type="button" aria-pressed="false" hidden>Umfeld zeigen</button></div></div>
+        <div class="graph-toolbar" aria-label="Graphansicht"><div class="graph-view-switch" role="group" aria-label="Sichtbare Bausteine"><button id="graph-linked" type="button" aria-pressed="true">Verknüpft</button><button id="graph-all" type="button" aria-pressed="false">Alle</button></div><div class="graph-zoom" role="group" aria-label="Graphgröße"><button id="graph-zoom-out" type="button" aria-label="Graph verkleinern">−</button><button id="graph-zoom-reset" type="button" aria-label="Graph einpassen">100 %</button><button id="graph-zoom-in" type="button" aria-label="Graph vergrößern">+</button></div></div>
+        <div id="graph-stage" class="graph-stage"><div class="graph-wrap"><svg id="graph" role="group" aria-label="Fachliche Zusammenhänge des gewählten Falls"></svg></div>
+          <div id="graph-list" class="graph-list" aria-label="Bausteine des Falls"></div>
+          <aside id="graph-inspector" class="graph-inspector" aria-labelledby="inspector-title" hidden><div class="inspector-head"><div><p class="eyebrow">BAUSTEIN</p><h2 id="inspector-title" tabindex="-1"></h2></div><button id="inspector-close" type="button" aria-label="Detailansicht schließen">✕</button></div><div id="relation-context" class="relation-context"></div></aside>
+        </div>
+        <section id="graph-orphans" class="graph-orphans" aria-label="Bausteine ohne Verbindung" hidden><div class="graph-orphans-head"><h3 id="graph-orphans-title"></h3><button id="graph-orphans-show" type="button">Alle im Graphen zeigen</button></div><div id="graph-orphans-list" class="graph-orphans-list"></div></section>
+      </section>
+    </section>
+    <div class="columns" data-view="bausteine" hidden>
+      <section class="card">
+        <div class="section-head"><div><p class="eyebrow">IM FALL</p><h2>Bausteine finden</h2></div><button id="add-node" type="button">+ Baustein</button></div>
+        <div class="node-filters"><div><label for="node-search">Baustein suchen</label><input id="node-search" type="search" placeholder="Bezeichnung oder Kennung"></div><div><label for="node-category">Art</label><select id="node-category"><option value="">Alle Arten</option><option value="required_information">Fragen</option><option value="documents">Dokumenttypen</option><option value="decisions">Entscheidungen</option><option value="gates">Prüfschritte</option><option value="evidence">Nachweistypen</option></select></div></div>
+        <p id="node-count" class="result-count"></p>
+        <div id="node-list" class="node-list"></div>
+      </section>
+      <section class="card detail">
+        <div class="section-head"><div><p class="eyebrow">BAUSTEIN</p><h2 id="detail-title">Baustein auswählen</h2></div><div class="detail-actions"><button id="edit-node" type="button" hidden>Bearbeiten</button><button id="delete-node" class="danger" type="button" hidden>Entfernen</button></div></div>
+        <div id="node-read" class="node-read"></div>
+        <div id="node-form" class="node-form" hidden></div>
+      </section>
+    </div>
+    <section class="card relations-workspace" data-view="verbindungen" hidden>
+      <div class="section-head"><div><p class="eyebrow">ZUSAMMENHÄNGE IM FALL</p><h2>Verbindungen</h2></div><span id="edge-count" class="result-count"></span></div>
+      <div id="edge-list" class="edge-list"></div>
+      <details id="edge-create" class="edge-editor"><summary>Verbindung hinzufügen</summary>
+      <div class="edge-add">
+        <div class="edge-choose"><span>Von</span><button id="edge-from-choose" type="button" aria-haspopup="dialog" aria-controls="case-node-search">Ausgang wählen</button><input id="edge-from" type="hidden"></div>
+        <div class="edge-choose"><label for="edge-type">Beziehung</label><select id="edge-type" aria-label="Beziehungstyp"></select></div>
+        <div class="edge-choose"><span>Zu</span><button id="edge-to-choose" type="button" aria-haspopup="dialog" aria-controls="case-node-search">Ziel wählen</button><input id="edge-to" type="hidden"></div>
+        <button id="add-edge" type="button">Hinzufügen</button>
+      </div>
+      </details>
+    </section>
+    <section class="card submission" data-view="pruefung" hidden>
+      <div class="section-head"><div><p class="eyebrow">ZUR PRÜFUNG GEBEN</p><h2>Änderung einreichen</h2></div></div>
+      <p>Beschreibe kurz den Grund und die verwendeten Quellen. Danach geht dein gespeicherter Entwurf zur notariellen Fachprüfung. Die Freigabe dokumentiert eine andere berechtigte Person.</p>
+      <label for="change-reason">Warum ist die Änderung nötig?</label><textarea id="change-reason" rows="3" placeholder="Beschreibe die fachliche Änderung und ihre Wirkung."></textarea>
+      <label for="change-source">Welcher Quellenstand wurde verwendet?</label><input id="change-source" placeholder="z. B. NaC-Commit und Fachquelle">
+      <button id="submit-review" class="primary" type="button">Zur Fachprüfung einreichen</button>
+      <a id="review-link" hidden target="_blank" rel="noopener noreferrer">Prüfentwurf öffnen ↗</a>
+    </section>
+    <section class="card review-workspace" data-view="fachpruefung" hidden>
+      <div class="section-head"><div><p class="eyebrow">FACHLICHE PRÜFUNG</p><h2>Änderungen zur Prüfung</h2></div><button id="refresh-reviews" type="button">Liste aktualisieren</button></div>
+      <p class="context-help">Hier stehen Änderungen an Fällen und gemeinsamen Begriffen aus GitHub. Die Ansicht zeigt fachliche Unterschiede und den angegebenen Quellenstand. Eine Entscheidung wird mit deinem GitHub-Konto dokumentiert.</p>
+      <div id="review-list" class="review-list"></div>
+      <div id="review-detail" class="review-detail" hidden>
+        <div class="section-head"><div><p class="eyebrow">AUSGEWÄHLTE ÄNDERUNG</p><h3 id="review-title"></h3></div><a id="review-pr-link" target="_blank" rel="noopener noreferrer">In GitHub öffnen ↗</a></div>
+        <p id="review-meta" class="review-meta"></p>
+        <h4>Begründung und Quellenstand</h4><div id="review-body" class="review-body"></div>
+        <h4>Fachliche Änderungen</h4><ul id="review-changes" class="review-changes"></ul>
+        <p id="review-problem" class="review-problem" hidden></p>
+        <fieldset id="review-checklist" class="review-checklist"><legend>Vor einer fachlichen Freigabe prüfen</legend>
+          <label><input id="review-terms" type="checkbox"> Begriffe und Fachfragen</label>
+          <label><input id="review-sources" type="checkbox"> Rechtsquellen und Quellenstand</label>
+          <label><input id="review-relations" type="checkbox"> Beziehungen und fachliche Wirkung</label>
+        </fieldset>
+        <label for="review-comment">Deine fachliche Begründung</label><textarea id="review-comment" rows="3" placeholder="Was hast du geprüft? Welche Änderung ist nötig?"></textarea>
+        <div class="review-actions"><button id="request-changes" type="button">Änderung anfordern</button><button id="approve-review" class="primary" type="button">Fachlich freigeben</button></div>
+        <p id="review-permission" class="context-help"></p><a id="review-result" hidden target="_blank" rel="noopener noreferrer">Dokumentierte Entscheidung öffnen ↗</a>
+      </div>
+    </section>
+    <section class="card vocabulary-workspace" data-view="vokabular" hidden>
+      <div class="section-head"><div><p class="eyebrow">GEMEINSAMES VOKABULAR</p><h2>Begriffe und Beziehungen pflegen</h2></div><button id="vocab-add" type="button" hidden>+ Begriff</button></div>
+      <p class="context-help">Hier stehen die Begriffe, Merkmale und Verbindungstypen, die alle Vorgangsarten dieses Katalogs gemeinsam verwenden. Ihre Änderung wirkt sich auf mehrere Fälle aus und geht zur notariellen Prüfung.</p>
+      <div class="vocabulary-layout">
+        <div><label for="vocab-search">Begriff suchen</label><input id="vocab-search" type="search" placeholder="z. B. Dokumenttyp oder erfordert"><div id="vocab-list" class="vocab-list"></div></div>
+        <div class="vocab-detail"><p class="eyebrow">AUSGEWÄHLTER BEGRIFF</p><h3 id="vocab-title">Begriff auswählen</h3><div id="vocab-read"></div>
+          <button id="vocab-edit" type="button" hidden>Begriff bearbeiten</button>
+          <div id="vocab-form" hidden>
+            <label for="vocab-id">Eindeutige Kennung</label><input id="vocab-id" maxlength="80">
+            <label for="vocab-kind">Art</label><select id="vocab-kind"><option value="class">Begriffsklasse</option><option value="object_property">Verbindung</option><option value="datatype_property">Merkmal</option></select>
+            <label for="vocab-label">Bezeichnung</label><input id="vocab-label" maxlength="150">
+            <label for="vocab-comment">Erläuterung</label><textarea id="vocab-comment" rows="4" maxlength="1000"></textarea>
+            <label for="vocab-parent">Oberklasse</label><select id="vocab-parent"></select>
+            <label for="vocab-domain">Gilt für</label><select id="vocab-domain"></select>
+            <label for="vocab-range">Zielklasse oder Datentyp</label><select id="vocab-range"></select>
+            <p class="context-help">Kennung und Art bestehender Begriffe sind fest. Neue Begriffe erhalten eine dauerhafte Kennung; eine Freigabe erfolgt im Pull Request.</p>
+          </div>
+          <section class="vocab-impact" aria-labelledby="vocab-impact-title">
+            <div class="section-head"><h4 id="vocab-impact-title">Verwendung im Fallkatalog</h4><button id="vocab-impact-refresh" type="button">Aktualisieren</button></div>
+            <div id="vocab-impact-content" role="status">Die Verwendung wird geladen …</div>
+          </section>
+        </div>
+      </div>
+      <div class="vocab-submission"><h3>Gemeinsame Begriffe zur Prüfung geben</h3><p>Speichere die Änderung und beschreibe anschließend den fachlichen Grund und den Quellenstand.</p>
+        <label for="vocab-reason">Fachlicher Grund</label><textarea id="vocab-reason" rows="3"></textarea>
+        <label for="vocab-source">Quellenstand</label><input id="vocab-source" placeholder="z. B. NaC-Commit und Fachquelle">
+        <button id="vocab-submit" type="button">Zur Fachprüfung einreichen</button><a id="vocab-pr-link" hidden target="_blank" rel="noopener noreferrer">Pull Request öffnen ↗</a>
+      </div>
+    </section>
+    </div>
+    </div>
+  </main>
+  <dialog id="change-preview" aria-labelledby="preview-title">
+    <div class="preview-head"><div><p class="eyebrow">VOR DEM SPEICHERN</p><h2 id="preview-title">Änderung prüfen</h2></div><button id="close-preview" type="button" aria-label="Vorschau schließen">Schließen</button></div>
+    <p id="preview-description">Prüfe die fachlichen Änderungen vor dem Speichern. Danach kannst du sie zur notariellen Fachprüfung einreichen.</p>
+    <ul id="preview-list"></ul>
+    <div class="preview-actions"><button id="cancel-preview" type="button">Weiter bearbeiten</button><button id="confirm-save" class="primary" type="button">Änderung speichern</button></div>
+  </dialog>
+  <dialog id="case-node-search" aria-labelledby="case-node-search-title">
+    <div class="preview-head"><h2 id="case-node-search-title">Baustein finden</h2><button id="case-node-search-close" type="button" aria-label="Suche schließen">✕</button></div>
+    <label class="visually-hidden" for="graph-query">Baustein in diesem Fall suchen</label><input id="graph-query" type="search" placeholder="In diesem Fall suchen" autocomplete="off">
+    <p id="graph-search-count" class="result-count" aria-live="polite"></p>
+    <div id="graph-results" class="graph-results"></div>
+  </dialog>
+  <dialog id="case-sources" aria-labelledby="sources-title">
+    <div class="preview-head"><h2 id="sources-title">Über diesen Fall</h2><button id="source-close" type="button">Schließen</button></div>
+    <p id="summary-read" class="case-summary"></p>
+    <h3>Rechtsquellen</h3><div id="source-links" class="source-links"></div>
+    <h3>NaC-Vorlage</h3><p><a id="nac-source" target="_blank" rel="noopener noreferrer">Ursprüngliche Fallvorlage öffnen ↗</a></p>
+    <h3>Prozessablauf</h3><p><a id="bpmn-source" target="_blank" rel="noopener noreferrer">Ablauf in NaC öffnen ↗</a></p>
+    <button id="edit-overview" type="button">Beschreibung und Quellen bearbeiten</button>
+    <div id="overview-editor" hidden><label for="summary">Kurzbeschreibung</label><textarea id="summary" rows="3"></textarea><label for="sources">Rechtsquellen <span class="hint">eine HTTPS-Adresse pro Zeile</span></label><textarea id="sources" rows="3"></textarea></div>
+    <details id="case-history" class="case-history"><summary>Änderungsverlauf und frühere Fassung</summary><div id="history-list" class="history-list"></div><div id="history-preview" class="history-preview" hidden><h3>Änderung vor der Übernahme prüfen</h3><p id="history-target"></p><ul id="history-changes"></ul><button id="history-apply" type="button">Als neuen Prüfentwurf übernehmen</button></div></details>
+  </dialog>
+  <dialog id="catalog-search" aria-labelledby="catalog-search-title">
+    <div class="preview-head"><div><p class="eyebrow">ALLE VORGANGSARTEN</p><h2 id="catalog-search-title">Bausteine suchen</h2></div><button id="catalog-search-close" type="button">Schließen</button></div>
+    <label for="case-index-query">Frage, Dokument oder Begriff</label><input id="case-index-query" type="search" placeholder="z. B. Erbschein, Identität oder Vollmacht" autocomplete="off">
+    <p id="case-index-status" class="context-help">Mindestens zwei Zeichen eingeben. Die Suche zeigt fachliche Bausteine aus dem aktuellen Katalogstand.</p>
+    <div id="case-index-results" class="case-index-results" aria-live="polite"></div>
+  </dialog>
+</body>
+</html>

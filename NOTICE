@@ -1,0 +1,12 @@
+editor8 — SaaS editor software
+
+Derived from the NaC ontology editor by funktion8 / ofunk.
+Software source: https://github.com/notariat8/ontology
+Source branch: codex/editor-workbench
+Source commit: 0c01d0cf737db71675540b17dbbc71707ed0a65b
+Migration: 2026-10-01, selective software export; no data or Git history export.
+
+The underlying NaC notarial template catalog remains in notariat8/ontology.
+NaC: Notariat as Code by funktion8 / ofunk: https://github.com/notariat8/NaC
+No trademark rights or notarial approval are implied.
+License allocation: LICENSES/README.md.

@@ -1,0 +1,12 @@
+{
+  "name": "editor8",
+  "private": true,
+  "license": "AGPL-3.0-or-later",
+  "scripts": {
+    "test:browser": "playwright test --config playwright.smoke.config.mjs",
+    "test:integration:browser": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}

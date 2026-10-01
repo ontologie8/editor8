@@ -19,6 +19,8 @@ Der Server öffnet `http://127.0.0.1:8765/`. Er liest und bearbeitet ausschließ
 
 ## Cloudbetrieb
 
+Die App zeigt den ausgelieferten Softwarecommit als „Editor-Release“ mit einem direkten GitHub-Link. Die Liste auswählbarer Datenziele liegt in `config/data-repositories.json`. [Datenrepositories und Benutzer](docs/data-repositories-and-users.md) beschreibt Auswahl, Nutzerzulassung und notarielle Rollen.
+
 ```powershell
 python scripts/cloud_editor.py
 ```

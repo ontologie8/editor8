@@ -14,6 +14,7 @@
     <div class="top-actions"><button id="global-search" class="search-trigger" type="button" aria-haspopup="dialog" aria-controls="catalog-search"><span aria-hidden="true">⌕</span> Katalog durchsuchen <kbd>Ctrl K</kbd></button><button id="vocab-nav" class="utility-nav" type="button" data-view-button="vokabular">Begriffe</button><button id="review-nav" class="utility-nav" type="button" data-view-button="fachpruefung" hidden>Prüfkorb</button><span id="branch" class="branch"></span><button id="start-branch" type="button" disabled>Änderung beginnen</button><button id="leave-draft" type="button" hidden>Entwurf ablegen</button><button id="save" class="primary" type="button">Änderung speichern</button><span id="session-user" class="session-user"></span><button id="logout" class="account-action" type="button" hidden>Abmelden</button></div>
   </header>
   <main>
+    <section id="repository-picker" class="repository-picker" aria-label="Datenquelle" hidden><label for="repository-select">Datenrepository</label><select id="repository-select"></select><span id="repository-name"></span></section>
     <div id="notice" class="notice" role="status" aria-live="polite">Lade Fälle …</div>
     <section id="draft-panel" class="draft-panel" aria-label="Meine gespeicherten Entwürfe" hidden>
       <div><h2>Meine Arbeitsentwürfe</h2><p>Hier findest du eigene GitHub-Zweige ohne Pull Request. Gespeicherte Änderungen bleiben beim Wechsel des Arbeitsbereichs erhalten.</p></div>
@@ -158,5 +159,6 @@
     <p id="case-index-status" class="context-help">Mindestens zwei Zeichen eingeben. Die Suche zeigt fachliche Bausteine aus dem aktuellen Katalogstand.</p>
     <div id="case-index-results" class="case-index-results" aria-live="polite"></div>
   </dialog>
+  <footer class="release-footer" aria-label="Softwarestand"><span>Editor-Release:</span> <a id="release-link" hidden target="_blank" rel="noopener noreferrer"></a><span id="release-status" role="status">Wird geladen …</span></footer>
 </body>
 </html>

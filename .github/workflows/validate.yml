@@ -24,13 +24,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: docker build -t editor8:ci .
+      - run: docker build --build-arg EDITOR8_COMMIT=${{ github.sha }} -t editor8:ci .
       - name: Health, static assets and protected API without embedded data
         run: |
-          docker run --rm -d --name editor8-smoke -p 127.0.0.1:18765:8080 \
+          docker run -d --name editor8-smoke -p 127.0.0.1:18765:8080 \
             -e GITHUB_APP_CLIENT_ID=smoke-test \
             -e GITHUB_APP_CLIENT_SECRET=smoke-test \
-            -e GITHUB_REPOSITORY=example/dataset \
+            -e GITHUB_REPOSITORY=notariat8/ontology \
             -e PUBLIC_ORIGIN=https://editor.example.org \
             -e EDITOR_USERS=smoke-tester editor8:ci
           trap 'docker logs editor8-smoke; docker stop editor8-smoke' EXIT
@@ -40,6 +40,7 @@ jobs:
           done
           curl --fail --silent http://127.0.0.1:18765/healthz
           curl --fail --silent http://127.0.0.1:18765/ > /dev/null
+          test "$(curl --fail --silent http://127.0.0.1:18765/api/release | python -c 'import json,sys; print(json.load(sys.stdin)["commit"])')" = "$GITHUB_SHA"
           test "$(curl --silent --output /dev/null --write-out '%{http_code}' http://127.0.0.1:18765/api/status)" = 401
           docker exec editor8-smoke python -c "from pathlib import Path; assert not Path('/app/catalog').exists(); assert not Path('/app/cases').exists()"
   deploy:
@@ -65,7 +66,7 @@ jobs:
           git fetch origin main
           test "$(git rev-parse origin/main)" = "$GITHUB_SHA"
       - name: Build and publish the immutable image
-        run: az acr build --registry acrnacontology8 --image "nac-editor:${GITHUB_SHA}" --file Dockerfile .
+        run: az acr build --registry acrnacontology8 --image "nac-editor:${GITHUB_SHA}" --build-arg "EDITOR8_COMMIT=${GITHUB_SHA}" --file Dockerfile .
       - name: Install Container Apps CLI
         run: az extension add --name containerapp --upgrade --yes
       - name: Deploy the validated commit
@@ -92,6 +93,8 @@ jobs:
                 curl --fail --silent --show-error "$base/healthz" > /dev/null
                 remote_hash=$(curl --fail --silent --show-error "$base/app.js" | sha256sum | cut -d ' ' -f1)
                 test "$remote_hash" = "$local_hash"
+                release=$(curl --fail --silent --show-error "$base/api/release" | python -c 'import json,sys; print(json.load(sys.stdin)["commit"])')
+                test "$release" = "$GITHUB_SHA"
                 exit 0
               fi
             fi

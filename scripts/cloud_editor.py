@@ -11,6 +11,7 @@ expire after eight hours; a restart signs editors out without losing Git data.
 from __future__ import annotations
 
 import argparse
+from contextlib import nullcontext
 import base64
 from datetime import datetime, timezone
 import hashlib
@@ -30,6 +31,8 @@ from rdflib import Graph, Namespace
 from rdflib.namespace import SKOS
 
 from data_contract import APP_ROOT
+from release_info import release_info
+from repository_registry import load_repositories
 from github_store import GitHubError, GitHubStore
 
 
@@ -53,6 +56,9 @@ def require_config() -> dict[str, str]:
     if len(owner_repo) != 2:
         raise ValueError("GITHUB_REPOSITORY muss owner/repo sein")
     GitHubStore(owner_repo[0], owner_repo[1], "configuration-check")
+    config["DATA_REPOSITORIES"] = load_repositories()
+    if not any(entry["repository"] == config["GITHUB_REPOSITORY"] for entry in config["DATA_REPOSITORIES"]):
+        raise ValueError("Das Standardrepository fehlt in config/data-repositories.json")
     if not all(value.strip() for value in config["EDITOR_USERS"].split(",")):
         raise ValueError("EDITOR_USERS muss GitHub-Benutzernamen enthalten")
     editors = {value.strip().lower() for value in config["EDITOR_USERS"].split(",")}
@@ -84,6 +90,7 @@ class CloudServer(ThreadingHTTPServer):
         self.case_index_cache: tuple[str, dict] | None = None
         self.lock = threading.RLock()
         self.owner, self.repo = config["GITHUB_REPOSITORY"].split("/")
+        self.repositories = config.get("DATA_REPOSITORIES", [{"repository": config["GITHUB_REPOSITORY"], "label": config["GITHUB_REPOSITORY"]}])
 
 
 class CloudHandler(BaseHTTPRequestHandler):
@@ -133,13 +140,56 @@ class CloudHandler(BaseHTTPRequestHandler):
         raise PermissionError("Bitte bei GitHub anmelden")
 
     def _store(self, session: dict) -> GitHubStore:
-        return GitHubStore(self.server.owner, self.server.repo, session["token"])
+        repository = session.get("repository", self.server.config["GITHUB_REPOSITORY"])
+        self._repository(repository, session["user"])
+        owner, repo = repository.split("/")
+        return GitHubStore(owner, repo, session["token"])
+
+    def _request_lock(self):
+        try:
+            session = self._session()
+        except PermissionError:
+            return nullcontext()
+        with self.server.lock:
+            return session.setdefault("request_lock", threading.RLock())
+
+    def _repository(self, repository: str, username: str) -> dict:
+        for entry in self.server.repositories:
+            if entry["repository"] == repository and ("users" not in entry or username.lower() in {user.lower() for user in entry["users"]}):
+                return entry
+        raise ValueError("Dieses Datenrepository ist nicht freigeschaltet")
+
+    def _available_repositories(self, username: str, token: str) -> list[dict]:
+        available = []
+        for entry in self.server.repositories:
+            try:
+                self._repository(entry["repository"], username)
+            except ValueError:
+                continue
+            try:
+                github_json("https://api.github.com/repos/" + entry["repository"], token)
+            except HTTPError as error:
+                if error.code in (403, 404):
+                    continue
+                raise
+            available.append({"repository": entry["repository"], "label": entry["label"]})
+        return available
+
+    def _role(self, field: str) -> set[str]:
+        session = self._session()
+        repository = session.get("repository", self.server.config["GITHUB_REPOSITORY"])
+        entry = self._repository(repository, session["user"])
+        if field.lower() in entry:
+            return {name.lower() for name in entry[field.lower()]}
+        if repository != self.server.config["GITHUB_REPOSITORY"]:
+            return set()
+        return {name.strip().lower() for name in self.server.config.get(field, "").split(",") if name.strip()}
 
     def _notaries(self) -> set[str]:
-        return {name.strip().lower() for name in self.server.config.get("NOTARY_REVIEWERS", "").split(",") if name.strip()}
+        return self._role("NOTARY_REVIEWERS")
 
     def _maintainers(self) -> set[str]:
-        return {name.strip().lower() for name in self.server.config.get("ONTOLOGY_MAINTAINERS", "").split(",") if name.strip()}
+        return self._role("ONTOLOGY_MAINTAINERS")
 
     def _login(self) -> None:
         state = secrets.token_urlsafe(24)
@@ -193,12 +243,16 @@ class CloudHandler(BaseHTTPRequestHandler):
             raise PermissionError("Dieses GitHub-Konto ist nicht als Editor freigeschaltet")
         # A readable repo and a working user token are required; write permission
         # is enforced again by GitHub when creating branches or commits.
-        github_json(f"https://api.github.com/repos/{self.server.owner}/{self.server.repo}", token)
+        available = self._available_repositories(user["login"], token)
+        if not available:
+            raise PermissionError("Kein freigeschaltetes Datenrepository ist für dieses Konto zugänglich")
+        default = self.server.config["GITHUB_REPOSITORY"]
+        repository = default if any(entry["repository"] == default for entry in available) else available[0]["repository"]
         sid = secrets.token_urlsafe(32)
         with self.server.lock:
             self.server.sessions[sid] = {
                 "token": token, "user": user["login"], "csrf": secrets.token_urlsafe(32),
-                "branch": "main", "created": time.time(),
+                "branch": "main", "repository": repository, "created": time.time(),
             }
         self._redirect("/", [
             f"nac_session={sid}; Path=/; Max-Age={SESSION_LIFETIME}; HttpOnly; Secure; SameSite=Lax",
@@ -211,10 +265,16 @@ class CloudHandler(BaseHTTPRequestHandler):
         return [{"slug": slug, "title": str(graph.value(n8[f"vorgangsart-{slug}"], SKOS.prefLabel))} for slug in case_ids]
 
     def do_GET(self) -> None:
+        with self._request_lock():
+            self._get()
+
+    def _get(self) -> None:
         try:
             path = urlparse(self.path)
             if path.path == "/healthz":
                 self._json(200, {"status": "ok"})
+            elif path.path == "/api/release":
+                self._json(200, release_info())
             elif path.path == "/login":
                 self._login()
             elif path.path == "/callback":
@@ -226,6 +286,9 @@ class CloudHandler(BaseHTTPRequestHandler):
             elif path.path == "/api/status":
                 session = self._session()
                 self._json(200, {"token": session["csrf"], "branch": session["branch"], "purpose": session.get("purpose", "case"), "case": session.get("case", ""), "hosted": True, "user": session["user"], "notary_reviewer": session["user"].lower() in self._notaries(), "ontology_maintainer": session["user"].lower() in self._maintainers()})
+            elif path.path == "/api/repositories":
+                session = self._session()
+                self._json(200, {"selected": session.get("repository", self.server.config["GITHUB_REPOSITORY"]), "repositories": self._available_repositories(session["user"], session["token"])})
             elif path.path == "/api/drafts":
                 session = self._session()
                 drafts = self._store(session).list_drafts(session["user"])
@@ -243,12 +306,13 @@ class CloudHandler(BaseHTTPRequestHandler):
                 main_ref = store.ref("main")
                 with self.server.lock:
                     cached = self.server.case_index_cache
-                if cached and cached[0] == main_ref:
+                cache_key = (session.get("repository", self.server.config["GITHUB_REPOSITORY"]), session["user"], main_ref)
+                if cached and cached[0] == cache_key:
                     index = cached[1]
                 else:
                     index = store.case_index(main_ref)
                     with self.server.lock:
-                        self.server.case_index_cache = (main_ref, index)
+                        self.server.case_index_cache = (cache_key, index)
                 self._json(200, index)
             elif path.path == "/api/reviews":
                 session = self._session()
@@ -270,12 +334,13 @@ class CloudHandler(BaseHTTPRequestHandler):
                 main_ref = store.ref("main")
                 with self.server.lock:
                     cached = self.server.impact_cache
-                if cached and cached[0] == main_ref:
+                cache_key = (session.get("repository", self.server.config["GITHUB_REPOSITORY"]), session["user"], main_ref)
+                if cached and cached[0] == cache_key:
                     impact = cached[1]
                 else:
                     impact = store.vocabulary_impact(main_ref)
                     with self.server.lock:
-                        self.server.impact_cache = (main_ref, impact)
+                        self.server.impact_cache = (cache_key, impact)
                 self._json(200, impact)
             elif path.path == "/api/vocabulary/turtle":
                 session = self._session()
@@ -311,6 +376,10 @@ class CloudHandler(BaseHTTPRequestHandler):
             self._json(500, {"error": "Serverfehler bei der Anfrage"})
 
     def do_POST(self) -> None:
+        with self._request_lock():
+            self._post()
+
+    def _post(self) -> None:
         try:
             try:
                 session = self._session()
@@ -335,6 +404,20 @@ class CloudHandler(BaseHTTPRequestHandler):
                             self.server.sessions.pop(sid, None)
                             break
                 self._json(200, {"ok": True})
+            elif self.path == "/api/repositories/select":
+                repository = data.get("repository")
+                if not isinstance(repository, str):
+                    raise ValueError("Bitte ein Datenrepository wählen")
+                self._repository(repository, session["user"])
+                if session["branch"] != "main":
+                    raise ValueError("Bitte zuerst den geöffneten Entwurf ablegen")
+                github_json("https://api.github.com/repos/" + repository, session["token"])
+                owner, repo = repository.split("/")
+                GitHubStore(owner, repo, session["token"]).slugs("main")
+                with self.server.lock:
+                    session.update(repository=repository, branch="main", purpose="case", case="")
+                    session["csrf"] = secrets.token_urlsafe(32)
+                self._json(200, {"repository": repository})
             elif self.path == "/api/drafts/leave":
                 if session["branch"] == "main":
                     raise ValueError("Es ist kein Arbeitsentwurf geöffnet")
@@ -439,6 +522,8 @@ class CloudHandler(BaseHTTPRequestHandler):
                 self._json(404, {"error": "Nicht gefunden"})
         except PermissionError as error:
             self._json(403, {"error": str(error)})
+        except HTTPError as error:
+            self._json(401 if error.code == 401 else 403, {"error": "GitHub-Zugriff auf dieses Repository fehlt"})
         except GitHubError as error:
             self._json(401 if error.status == 401 else 403 if error.status == 403 else 400, {"error": str(error)})
         except ValueError as error:

@@ -24,3 +24,19 @@ test('two-case search index and draft creation use configured catalog scope',asy
   expect((await branch.json()).case).toBe('demo-eins');
   const missing=await request.get('/api/cases/not-in-catalog'); expect(missing.status()).toBe(400);
 });
+test('release links to the delivered commit and data targets can be switched', async ({page}) => {
+  const commit = 'b'.repeat(40);
+  await page.route('**/api/release', route => route.fulfill({json: {commit}}));
+  await page.goto('/');
+  await expect(page.locator('#release-link')).toHaveText(commit.slice(0,12));
+  await expect(page.locator('#release-link')).toHaveAttribute('href', 'https://github.com/ontologie8/editor8/commit/' + commit);
+  await expect(page.locator('#repository-select option')).toHaveCount(2);
+  await page.request.post('/api/drafts/leave', {headers: {'Origin':'http://127.0.0.1:18767', 'X-Editor-Token':'browser-csrf'}, data: {}});
+  await page.reload();
+  await page.locator('#repository-select').selectOption('example/second-dataset');
+  await expect(page.locator('#repository-name')).toHaveText('example/second-dataset');
+  await expect(page.locator('#case-list button')).toHaveCount(2);
+  await page.setViewportSize({width:500, height:800});
+  await expect(page.locator('#release-link')).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});

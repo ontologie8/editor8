@@ -5,6 +5,9 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 COPY scripts ./scripts
 COPY editor ./editor
+COPY config ./config
+ARG EDITOR8_COMMIT=development
+RUN python scripts/release_info.py "${EDITOR8_COMMIT}"
 COPY LICENSES ./LICENSES
 COPY NOTICE ./NOTICE
 RUN useradd --create-home --uid 10001 editor8 && chown -R editor8:editor8 /app

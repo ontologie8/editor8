@@ -116,6 +116,10 @@ class QuietBrowserHandler(cloud_editor.CloudHandler):
 
 def main() -> None:
     cloud_editor.GitHubStore = BrowserStore
+    def fake_github(url, token):
+        assert token == "browser-fixture" and url == "https://api.github.com/repos/notariat8/ontology"
+        return {}
+    cloud_editor.github_json = fake_github
     server = cloud_editor.CloudServer(("127.0.0.1", PORT), {
         "GITHUB_APP_CLIENT_ID": "browser-fixture",
         "GITHUB_APP_CLIENT_SECRET": "browser-fixture",

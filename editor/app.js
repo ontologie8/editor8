@@ -906,6 +906,32 @@ async function init() {
     const requestedCase=new URLSearchParams(window.location.search).get("case");
     const status=await api("/api/status");state.token=status.token;state.branch=status.branch;state.purpose=status.purpose || "case";state.activeCase=status.case || "";state.hosted=!!status.hosted;state.ontologyMaintainer=!!status.ontology_maintainer;refreshBranch();
     if(status.user){state.user=status.user;state.notaryReviewer=!!status.notary_reviewer;$("session-user").textContent=status.user;$("logout").hidden=false;$("review-nav").hidden=false;}
+    if (state.hosted) {
+      const sources = await api("/api/repositories");
+      const select = $("repository-select");
+      for (const entry of sources.repositories) {
+        const option = element("option", entry.label);
+        option.value = entry.repository;
+        select.append(option);
+      }
+      select.value = sources.selected;
+      $("repository-name").textContent = sources.selected;
+      $("repository-picker").hidden = false;
+      select.addEventListener("change", async () => {
+        const repository = select.value;
+        select.disabled = true;
+        try {
+          if (state.dirty) throw new Error("Bitte zuerst ungespeicherte Änderungen speichern oder verwerfen.");
+          if (state.branch !== "main") throw new Error("Bitte zuerst den geöffneten Entwurf ablegen.");
+          await api("/api/repositories/select", {repository});
+          window.location.assign("/");
+        } catch (error) {
+          select.value = sources.selected;
+          notice(error.message, "error");
+          select.disabled = false;
+        }
+      });
+    }
     $("logout").addEventListener("click",async()=>{try{await api("/api/logout",{});window.location.assign("/login");}catch(error){notice(error.message,"error");}});
     $("leave-draft").addEventListener("click",()=>leaveDraft().catch(error=>notice(error.message,"error")));
     const cases=await api("/api/cases");state.cases=cases;$("case-count").textContent=String(cases.length);
@@ -1025,4 +1051,24 @@ async function init() {
     if(state.user)loadDrafts().catch(error=>notice(error.message,"error"));
   } catch(error){notice(error.message,"error");}
 }
+async function loadRelease() {
+  try {
+    const response = await fetch("/api/release", {cache: "no-store"});
+    if (!response.ok) throw new Error("Release nicht verfügbar");
+    const release = await response.json();
+    if (/^[0-9a-f]{40}$/.test(release.commit || "")) {
+      const link = $("release-link");
+      link.textContent = release.commit.slice(0, 12);
+      link.href = "https://github.com/ontologie8/editor8/commit/" + release.commit;
+      link.title = "Ausgelieferter Softwarestand: " + release.commit;
+      link.hidden = false;
+      $("release-status").hidden = true;
+    } else {
+      $("release-status").textContent = "Entwicklung";
+    }
+  } catch (error) {
+    $("release-status").textContent = "Nicht verfügbar";
+  }
+}
+loadRelease();
 init();

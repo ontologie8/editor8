@@ -42,7 +42,7 @@ class BrowserStore:
     branches: dict[str, dict] = {}
 
     def __init__(self, owner: str, repo: str, token: str):
-        assert (owner, repo, token) == ("notariat8", "ontology", "browser-fixture")
+        assert (owner, repo) in (("notariat8", "ontology"), ("example", "second-dataset")) and token == "browser-fixture"
 
     def slugs(self, ref):
         return slugs()
@@ -120,12 +120,17 @@ class QuietBrowserHandler(cloud_editor.CloudHandler):
 
 def main() -> None:
     cloud_editor.GitHubStore = BrowserStore
+    def fake_github(url, token):
+        assert token == "browser-fixture" and url in ("https://api.github.com/repos/notariat8/ontology", "https://api.github.com/repos/example/second-dataset")
+        return {"permissions": {"push": True}}
+    cloud_editor.github_json = fake_github
     server = cloud_editor.CloudServer(("127.0.0.1", PORT), {
         "GITHUB_APP_CLIENT_ID": "browser-fixture",
         "GITHUB_APP_CLIENT_SECRET": "browser-fixture",
         "GITHUB_REPOSITORY": "notariat8/ontology",
         "PUBLIC_ORIGIN": ORIGIN,
         "EDITOR_USERS": "browser-tester",
+        "DATA_REPOSITORIES": [{"repository": "notariat8/ontology", "label": "Künstlicher Datensatz eins"}, {"repository": "example/second-dataset", "label": "Künstlicher Datensatz zwei"}],
     })
     server.RequestHandlerClass = QuietBrowserHandler
     server.sessions["browser-session"] = {

@@ -26,6 +26,7 @@ from case_restore import prepare_historical_case
 from case_index import build_case_index
 from vocabulary_editor import model as vocabulary_model, prepare_change as prepare_vocabulary_change
 from vocabulary_impact import impact_index
+from release_info import release_info
 
 
 ASSETS = APP_ROOT / "editor"
@@ -304,7 +305,9 @@ class EditorHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         try:
             path = urlparse(self.path).path
-            if path == "/api/status":
+            if path == "/api/release":
+                self._json(200, release_info())
+            elif path == "/api/status":
                 branch = git_branch()
                 self._json(200, {"token": self.server.token, "branch": branch, "purpose": "vocabulary" if VOCABULARY_BRANCH.fullmatch(branch) else "case", "ontology_maintainer": True})
             elif path == "/api/cases":

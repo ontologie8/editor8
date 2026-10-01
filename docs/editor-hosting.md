@@ -16,12 +16,12 @@ Für den ersten privaten Pilotbetrieb ist **Azure Container Apps im Consumption-
 
 ##> Herkunft: aus dem ontology-Editorzweig übernommen. Historische Azure-/PR-Nachweise sind keine neue Deploymentbestätigung. Softwarepflege erfolgt seit 2026-10-01 in editor8; Daten bleiben in notariat8/ontology.
 
-# Tatsächlich bereitgestellter Pilotstand
+# Historischer Pilotstand bis 30.09.2026
 
 | Azure-Ressource | Name und Zweck |
 | --- | --- |
 | Ressourcengruppe | `rg-nac-ontology-editor` trennt den Editor von der bestehenden Function. |
-| Container Registry | `acrnacontology8`, Basic, Admin-Passwort deaktiviert; aktuell bereitgestelltes Image `nac-editor:dbcfc59` aus dem Draft-PR-Branch. |
+| Container Registry | `acrnacontology8`, Basic, Admin-Passwort deaktiviert; damals bereitgestelltes Image `nac-editor:dbcfc59` aus dem Draft-PR-Branch. |
 | Log Analytics | `law-nac-ontology-editor`, 30 Tage Aufbewahrung. |
 | Container-Apps-Umgebung | `cae-nac-ontology-editor`, Consumption ohne dedizierte Workload-Profile. |
 | Container App | `ca-nac-ontology-editor`, externes HTTPS, 0,25 CPU/0,5 GiB, genau ein Replikat, Single Revision. Image-Abruf per Managed Identity. |
@@ -94,3 +94,13 @@ Für das **gemeinsame Vokabular** gibt es einen eigenen Arbeitsbereich. Eingetra
 **Grenze der manuellen Freigabe, erneut geprüft am 29.09.2026:** Das private Repository gehört der Organisation `notariat8`. Der Branch-Protection-Endpunkt antwortet trotz Admin-Zugriff mit HTTP 403 und einem Upgrade-Hinweis. Nach [GitHubs Dokumentation](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches) sind Schutzregeln für private Organisations-Repositories mit **GitHub Team** verfügbar; Enterprise ist dafür nicht nötig. [GitHubs Rollenmatrix](https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/repository-roles-for-an-organization) zeigt zugleich, dass eingeladene Nutzer mit `Write`-Rechten PRs auch ohne notarielle Freigabe mergen können, solange keine Schutzregel greift. Der vereinbarte Betrieb setzt daher auf einen kleinen vertrauenswürdigen Nutzerkreis und dokumentierte manuelle Prüfung. Ein technisch erzwungener Merge-Gate ist eine optionale spätere Härtung in [Issue #7](https://github.com/notariat8/ontology/issues/7), keine Voraussetzung für den Piloten. Das Repository bleibt privat.
 
 Das ist ein **technischer Bereitstellungsvertrag**, keine bestätigte Produktqualität. Die UI wurde lokal in Desktop- und Mobilgröße gerendert und mit Browser-Szenarien für Graph, Details, Suche, Bausteine, Verbindungen und Tastatur geprüft. Vor produktiver Nutzung fehlen mindestens der echte Bearbeitungs- und PR-Weg mit angemeldetem Konto sowie eine Sicherheitsprüfung. Notarinnen und Notare prüfen fachliche Inhalte und Freigaben; sie sind nicht dafür zuständig, eine unausgereifte Oberfläche benutzbar zu machen. Es werden weiterhin keine realen Aktenwerte im Repository gespeichert.
+
+## Automatische Bereitstellung ab editor8/main
+
+**Migration am 01.10.2026:** Der separat geprüfte Software-Commit `9fa6d4a063b190188d6a5a8d7a16038dd2790043` wurde als ACR-Build `dn6` mit Image-Digest `sha256:bc3cb1fd64ce1dff0697b91fc07a1622cbddd8a72b01cd86dcf97d2eb3c91fb3` gebaut. Azure-Revision `ca-nac-ontology-editor--0000009` war aktiv, `Healthy`, `Provisioned` und `RunningAtMaxScale`. `/healthz` antwortete 200, `/api/status` ohne Sitzung 401; das ausgelieferte `app.js` hatte denselben SHA-256-Wert wie der Software-Checkout. Die Python-Integration gegen Ontologie-`main` `e58f41e13a6159b86748a799de79bec9650d5e98` bestand mit 48 Tests. Der erste automatisierte Deploy nach diesem Commit ist separat im GitHub-Actions-Lauf zu verifizieren.
+
+GitHub prüft bei jedem Push Python, JavaScript, synthetische Browserabläufe und das Containerimage. Nur ein erfolgreicher Push auf `main` startet den Job `deploy`. Er baut in `acrnacontology8` ein Image mit dem vollständigen Commit-SHA als Tag, aktualisiert `ca-nac-ontology-editor` und vergleicht anschließend die aktive Revision, den Gesundheitszustand und das ausgelieferte JavaScript mit dem Quellstand. Ein inzwischen überholter Commit wird vor Build und Deployment abgewiesen. Ein grüner Testlauf allein ist kein Azure-Release; erst der grüne Deploy-Job und die aktive Revision belegen es.
+
+Die GitHub-Actions-Secrets `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` und `AZURE_SUBSCRIPTION_ID` bezeichnen die Azure-Identität `id-editor8-github-deploy`; sie enthalten kein Passwort. Eine föderierte Vertrauensregel erlaubt Tokens ausschließlich von `ontologie8/editor8` auf `main`. Die Identität darf Builds in `acrnacontology8` erstellen und nur die Container App `ca-nac-ontology-editor` aktualisieren. Der Image-Abruf der laufenden App bleibt bei ihrer eigenen systemseitigen Identität. Ontologiedaten bleiben ausschließlich in `notariat8/ontology`.
+
+Bei einem fehlgeschlagenen Deploy-Job den GitHub-Actions-Lauf und die aktive Azure-Revision vergleichen. Ein manuelles Release muss aus einem sauberen, geprüften `main`-Checkout mit dem vollständigen SHA getaggt werden; danach Image, Revision, `/healthz` und ausgelieferte Assets prüfen. Die Datenintegration gegen den konkreten Commit von `notariat8/ontology` ist vor fachlich relevanten Softwareänderungen zusätzlich lokal zu prüfen, da die Software-CI keinen privaten Datencheckout besitzt.

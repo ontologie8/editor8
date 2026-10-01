@@ -42,3 +42,60 @@ jobs:
           curl --fail --silent http://127.0.0.1:18765/ > /dev/null
           test "$(curl --silent --output /dev/null --write-out '%{http_code}' http://127.0.0.1:18765/api/status)" = 401
           docker exec editor8-smoke python -c "from pathlib import Path; assert not Path('/app/catalog').exists(); assert not Path('/app/cases').exists()"
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [software, container]
+    runs-on: ubuntu-latest
+    concurrency:
+      group: editor8-production
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sign in to Azure using the main-branch identity
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Confirm the validated commit is still main
+        run: |
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$GITHUB_SHA"
+      - name: Build and publish the immutable image
+        run: az acr build --registry acrnacontology8 --image "nac-editor:${GITHUB_SHA}" --file Dockerfile .
+      - name: Install Container Apps CLI
+        run: az extension add --name containerapp --upgrade --yes
+      - name: Deploy the validated commit
+        run: |
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$GITHUB_SHA"
+          az containerapp update \
+            --name ca-nac-ontology-editor \
+            --resource-group rg-nac-ontology-editor \
+            --image "acrnacontology8.azurecr.io/nac-editor:${GITHUB_SHA}" --output none
+      - name: Check the live revision and delivered JavaScript
+        run: |
+          set -euo pipefail
+          expected="acrnacontology8.azurecr.io/nac-editor:${GITHUB_SHA}"
+          base="https://ca-nac-ontology-editor.salmonsmoke-565866ed.germanywestcentral.azurecontainerapps.io"
+          local_hash=$(sha256sum editor/app.js | cut -d ' ' -f1)
+          for attempt in $(seq 1 30); do
+            live_image=$(az containerapp show --name ca-nac-ontology-editor --resource-group rg-nac-ontology-editor --query 'properties.template.containers[0].image' -o tsv)
+            revision=$(az containerapp show --name ca-nac-ontology-editor --resource-group rg-nac-ontology-editor --query 'properties.latestReadyRevisionName' -o tsv)
+            if [ "$live_image" = "$expected" ] && [ -n "$revision" ]; then
+              ready_image=$(az containerapp revision show --name ca-nac-ontology-editor --resource-group rg-nac-ontology-editor --revision "$revision" --query 'properties.template.containers[0].image' -o tsv)
+              health=$(az containerapp revision show --name ca-nac-ontology-editor --resource-group rg-nac-ontology-editor --revision "$revision" --query 'properties.healthState' -o tsv)
+              if [ "$ready_image" = "$expected" ] && [ "$health" = Healthy ]; then
+                curl --fail --silent --show-error "$base/healthz" > /dev/null
+                remote_hash=$(curl --fail --silent --show-error "$base/app.js" | sha256sum | cut -d ' ' -f1)
+                test "$remote_hash" = "$local_hash"
+                exit 0
+              fi
+            fi
+            sleep 5
+          done
+          echo 'The expected release did not become healthy' >&2
+          exit 1

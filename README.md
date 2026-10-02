@@ -12,7 +12,9 @@ Die Desktop-Oberfläche folgt der freigegebenen Office-Struktur: außen **Verste
 
 ## Lokal starten
 
-Python 3.12 oder neuer, Git und ein separater Datencheckout werden benötigt.
+Für die Softwareentwicklung werden Python 3.12 oder neuer, Node.js und Git benötigt. Die Prüfungen unter „Prüfen“ verwenden künstliche Daten und funktionieren ohne ontology-Checkout und ohne GitHub-App-Secrets. [Eigenständigkeit und Betriebszugänge](docs/editor-autonomy.md) beschreibt den geprüften Umfang.
+
+Der folgende lokale Offlinebetrieb mit echten Fachmodellen benötigt zusätzlich einen ausdrücklich gewählten separaten Datencheckout.
 
 ```powershell
 python -m venv .venv

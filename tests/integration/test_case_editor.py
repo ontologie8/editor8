@@ -168,7 +168,7 @@ class CaseEditorTests(unittest.TestCase):
             connection.request("GET", "/?case=erbausschlagung")
             response = connection.getresponse()
             self.assertEqual(response.status, 200)
-            self.assertIn(b"NaC-Fallontologie", response.read())
+            self.assertIn(b"<title>editor8", response.read())
             connection.close()
             connection = http.client.HTTPConnection("127.0.0.1", server.server_port, timeout=5)
             connection.request("GET", "/api/drafts")

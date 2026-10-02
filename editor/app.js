@@ -76,7 +76,7 @@ function refreshBranch() {
   $("start-branch").hidden = state.branch !== "main" || (state.view==="vokabular" && !state.ontologyMaintainer);
   $("start-branch").disabled = !state.current;
   $("leave-draft").hidden = !state.hosted || state.branch === "main";
-  $("save").hidden = state.branch==="main" || !state.dirty;
+  $("save").hidden = false;
   $("save").disabled = !state.dirty || (state.view==="vokabular" ? state.purpose!=="vocabulary" : !caseEditable());
   $("add-node").hidden=!caseEditable();
   $("edge-create").hidden=!caseEditable();
@@ -85,20 +85,31 @@ function refreshBranch() {
   $("edit-node").disabled=state.branch!=="main" && !caseEditable();
   $("vocab-add").hidden=!state.ontologyMaintainer || (state.branch!=="main" && state.purpose!=="vocabulary");
   $("vocab-submit").disabled=state.branch==="main" || state.purpose!=="vocabulary";
+  renderOffice();
 }
 function renderCaseList() {
   const root=$("case-list");root.replaceChildren();
   const query=$("case-search").value.trim().toLocaleLowerCase("de");
   let count=0;
   state.cases.forEach(item=>{
-    if(query && !item.title.toLocaleLowerCase("de").includes(query)) return;
+    const current=state.current?.slug===item.slug;
+    const nodes=current?state.current.nodes:[];
+    const matching=nodes.filter(node=>[node.label,node.question,node.id].join(" ").toLocaleLowerCase("de").includes(query));
+    if(query&&!item.title.toLocaleLowerCase("de").includes(query)&&!matching.length)return;
     count++;
-    const button=element("button",item.title,"case-item"+(state.current?.slug===item.slug ? " active" : ""));
-    button.type="button";
-    button.addEventListener("click",()=>loadCase(item.slug).catch(error=>notice(error.message,"error")));
-    root.append(button);
+    const branch=element("details",undefined,"tree-case");branch.open=current&&!office.closedCases.has(item.slug);
+    const summary=element("summary");const button=element("button",item.title,"case-item"+(current?" active":""));button.type="button";button.setAttribute("aria-current",current?"page":"false");
+    button.addEventListener("click",event=>{event.preventDefault();loadCase(item.slug).catch(error=>notice(error.message,"error"));});summary.append(button);branch.append(summary);
+    branch.addEventListener("toggle",()=>{if(branch.open)office.closedCases.delete(item.slug);else office.closedCases.add(item.slug);});
+    if(current){groups.forEach(([key,title])=>{
+      const matches=(query&&!item.title.toLocaleLowerCase("de").includes(query)?matching:nodes).filter(node=>node.category===key).sort((a,b)=>a.label.localeCompare(b.label,"de"));if(!matches.length)return;
+      const category=element("details",undefined,"tree-category");const categoryKey=item.slug+":"+key;category.open=!office.closedGroups.has(categoryKey);category.append(element("summary",title+" · "+matches.length));
+      category.addEventListener("toggle",()=>{if(category.open)office.closedGroups.delete(categoryKey);else office.closedGroups.add(categoryKey);});
+      matches.forEach(node=>{const leaf=element("button",displayNodeLabel(node),"tree-node"+(state.selected===node.id?" active":""));leaf.type="button";leaf.setAttribute("aria-pressed",String(state.selected===node.id));leaf.addEventListener("click",()=>{if(office.area==='edit')selectNode(node.id);else{setView('fall');focusGraphNode(node.id);}renderCaseList();});category.append(leaf);});branch.append(category);
+    });}
+    root.append(branch);
   });
-  if(!count) root.append(element("p","Keine Vorgangsart gefunden.","empty"));
+  if(!count)root.append(element("p","Kein Eintrag gefunden.","empty"));
 }
 function renderCaseIndex() {
   const root=$("case-index-results");root.replaceChildren();
@@ -466,6 +477,8 @@ async function submitVocabulary(){
 }
 function setView(view) {
   if(state.dirty && (view==="vokabular") !== (state.view==="vokabular")) {notice("Bitte zuerst die offenen Änderungen speichern.","error");return;}
+  if(view!=="fall")office.graphEdit=false;
+  if(view!=="hilfe")office.lastView=view;
   state.view=view;
   if(view!=="fall")closeGraphInspector();
   document.body.classList.toggle("review-mode",view==="fachpruefung" || view==="vokabular");
@@ -483,6 +496,7 @@ function setView(view) {
     else button.removeAttribute("aria-current");
   });
   refreshBranch();
+  renderCaseList();
 }
 async function loadCase(slug) {
   if (state.dirty && !window.confirm("Ungespeicherte Änderungen verwerfen und anderen Fall öffnen?")) {
@@ -519,6 +533,7 @@ async function loadCase(slug) {
   notice(state.hosted && state.branch!=="main" && state.purpose==="case" && !caseEditable() ? "Dieser Fall ist im Lesemodus. Lege den geöffneten Entwurf ab, um hier eine Änderung zu beginnen." : "Fall geladen. Die fachlichen Zusammenhänge sind direkt sichtbar.","quiet");
 }
 function renderAll() {
+  renderCaseList();
   renderGraph();
   renderGraphList();
   renderGraphSearch();
@@ -607,7 +622,7 @@ function renderGraph() {
   canvas.dataset.scope=focused?"focused":"all";
   canvas.setAttribute("viewBox","0 0 "+width+" "+height);
   canvas.style.height=Math.round(height*state.graphZoom)+"px";
-  canvas.style.width=(state.graphZoom*100)+"%";
+  canvas.style.width=Math.round(width*state.graphZoom)+"px";
   canvas.style.minWidth="0";
   const defs=svg("defs");
   const marker=svg("marker",{id:"arrow",markerWidth:"8",markerHeight:"8",refX:"7",refY:"4",orient:"auto"});
@@ -642,7 +657,7 @@ function renderGraph() {
     const chosen=node.id===state.selected;
     const connectedToSelection=!selected || chosen || state.current.edges.some(edge=>(edge.from===selected.id && edge.to===node.id)||(edge.to===selected.id && edge.from===node.id));
     const group=svg("g",{class:"graph-node"+(chosen?" selected":"")+(linked.has(node.id)?"":" disconnected")+(connectedToSelection?"":" dimmed"),tabindex:"0",role:"button","aria-label":displayNodeLabel(node)+"; "+category[1]+(linked.has(node.id)?"":"; bisher ohne Verbindung")});
-    group.append(svg("rect",{x:position.x,y:position.y,width:nodeWidth,height:56,rx:8,fill:category[2],stroke:category[3]}));
+    group.append(svg("rect",{x:position.x,y:position.y,width:nodeWidth,height:56,rx:4,fill:category[2],stroke:category[3]}));
     const caption=svg("text",{x:position.x+10,y:position.y+22});
     const limit=focused?26:20;
     const lines=[""];
@@ -722,7 +737,7 @@ function renderNodes() {
 function selectNode(id) {
   state.selected = id;
   state.nodeEditing = false;
-  setView("bausteine");
+  setView(office.graphEdit?"fall":"bausteine");
   renderNodes(); renderNodeForm(); renderGraph(); renderGraphList(); renderRelationContext(); fillNodeSelects();
 }
 function closeGraphInspector() {
@@ -742,6 +757,7 @@ function focusGraphNode(id) {
   $("graph-stage").classList.add("has-selection");
   renderAll();
   $("graph-stage").querySelector(".graph-wrap").scrollTop=0;
+  renderCaseList();
   $("inspector-title").focus({preventScroll:true});
 }
 function field(root, label, value, onChange, multiline = false, hint = "") {
@@ -853,7 +869,7 @@ function renderEdges() {
 }
 async function save() {
   try {
-    if (state.branch === "main") throw new Error("Bitte zuerst „Änderung beginnen“ wählen.");
+    if (state.branch === "main") throw new Error("Bitte zuerst unter Bearbeiten einen Entwurf erstellen.");
     if(state.view!=="vokabular" && !caseEditable())throw new Error("Dieser Entwurf gehört zu einem anderen Fall. Lege ihn zuerst ab.");
     const vocabulary=state.view==="vokabular";
     if((vocabulary && state.purpose!=="vocabulary") || (!vocabulary && state.purpose!=="case"))throw new Error("Dieser Arbeitszweig gehört zu einem anderen Arbeitsbereich.");
@@ -1000,7 +1016,7 @@ async function init() {
         if(!caseEditable())throw new Error("Dieser Entwurf gehört zu einem anderen Fall. Lege ihn zuerst ab.");
         state.selected=selected;
         state.nodeEditing=!state.nodeEditing;
-        setView("bausteine");
+        setView(office.graphEdit?"fall":"bausteine");
         renderNodes();renderNodeForm();renderGraph();
       }catch(error){notice(error.message,"error");}
     });
@@ -1070,5 +1086,91 @@ async function loadRelease() {
     $("release-status").textContent = "Nicht verfügbar";
   }
 }
+
+
+// Office shell: presentation only; mutations continue through the existing API.
+const office={graphEdit:false,area:"understand",menu:"home",pinned:true,open:true,tree:true,lastView:"fall",closedCases:new Set(),closedGroups:new Set()};
+function renderOffice(){
+  office.area=["pruefung","fachpruefung"].includes(state.view)?"review":["bausteine","verbindungen"].includes(state.view)||state.vocabEditing||office.graphEdit?"edit":"understand";
+  $("office-app").classList.toggle("office-edit-graph",office.graphEdit&&state.view==='fall');
+  const detail=$("node-detail-panel");if(office.graphEdit&&state.view==='fall'){if(detail.parentElement!==$("graph-stage"))$("graph-stage").append(detail);}else if(detail.parentElement===$("graph-stage"))$("node-detail-slot").before(detail);
+  $("office-app").classList.toggle("ribbon-collapsed",!office.pinned);$("office-app").classList.toggle("ribbon-floating",!office.pinned&&office.open);
+  $("office-ribbon").hidden=!office.open;
+  $("ribbon-toggle").setAttribute("aria-expanded",String(office.open));$("ribbon-toggle").setAttribute("aria-label",office.pinned?"Menüband reduzieren":"Menüband immer anzeigen");$("ribbon-toggle").title=(office.pinned?"Menüband reduzieren":"Menüband immer anzeigen")+" (Strg+F1)";
+  $("workspace-shell").classList.toggle("tree-collapsed",!office.tree);$("navigation-toggle").setAttribute("aria-expanded",String(office.tree));$("navigation-toggle").setAttribute("aria-label",office.tree?"Navigationsbereich ausblenden":"Navigationsbereich einblenden");
+  document.querySelectorAll("[data-menu]").forEach(button=>button.setAttribute("aria-selected",String(button.dataset.menu===office.menu)));
+  document.querySelectorAll("[data-area]").forEach(button=>{button.setAttribute("aria-pressed",String(button.dataset.area===office.area));button.disabled=!state.current;});
+  const commands=office.menu==='home'?'home-'+office.area:office.menu;
+  document.querySelectorAll("[data-command-group]").forEach(group=>group.hidden=group.dataset.commandGroup!==commands);
+  $("save-current").disabled=$("save").disabled;$("new-node").disabled=!state.current||!caseEditable();
+  const tasks=$("task-navigation");tasks.replaceChildren();
+  const taskMode=state.view==='hilfe'||office.area==='review';tasks.hidden=!taskMode;$("case-list").hidden=taskMode;
+  // Keep the count element attached: the catalog and repository remain discoverable.
+  $("navigation-heading").firstChild.textContent=state.view==='hilfe'?'Dokumentation ':office.area==='review'?'Änderungen ':'Vorgangsarten ';
+  if(state.view==='hilfe'){
+    [['start','Kurzanleitung'],['example','Beispiel'],['terms','Begriffe']].forEach(([topic,label])=>{const b=element('button',label);b.type='button';b.addEventListener('click',()=>showHelp(topic));tasks.append(b);});
+  }else if(office.area==='review'){
+    [['pruefung','Meine Änderung'],['fachpruefung','Fachprüfung']].filter(([view])=>view!=='fachpruefung'||state.user).forEach(([view,label])=>{const b=element('button',label);b.type='button';b.setAttribute('aria-current',view===state.view?'page':'false');b.addEventListener('click',()=>setView(view));tasks.append(b);});
+    if(state.branch!=='main')tasks.append(element('p','Geöffneter Arbeitsentwurf · '+(state.cases.find(item=>item.slug===state.activeCase)?.title||state.activeCase||'Gemeinsame Begriffe'),'context-help'));
+  }
+}
+function toggleRibbon(){office.pinned=!office.pinned;office.open=office.pinned;renderOffice();}
+function showHelp(topic='start'){
+  if(state.view!=='hilfe')office.lastView=state.view;
+  setView('hilfe');if(state.view!=='hilfe')return;
+  office.menu='help';renderOffice();const root=$("help-content");root.replaceChildren();
+  root.append(element('h2',topic==='example'?'Beispiel':topic==='terms'?'Begriffe':'Kurzanleitung'));
+  const blocks=topic==='example'?[
+    ['Künstliches Beispiel','Eine Angabenfrage „Angabe A“ ist mit einem Dokumenttyp „Nachweis A“ verbunden. Beide Namen sind ausschließlich ein künstliches Beispiel.'],
+    ['Verstehen','Wähle im Datenbaum den Vorgang und anschließend einen Baustein. Der Graph zeigt die Verbindungen, rechts stehen die Details.'],
+    ['Bearbeiten','Erstelle einen Arbeitsentwurf, ändere die Bezeichnung und wähle Speichern. Prüfe die angezeigten Unterschiede, bevor du das Speichern bestätigst.'],
+    ['Prüfen','Beschreibe Grund und Quellenstand. Reiche die gespeicherte Änderung ein. Eine andere berechtigte Person prüft sie; eine notarielle Freigabe braucht das entsprechende Konto.']
+  ]:topic==='terms'?[
+    ['Vorgangsart','Eine Fachvorlage aus dem gewählten Datenrepository. Sie enthält Bausteine und Verbindungen; keine konkrete Akte wird dadurch angelegt.'],
+    ['Baustein','Eine Frage, ein Dokumenttyp, eine Entscheidung, ein Prüfschritt oder ein Nachweistyp im Fachmodell.'],
+    ['Arbeitsentwurf','Dein eigener GitHub-Zweig im Datenrepository. Speichern aktualisiert diesen Entwurf.'],
+    ['Fachprüfung','Prüfung einer eingereichten Änderung einschließlich fachlicher Wirkung und Quellenstand. Speichern allein erteilt keine Freigabe.']
+  ]:[
+    ['Öffnen und Suchen','Wähle das Datenrepository und den Vorgang im Baum. Das Suchfeld oben filtert die aktuelle Auswahl. Mit Eingabetaste oder Strg+K durchsuchst du Bausteine im gesamten Katalog.'],
+    ['Verstehen','Wähle einen Baustein im Baum oder Graphen. Rechts erscheinen die Details. Das Fragezeichen öffnet Hilfe zur aktuellen Auswahl. Informationen zeigt die Quellen und den Änderungsverlauf.'],
+    ['Bearbeiten und Speichern','Wähle links Bearbeiten. Erstelle einen Entwurf oder wähle beim Baustein Bearbeiten. Speichern zeigt zuerst einen Vergleich. Erst deine Bestätigung schreibt die Änderung in den Datenentwurf.'],
+    ['Prüfen','Unter Meine Änderung reichst du den gespeicherten Entwurf mit Grund und Quellenstand ein. Unter Fachprüfung findest du eingereichte Änderungen. Die Freigaberechte werden vom Server geprüft.'],
+    ['Ansicht und Drucken','Unter Ansicht wechselst du zwischen Zusammenhängen, Bausteinen, Verbindungen und gemeinsamen Begriffen. Datei → Drucken erstellt eine Lesefassung der aktuellen Auswahl.'],
+    ['Menüband','Strg+F1 oder Doppelklick reduziert das Menüband. Ein Klick auf eine Registerkarte öffnet die Befehle vorübergehend. Der Schalter rechts hält sie dauerhaft sichtbar. Die Baum-Navigation wird unabhängig über das Menü-Symbol links gesteuert.']
+  ];blocks.forEach(([title,text])=>root.append(element('h3',title),element('p',text)));
+}
+function selectionHelp(){
+  const root=$("selection-help-content");root.replaceChildren();const node=state.current?.nodes.find(item=>item.id===state.selected);
+  if(state.view==='vokabular'){
+    const term=selectedTerm();$("selection-help-title").textContent=term?'Hilfe zu '+term.label:'Hilfe zu gemeinsamen Begriffen';root.append(element('p','Gemeinsame Begriffe gelten für mehrere Vorgangsarten. Ihre Änderung braucht einen eigenen Vokabularentwurf und die entsprechende Pflegeberechtigung.'));
+  }else{$("selection-help-title").textContent=node?'Hilfe zu '+displayNodeLabel(node):'Hilfe zur Auswahl';root.append(element('p',node?(groups.find(item=>item[0]===node.category)?.[1]||'Baustein')+' im Vorgang „'+state.current.title+'“.':'Wähle zuerst einen Baustein im Baum oder im Graphen.'));if(node){root.append(element('p',node.detail||node.question||'Zu diesem Baustein liegt keine weitere Erläuterung im Datenmodell vor.'));root.append(element('p','Links Bearbeiten wählen, um die Inhalte in einem Arbeitsentwurf zu ändern. Verbindungen zeigt die Beziehungen zu anderen Bausteinen.'));}}
+  $("selection-help-dialog").showModal();
+}
+function printSelection(){
+  const root=$("print-document");root.replaceChildren();
+  if(state.view==='hilfe'){const copy=$("help-content").cloneNode(true);copy.removeAttribute('id');root.append(copy);}
+  else if(state.view==='vokabular'&&state.vocabulary){root.append(element('h1','Gemeinsame Begriffe'));state.vocabulary.terms.forEach(term=>root.append(element('h2',term.label),element('p',term.comment||'')));}
+  else if(state.reviewDetail&&state.view==='fachpruefung'){root.append(element('h1',state.reviewDetail.title),element('p',state.reviewDetail.body));state.reviewDetail.changes.forEach(change=>root.append(element('p',change)));}
+  else if(state.current){root.append(element('h1',state.current.title),element('p',state.current.summary));state.current.nodes.forEach(node=>root.append(element('h2',displayNodeLabel(node)),element('p',[node.question,node.detail].filter(Boolean).join('\n'))));root.append(element('h2','Verbindungen'));state.current.edges.forEach(edge=>root.append(element('p',nodeLabel(edge.from)+' '+(relations[edge.type]||edge.type)+' '+nodeLabel(edge.to))));}
+  else{notice('Bitte zuerst einen Vorgang öffnen.','error');return;}
+  root.append(element('p','Datenquelle: '+($("repository-name").textContent||'Lokales Datenziel')+' · '+$("branch").textContent));window.print();
+}
+function initOffice(){
+  $("navigation-toggle").addEventListener('click',()=>{office.tree=!office.tree;renderOffice();});$("ribbon-toggle").addEventListener('click',toggleRibbon);
+  document.querySelectorAll('[data-menu]').forEach(tab=>{tab.addEventListener('click',()=>{office.menu=tab.dataset.menu;if(!office.pinned)office.open=true;if(office.menu==='help')showHelp();else if(state.view==='hilfe')setView(office.lastView);renderOffice();});tab.addEventListener('dblclick',toggleRibbon);});
+  document.querySelectorAll('[data-area]').forEach(button=>button.addEventListener('click',()=>{office.menu='home';office.graphEdit=button.dataset.area==='edit';setView(button.dataset.area==='review'?'pruefung':'fall');if(office.graphEdit&&state.current&&!state.selected)selectNode(state.current.nodes[0]?.id);}));
+  document.querySelectorAll('[data-help-topic]').forEach(button=>button.addEventListener('click',()=>showHelp(button.dataset.helpTopic)));
+  $("file-open").addEventListener('click',()=>{office.tree=true;office.graphEdit=false;office.menu='home';setView('fall');$("app-search").focus();});
+  $("app-search").addEventListener('input',event=>{$("case-search").value=event.target.value;renderCaseList();});
+  $("app-search").addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();$("global-search").click();$("case-index-query").value=event.target.value;renderCaseIndex();if(event.target.value.trim().length>=2)loadCaseIndex().catch(()=>{});}});
+  $("save-current").addEventListener('click',()=>$("save").click());$("new-node").addEventListener('click',()=>$("add-node").click());
+  $("print").addEventListener('click',printSelection);$("fullscreen").addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{notice('Vollbild kann mit F11 geöffnet werden.');}});
+  for(const id of ['selection-help','edit-selection-help'])$(id).addEventListener('click',selectionHelp);$("selection-help-close").addEventListener('click',()=>$("selection-help-dialog").close());
+  $("saved-drafts").addEventListener('click',()=>{office.tree=true;renderOffice();if(state.branch==='main')loadDrafts().catch(error=>notice(error.message,'error'));else notice('Schließe den geöffneten Entwurf, um andere Arbeitsentwürfe zu öffnen.');});
+  document.addEventListener('pointerdown',event=>{if(!office.pinned&&office.open&&!event.target.closest('.menubar,.office-ribbon')){office.open=false;renderOffice();}});
+  document.addEventListener('keydown',event=>{if(event.ctrlKey&&event.key==='F1'){event.preventDefault();toggleRibbon();}else if(event.key==='Escape'&&!office.pinned&&office.open){office.open=false;renderOffice();}else if(event.ctrlKey&&!event.altKey&&['s','o','p'].includes(event.key.toLowerCase())){event.preventDefault();const key=event.key.toLowerCase();if(key==='s'&&!$("save").disabled)save();if(key==='o')$("file-open").click();if(key==='p')printSelection();}});
+  renderOffice();
+}
+initOffice();
 loadRelease();
 init();

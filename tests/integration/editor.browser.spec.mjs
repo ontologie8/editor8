@@ -16,7 +16,7 @@ test('all 20 maintained cases open with a rendered graph', async ({ page }) => {
   expect(cases).toHaveLength(20);
 
   await page.goto('/');
-  await expect(page.locator('#case-list button')).toHaveCount(20);
+  await expect(page.locator('#case-list .case-item')).toHaveCount(20);
   for (const item of cases) {
     await page.locator('#case-list').getByRole('button', { name: item.title, exact: true }).click();
     await expect(page.locator('#case-title')).toHaveText(item.title);
@@ -91,25 +91,26 @@ test('editing remains unavailable until the first case has loaded', async ({ pag
 test('edit, review preview, save and submit through the browser', async ({ page }) => {
   await page.goto('/?case=immobilienkaufvertrag');
   await expect(page.locator('#case-title')).toHaveText('Immobilienkaufvertrag');
+  await page.locator('[data-area=edit]').click();
   await page.locator('#start-branch').click();
   await expect(page.locator('#notice')).toContainText('Änderung begonnen');
   await expect(page.locator('#branch')).toHaveText('Mein Entwurf');
-  await page.locator('[data-view-button="bausteine"]').click();
-  await page.locator('#node-list button').first().click();
+  await page.locator('[data-area=edit]').click();
+  await page.locator('.tree-node').first().click();
   await page.locator('#edit-node').click();
 
   const label = page.locator('#node-form label').filter({ hasText: /^Bezeichnung$/ }).locator('input');
   const original = await label.inputValue();
   await label.fill(`${original} (lokale Browserprüfung)`);
-  await expect(page.locator('#save')).toBeVisible();
-  await page.locator('#save').click();
+  await expect(page.locator('#save-current')).toBeVisible();
+  await page.locator('#save-current').click();
   await expect(page.locator('#change-preview')).toBeVisible();
   await expect(page.locator('#preview-list')).toContainText('Bezeichnung');
   await page.locator('#confirm-save').click();
   await expect(page.locator('#change-preview')).not.toBeVisible();
   await expect(page.locator('#notice')).toContainText('Fallvorlage gespeichert');
 
-  await page.locator('[data-view-button="pruefung"]').click();
+  await page.locator('[data-area=review]').click();
   await page.locator('#change-reason').fill('Lokale Browserprüfung des vollständigen Einreichungswegs.');
   await page.locator('#change-source').fill('Testfixture, aktueller Repository-Stand');
   await page.locator('#submit-review').click();

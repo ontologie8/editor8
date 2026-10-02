@@ -77,22 +77,29 @@ jobs:
             --name ca-nac-ontology-editor \
             --resource-group rg-nac-ontology-editor \
             --image "acrnacontology8.azurecr.io/nac-editor:${GITHUB_SHA}" --output none
-      - name: Check the live revision and delivered JavaScript
+      - name: Check the active revision and delivered interface
         run: |
           set -euo pipefail
           expected="acrnacontology8.azurecr.io/nac-editor:${GITHUB_SHA}"
           base="https://ca-nac-ontology-editor.salmonsmoke-565866ed.germanywestcentral.azurecontainerapps.io"
           local_hash=$(sha256sum editor/app.js | cut -d ' ' -f1)
+          local_html_hash=$(sha256sum editor/index.html | cut -d ' ' -f1)
+          local_css_hash=$(sha256sum editor/style.css | cut -d ' ' -f1)
           for attempt in $(seq 1 30); do
             live_image=$(az containerapp show --name ca-nac-ontology-editor --resource-group rg-nac-ontology-editor --query 'properties.template.containers[0].image' -o tsv)
             revision=$(az containerapp show --name ca-nac-ontology-editor --resource-group rg-nac-ontology-editor --query 'properties.latestReadyRevisionName' -o tsv)
             if [ "$live_image" = "$expected" ] && [ -n "$revision" ]; then
               ready_image=$(az containerapp revision show --name ca-nac-ontology-editor --resource-group rg-nac-ontology-editor --revision "$revision" --query 'properties.template.containers[0].image' -o tsv)
               health=$(az containerapp revision show --name ca-nac-ontology-editor --resource-group rg-nac-ontology-editor --revision "$revision" --query 'properties.healthState' -o tsv)
-              if [ "$ready_image" = "$expected" ] && [ "$health" = Healthy ]; then
+              active=$(az containerapp revision show --name ca-nac-ontology-editor --resource-group rg-nac-ontology-editor --revision "$revision" --query 'properties.active' -o tsv)
+              if [ "$ready_image" = "$expected" ] && [ "$health" = Healthy ] && [ "$active" = true ]; then
                 curl --fail --silent --show-error "$base/healthz" > /dev/null
                 remote_hash=$(curl --fail --silent --show-error "$base/app.js" | sha256sum | cut -d ' ' -f1)
                 test "$remote_hash" = "$local_hash"
+                remote_html_hash=$(curl --fail --silent --show-error "$base/" | sha256sum | cut -d ' ' -f1)
+                remote_css_hash=$(curl --fail --silent --show-error "$base/style.css" | sha256sum | cut -d ' ' -f1)
+                test "$remote_html_hash" = "$local_html_hash"
+                test "$remote_css_hash" = "$local_css_hash"
                 release=$(curl --fail --silent --show-error "$base/api/release" | python -c 'import json,sys; print(json.load(sys.stdin)["commit"])')
                 test "$release" = "$GITHUB_SHA"
                 exit 0

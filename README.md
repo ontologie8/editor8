@@ -4,6 +4,12 @@ SaaS-Editor für versionierte Fachmodelle: Oberfläche, Python-API, GitHub-Anmel
 
 **Software und Daten sind getrennt:** Dieses Repository enthält den Editor. [notariat8/ontology](https://github.com/notariat8/ontology) pflegt die Notar-Fachmodelle; [NaC](https://github.com/notariat8/NaC) pflegt die führenden Prozessabläufe. Der aktuelle Datenadapter unterstützt das NaC-RDF-Schema; weitere Schemata benötigen eigene Adapter. Die 20-Fall-Grenze liegt im Notardatensatz, nicht im Editor-Code.
 
+## Bedienung
+
+Die Desktop-Oberfläche folgt der freigegebenen Office-Struktur: außen **Verstehen, Bearbeiten, Prüfen**, daneben das Datenrepository mit seinem Baum und in der Mitte der Arbeitsbereich. Beim Bearbeiten bleibt der Graph sichtbar; Details und Formular stehen rechts. **Datei, Startseite, Ansicht und Hilfe** liegen oben. Das Menüband lässt sich mit seinem Pfeil oder **Strg+F1** einklappen und durch Anklicken einer Registerkarte vorübergehend öffnen. Das Hamburger-Menü schaltet den Datenbaum unabhängig davon um.
+
+**Öffnen, Speichern und Drucken** stehen unter Datei. Speichern zeigt zunächst den Vergleich und verlangt die Bestätigung der Änderung im Datenentwurf. Die allgemeine Hilfe steht oben; das Fragezeichen am ausgewählten Baustein erläutert dessen Kontext. Menüs und Datenrepository-Auswahl bleiben erreichbar, während Baum und Arbeitsinhalt bei Bedarf innerhalb ihrer Bereiche scrollen. [DESIGN.md](DESIGN.md) hält die Maße und Microsoft-Referenzen fest.
+
 ## Lokal starten
 
 Python 3.12 oder neuer, Git und ein separater Datencheckout werden benötigt.

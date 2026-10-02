@@ -4,44 +4,78 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NaC-Fallontologie · Editor</title>
+  <title>editor8 · Fachmodelle</title>
   <link rel="stylesheet" href="/style.css">
   <script src="/app.js" defer></script>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand"><span class="brand-mark">N8</span><div><strong>NaC-Fallontologie</strong><small>Vorgangsarten im Datenkatalog</small></div></div>
-    <div class="top-actions"><button id="global-search" class="search-trigger" type="button" aria-haspopup="dialog" aria-controls="catalog-search"><span aria-hidden="true">⌕</span> Katalog durchsuchen <kbd>Ctrl K</kbd></button><button id="vocab-nav" class="utility-nav" type="button" data-view-button="vokabular">Begriffe</button><button id="review-nav" class="utility-nav" type="button" data-view-button="fachpruefung" hidden>Prüfkorb</button><span id="branch" class="branch"></span><button id="start-branch" type="button" disabled>Änderung beginnen</button><button id="leave-draft" type="button" hidden>Entwurf ablegen</button><button id="save" class="primary" type="button">Änderung speichern</button><span id="session-user" class="session-user"></span><button id="logout" class="account-action" type="button" hidden>Abmelden</button></div>
-  </header>
+  <div id="office-app" class="office-app">
+  <header class="topbar"><strong class="brand">editor8</strong><span class="app-title">Fachmodelle</span><label class="visually-hidden" for="app-search">Suchen</label><input id="app-search" type="search" placeholder="Suchen" title="Suchen; Eingabetaste durchsucht alle Bausteine"><span id="session-user" class="session-user"></span><button type="button" id="fullscreen" ><span>Vollbild</span></button><button type="button" id="logout" hidden><span>Abmelden</span></button></header>
+  <nav class="menubar" aria-label="Menüband"><button type="button" id="navigation-toggle" aria-label="Navigationsbereich ausblenden" aria-expanded="true" title="Navigationsbereich ausblenden"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.75254 17.9997H21.2525C21.6668 17.9997 22.0025 18.3355 22.0025 18.7497C22.0025 19.1294 21.7204 19.4432 21.3543 19.4928L21.2525 19.4997H2.75254C2.33832 19.4997 2.00254 19.1639 2.00254 18.7497C2.00254 18.37 2.28469 18.0562 2.65077 18.0065L2.75254 17.9997H21.2525H2.75254ZM2.75254 11.5027H21.2525C21.6668 11.5027 22.0025 11.8385 22.0025 12.2527C22.0025 12.6324 21.7204 12.9462 21.3543 12.9959L21.2525 13.0027H2.75254C2.33832 13.0027 2.00254 12.6669 2.00254 12.2527C2.00254 11.873 2.28469 11.5592 2.65077 11.5095L2.75254 11.5027H21.2525H2.75254ZM2.75168 5.00293H21.2517C21.6659 5.00293 22.0017 5.33872 22.0017 5.75293C22.0017 6.13263 21.7195 6.44642 21.3535 6.49608L21.2517 6.50293H2.75168C2.33746 6.50293 2.00168 6.16714 2.00168 5.75293C2.00168 5.37323 2.28383 5.05944 2.64991 5.00978L2.75168 5.00293H21.2517H2.75168Z" fill="currentColor"/>
+</svg>
+<span></span></button><div role="tablist" aria-label="Registerkarten"><button type="button" role="tab" data-menu="file" aria-selected="false">Datei</button><button type="button" role="tab" data-menu="home" aria-selected="true">Startseite</button><button type="button" role="tab" data-menu="view" aria-selected="false">Ansicht</button><button type="button" role="tab" data-menu="help" aria-selected="false">Hilfe</button></div><button type="button" id="ribbon-toggle" aria-label="Menüband reduzieren" aria-expanded="true" title="Menüband reduzieren (Strg+F1)"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M4.21967 15.5303C4.51256 15.8232 4.98744 15.8232 5.28033 15.5303L12 8.81066L18.7197 15.5303C19.0126 15.8232 19.4874 15.8232 19.7803 15.5303C20.0732 15.2374 20.0732 14.7626 19.7803 14.4697L12.5303 7.21967C12.2374 6.92678 11.7626 6.92678 11.4697 7.21967L4.21967 14.4697C3.92678 14.7626 3.92678 15.2374 4.21967 15.5303Z" fill="currentColor"/>
+</svg>
+<span></span></button></nav>
+  <section id="office-ribbon" class="office-ribbon" aria-label="Befehle">
+    <div data-command-group="file" hidden><button type="button" id="file-open" ><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M3.50014 6.25C3.50014 5.2835 4.28364 4.5 5.25014 4.5H8.12882C8.32773 4.5 8.5185 4.57902 8.65915 4.71967L10.7198 6.78033C10.8605 6.92098 11.0512 7 11.2501 7H16.7501C17.7166 7 18.5001 7.7835 18.5001 8.75C18.5001 8.83602 18.5146 8.91866 18.5413 8.99561L8.71867 8.99561C7.37893 8.99561 6.14095 9.71035 5.47108 10.8706L3.50014 14.2844V6.25ZM2.00036 17.7883C2.02089 19.5656 3.468 21 5.25014 21H11.0001C11.0292 21 11.058 20.9983 11.0862 20.9951H16.2812C17.6209 20.9951 18.8589 20.2804 19.5288 19.1201L22.5596 13.8706C23.7748 11.7657 22.3337 9.14964 19.9567 9.00214C19.9848 8.92334 20.0001 8.83846 20.0001 8.75C20.0001 6.95507 18.5451 5.5 16.7501 5.5H11.5608L9.71981 3.65901C9.29786 3.23705 8.72556 3 8.12882 3H5.25014C3.45522 3 2.00014 4.45507 2.00014 6.25V17.71C1.9999 17.7362 1.99997 17.7623 2.00036 17.7883ZM8.71867 10.4956L19.745 10.4956C21.0921 10.4956 21.9341 11.9539 21.2605 13.1206L18.2297 18.3701C17.8278 19.0663 17.085 19.4951 16.2812 19.4951H5.25485C3.9077 19.4951 3.06573 18.0368 3.7393 16.8701L6.77011 11.6206C7.17204 10.9245 7.91482 10.4956 8.71867 10.4956Z" fill="currentColor"/>
+</svg>
+<span>Öffnen</span></button><button type="button" id="save" class="primary"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 5.75C3 4.23122 4.23122 3 5.75 3H15.7145C16.5764 3 17.4031 3.34241 18.0126 3.9519L20.0481 5.98744C20.6576 6.59693 21 7.42358 21 8.28553V18.25C21 19.7688 19.7688 21 18.25 21H5.75C4.23122 21 3 19.7688 3 18.25V5.75ZM5.75 4.5C5.05964 4.5 4.5 5.05964 4.5 5.75V18.25C4.5 18.9404 5.05964 19.5 5.75 19.5H6V14.25C6 13.0074 7.00736 12 8.25 12H15.75C16.9926 12 18 13.0074 18 14.25V19.5H18.25C18.9404 19.5 19.5 18.9404 19.5 18.25V8.28553C19.5 7.8214 19.3156 7.37629 18.9874 7.0481L16.9519 5.01256C16.6918 4.75246 16.3582 4.58269 16 4.52344V7.25C16 8.49264 14.9926 9.5 13.75 9.5H9.25C8.00736 9.5 7 8.49264 7 7.25V4.5H5.75ZM16.5 19.5V14.25C16.5 13.8358 16.1642 13.5 15.75 13.5H8.25C7.83579 13.5 7.5 13.8358 7.5 14.25V19.5H16.5ZM8.5 4.5V7.25C8.5 7.66421 8.83579 8 9.25 8H13.75C14.1642 8 14.5 7.66421 14.5 7.25V4.5H8.5Z" fill="currentColor"/>
+</svg>
+<span>Speichern</span></button><button type="button" id="print" ><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.7525 3C16.9951 3 18.0025 4.00736 18.0025 5.25L18.002 6.003L18.7525 6.00358C20.5469 6.00533 22.0011 7.45877 22.0038 9.25244L22.0071 15.2497C22.009 16.4918 21.0021 17.5002 19.7591 17.5009L18 17.5V18.75C18 19.9926 16.9926 21 15.75 21H8.25C7.00736 21 6 19.9926 6 18.75L6.00091 17.5L4.25 17.5001C3.00736 17.5001 2 16.4927 2 15.2501V9.25358C2 7.45865 3.45507 6.00358 5.25 6.00358L5.999 6.003L6 5.25C6 4.00736 7.00736 3 8.25 3H15.7525ZM15.75 13.5H8.25C7.83579 13.5 7.5 13.8358 7.5 14.25V18.75C7.5 19.1642 7.83579 19.5 8.25 19.5H15.75C16.1642 19.5 16.5 19.1642 16.5 18.75V14.25C16.5 13.8358 16.1642 13.5 15.75 13.5ZM18.7518 7.50358H5.25C4.2835 7.50358 3.5 8.28708 3.5 9.25358V15.2501C3.5 15.6643 3.83579 16.0001 4.25 16.0001L6 16V14.25C6 13.0074 7.00736 12 8.25 12H15.75C16.9926 12 18 13.0074 18 14.25L18.0009 16.0001L19.7827 16.0005C20.1855 15.9874 20.5077 15.6567 20.5071 15.2512L20.5038 9.25398C20.5024 8.28801 19.7185 7.50452 18.7518 7.50358ZM15.7525 4.5H8.25C7.83579 4.5 7.5 4.83579 7.5 5.25L7.499 6.003H16.502L16.5025 5.25C16.5025 4.83579 16.1667 4.5 15.7525 4.5Z" fill="currentColor"/>
+</svg>
+<span>Drucken</span></button><button type="button" id="leave-draft" hidden><span>Entwurf schließen</span></button></div>
+    <div data-command-group="home-understand"><button type="button" id="source-open" aria-haspopup="dialog" aria-controls="case-sources"><span>Informationen</span></button><button type="button" id="graph-find" aria-haspopup="dialog" aria-controls="case-node-search"><span>Baustein suchen</span></button></div>
+    <div data-command-group="home-edit" hidden><button type="button" id="start-branch" disabled><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M20.9519 3.0481C19.5543 1.65058 17.2885 1.65064 15.8911 3.04825L3.94103 14.9997C3.5347 15.4061 3.2491 15.9172 3.116 16.4762L2.02041 21.0777C1.96009 21.3311 2.03552 21.5976 2.21968 21.7817C2.40385 21.9659 2.67037 22.0413 2.92373 21.981L7.52498 20.8855C8.08418 20.7523 8.59546 20.4666 9.00191 20.0601L20.952 8.10861C22.3493 6.71112 22.3493 4.4455 20.9519 3.0481ZM16.9518 4.10884C17.7634 3.29709 19.0795 3.29705 19.8912 4.10876C20.7028 4.9204 20.7029 6.23632 19.8913 7.04801L19 7.93946L16.0606 5.00012L16.9518 4.10884ZM15 6.06084L17.9394 9.00018L7.94119 18.9995C7.73104 19.2097 7.46668 19.3574 7.17755 19.4263L3.76191 20.2395L4.57521 16.8237C4.64402 16.5346 4.79168 16.2704 5.00175 16.0603L15 6.06084Z" fill="currentColor"/>
+</svg>
+<span>Entwurf erstellen</span></button><button type="button" id="save-current" disabled><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 5.75C3 4.23122 4.23122 3 5.75 3H15.7145C16.5764 3 17.4031 3.34241 18.0126 3.9519L20.0481 5.98744C20.6576 6.59693 21 7.42358 21 8.28553V18.25C21 19.7688 19.7688 21 18.25 21H5.75C4.23122 21 3 19.7688 3 18.25V5.75ZM5.75 4.5C5.05964 4.5 4.5 5.05964 4.5 5.75V18.25C4.5 18.9404 5.05964 19.5 5.75 19.5H6V14.25C6 13.0074 7.00736 12 8.25 12H15.75C16.9926 12 18 13.0074 18 14.25V19.5H18.25C18.9404 19.5 19.5 18.9404 19.5 18.25V8.28553C19.5 7.8214 19.3156 7.37629 18.9874 7.0481L16.9519 5.01256C16.6918 4.75246 16.3582 4.58269 16 4.52344V7.25C16 8.49264 14.9926 9.5 13.75 9.5H9.25C8.00736 9.5 7 8.49264 7 7.25V4.5H5.75ZM16.5 19.5V14.25C16.5 13.8358 16.1642 13.5 15.75 13.5H8.25C7.83579 13.5 7.5 13.8358 7.5 14.25V19.5H16.5ZM8.5 4.5V7.25C8.5 7.66421 8.83579 8 9.25 8H13.75C14.1642 8 14.5 7.66421 14.5 7.25V4.5H8.5Z" fill="currentColor"/>
+</svg>
+<span>Speichern</span></button><button type="button" id="new-node" ><span>Neuer Baustein</span></button><button type="button" data-view-button="verbindungen">Verbindungen</button></div>
+    <div data-command-group="home-review" hidden><button type="button" data-view-button="pruefung">Meine Änderung</button><button type="button" id="review-nav" data-view-button="fachpruefung" hidden><span>Fachprüfung</span></button><button type="button" id="saved-drafts" ><span>Arbeitsentwürfe</span></button></div>
+    <div data-command-group="view" hidden><button type="button" data-view-button="fall">Zusammenhänge</button><button type="button" data-view-button="bausteine">Bausteine</button><button type="button" data-view-button="verbindungen">Verbindungen</button><button type="button" id="vocab-nav" data-view-button="vokabular"><span>Begriffe</span></button><span class="command-divider"></span><button id="graph-linked" type="button" aria-pressed="true">Verknüpfte</button><button id="graph-all" type="button" aria-pressed="false">Alle</button><button id="graph-scope" type="button" aria-pressed="false" hidden>Umfeld zeigen</button><button id="graph-zoom-out" type="button" aria-label="Graph verkleinern">−</button><button id="graph-zoom-reset" type="button" aria-label="Graph einpassen">100 %</button><button id="graph-zoom-in" type="button" aria-label="Graph vergrößern">+</button></div>
+    <div data-command-group="help" hidden><button type="button" data-help-topic="start">Kurzanleitung</button><button type="button" data-help-topic="example">Beispiel</button><button type="button" data-help-topic="terms">Begriffe</button></div>
+  </section>
   <main>
-    <section id="repository-picker" class="repository-picker" aria-label="Datenquelle" hidden><label for="repository-select">Datenrepository</label><select id="repository-select"></select><span id="repository-name"></span></section>
-    <div id="notice" class="notice" role="status" aria-live="polite">Lade Fälle …</div>
-    <section id="draft-panel" class="draft-panel" aria-label="Meine gespeicherten Entwürfe" hidden>
+<div class="workspace-shell" id="workspace-shell">
+    <nav class="area-navigation" aria-label="Arbeitsbereiche"><button type="button" data-area="understand" aria-pressed="true"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 19.1375C11.4986 19.6686 10.788 20 10 20H3.75C2.7835 20 2 19.2165 2 18.25V5.75C2 4.7835 2.7835 4 3.75 4H10C10.788 4 11.4986 4.33145 12 4.86253C12.5014 4.33145 13.212 4 14 4H20.25C21.2165 4 22 4.7835 22 5.75V18.25C22 19.2165 21.2165 20 20.25 20H14C13.212 20 12.5014 19.6686 12 19.1375ZM3.5 5.75V18.25C3.5 18.3881 3.61193 18.5 3.75 18.5H10C10.6904 18.5 11.25 17.9404 11.25 17.25V6.75C11.25 6.05964 10.6904 5.5 10 5.5H3.75C3.61193 5.5 3.5 5.61193 3.5 5.75ZM12.75 17.25C12.75 17.9404 13.3096 18.5 14 18.5H20.25C20.3881 18.5 20.5 18.3881 20.5 18.25V5.75C20.5 5.61193 20.3881 5.5 20.25 5.5H14C13.3096 5.5 12.75 6.05964 12.75 6.75V17.25Z" fill="currentColor"/>
+</svg>
+<span>Verstehen</span></button><button type="button" data-area="edit" aria-pressed="false"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M20.9519 3.0481C19.5543 1.65058 17.2885 1.65064 15.8911 3.04825L3.94103 14.9997C3.5347 15.4061 3.2491 15.9172 3.116 16.4762L2.02041 21.0777C1.96009 21.3311 2.03552 21.5976 2.21968 21.7817C2.40385 21.9659 2.67037 22.0413 2.92373 21.981L7.52498 20.8855C8.08418 20.7523 8.59546 20.4666 9.00191 20.0601L20.952 8.10861C22.3493 6.71112 22.3493 4.4455 20.9519 3.0481ZM16.9518 4.10884C17.7634 3.29709 19.0795 3.29705 19.8912 4.10876C20.7028 4.9204 20.7029 6.23632 19.8913 7.04801L19 7.93946L16.0606 5.00012L16.9518 4.10884ZM15 6.06084L17.9394 9.00018L7.94119 18.9995C7.73104 19.2097 7.46668 19.3574 7.17755 19.4263L3.76191 20.2395L4.57521 16.8237C4.64402 16.5346 4.79168 16.2704 5.00175 16.0603L15 6.06084Z" fill="currentColor"/>
+</svg>
+<span>Bearbeiten</span></button><button type="button" data-area="review" aria-pressed="false"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M6.25 3C4.45507 3 3 4.45507 3 6.25V17.75C3 19.5449 4.45507 21 6.25 21H17.75C19.5449 21 21 19.5449 21 17.75V6.25C21 4.45507 19.5449 3 17.75 3H6.25ZM4.5 6.25C4.5 5.2835 5.2835 4.5 6.25 4.5H17.75C18.7165 4.5 19.5 5.2835 19.5 6.25V17.75C19.5 18.7165 18.7165 19.5 17.75 19.5H6.25C5.2835 19.5 4.5 18.7165 4.5 17.75V6.25ZM17.28 9.28064C17.5731 8.98791 17.5734 8.51304 17.2806 8.21998C16.9879 7.92691 16.513 7.92664 16.22 8.21936L9.99658 14.4356L7.78084 12.2197C7.48795 11.9268 7.01308 11.9268 6.72018 12.2196C6.42727 12.5125 6.42726 12.9874 6.72014 13.2803L9.46591 16.0262C9.75868 16.319 10.2333 16.3192 10.5263 16.0266L17.28 9.28064Z" fill="currentColor"/>
+</svg>
+<span>Prüfen</span></button></nav>
+    <aside class="case-sidebar" aria-label="Vorgangsarten">
+      <section id="repository-picker" class="repository-picker" aria-label="Datenquelle" hidden><label class="visually-hidden" for="repository-select">Datenrepository</label><select id="repository-select"></select></section>
+      <h2 class="navigation-heading" id="navigation-heading">Vorgangsarten <span id="case-count"></span></h2>
+      <label class="visually-hidden" for="case-search">Vorgangsart suchen</label><input id="case-search" type="search" placeholder="Vorgangsart suchen …">
+      <div id="case-list" class="case-list"></div><nav id="task-navigation" class="task-navigation" aria-label="Aufgabenauswahl" hidden></nav>    <section id="draft-panel" class="draft-panel" aria-label="Meine gespeicherten Entwürfe" hidden>
       <div><h2>Meine Arbeitsentwürfe</h2><p>Hier findest du eigene GitHub-Zweige ohne Pull Request. Gespeicherte Änderungen bleiben beim Wechsel des Arbeitsbereichs erhalten.</p></div>
       <div id="draft-list" class="draft-list"></div>
     </section>
-    <div class="workspace-shell">
-    <aside class="case-sidebar" aria-label="Vorgangsarten">
-      <p class="eyebrow">FALLKATALOG</p><h2>Vorgangsarten <span id="case-count"></span></h2>
-      <label class="visually-hidden" for="case-search">Vorgangsart suchen</label><input id="case-search" type="search" placeholder="Vorgangsart suchen …">
-      <div id="case-list" class="case-list"></div>
     </aside>
     <div class="workspace-main">
     <section class="mobile-case-picker"><label for="case-select">Vorgangsart</label><select id="case-select" aria-label="Vorgangsart auswählen"></select></section>
-    <nav class="workbench-nav" aria-label="Arbeitsbereiche">
-      <button type="button" data-view-button="fall" aria-current="page">Übersicht</button>
-      <button type="button" data-view-button="bausteine">Bausteine</button>
-      <button type="button" data-view-button="verbindungen">Verbindungen</button>
-      <button type="button" data-view-button="pruefung">Einreichen</button>
-    </nav>
+
     <section class="card overview" data-view="fall">
-      <div class="section-head case-hero"><div><h1 id="case-title"></h1></div><button id="source-open" class="text-action" type="button" aria-haspopup="dialog" aria-controls="case-sources">Info zum Fall</button></div>
+      <div class="section-head case-hero"><div><h1 id="case-title"></h1></div></div>
       <section class="graph-panel" aria-labelledby="graph-title">
-        <div class="graph-head"><div><h2 id="graph-title">Fachgraph</h2><p id="graph-status" class="graph-status"></p></div><div class="graph-actions"><button id="graph-find" type="button" aria-haspopup="dialog" aria-controls="case-node-search">Baustein suchen</button><button id="graph-scope" type="button" aria-pressed="false" hidden>Umfeld zeigen</button></div></div>
-        <div class="graph-toolbar" aria-label="Graphansicht"><div class="graph-view-switch" role="group" aria-label="Sichtbare Bausteine"><button id="graph-linked" type="button" aria-pressed="true">Verknüpft</button><button id="graph-all" type="button" aria-pressed="false">Alle</button></div><div class="graph-zoom" role="group" aria-label="Graphgröße"><button id="graph-zoom-out" type="button" aria-label="Graph verkleinern">−</button><button id="graph-zoom-reset" type="button" aria-label="Graph einpassen">100 %</button><button id="graph-zoom-in" type="button" aria-label="Graph vergrößern">+</button></div></div>
-        <div id="graph-stage" class="graph-stage"><div class="graph-wrap"><svg id="graph" role="group" aria-label="Fachliche Zusammenhänge des gewählten Falls"></svg></div>
+        <div class="graph-head"><div><h2 id="graph-title">Fachgraph</h2><p id="graph-status" class="graph-status"></p></div><div class="graph-actions"></div></div>
+<div id="graph-stage" class="graph-stage"><div class="graph-wrap"><svg id="graph" role="group" aria-label="Fachliche Zusammenhänge des gewählten Falls"></svg></div>
           <div id="graph-list" class="graph-list" aria-label="Bausteine des Falls"></div>
-          <aside id="graph-inspector" class="graph-inspector" aria-labelledby="inspector-title" hidden><div class="inspector-head"><div><p class="eyebrow">BAUSTEIN</p><h2 id="inspector-title" tabindex="-1"></h2></div><button id="inspector-close" type="button" aria-label="Detailansicht schließen">✕</button></div><div id="relation-context" class="relation-context"></div></aside>
+          <aside id="graph-inspector" class="graph-inspector" aria-labelledby="inspector-title" hidden><div class="inspector-head"><div><p class="eyebrow">BAUSTEIN</p><h2 id="inspector-title" tabindex="-1"></h2></div><button type="button" id="selection-help" aria-label="Hilfe zur Auswahl" title="Hilfe zur Auswahl"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 2C17.523 2 22 6.478 22 12C22 17.522 17.523 22 12 22C6.477 22 2 17.522 2 12C2 6.478 6.477 2 12 2ZM12 3.667C7.405 3.667 3.667 7.405 3.667 12C3.667 16.595 7.405 20.333 12 20.333C16.595 20.333 20.333 16.595 20.333 12C20.333 7.405 16.595 3.667 12 3.667ZM12 15.5C12.5523 15.5 13 15.9477 13 16.5C13 17.0523 12.5523 17.5 12 17.5C11.4477 17.5 11 17.0523 11 16.5C11 15.9477 11.4477 15.5 12 15.5ZM12 6.75C13.5188 6.75 14.75 7.98122 14.75 9.5C14.75 10.5108 14.4525 11.074 13.6989 11.8586L13.5303 12.0303C12.9084 12.6522 12.75 12.9163 12.75 13.5C12.75 13.9142 12.4142 14.25 12 14.25C11.5858 14.25 11.25 13.9142 11.25 13.5C11.25 12.4892 11.5475 11.926 12.3011 11.1414L12.4697 10.9697C13.0916 10.3478 13.25 10.0837 13.25 9.5C13.25 8.80964 12.6904 8.25 12 8.25C11.3528 8.25 10.8205 8.74187 10.7565 9.37219L10.75 9.5C10.75 9.91421 10.4142 10.25 10 10.25C9.58579 10.25 9.25 9.91421 9.25 9.5C9.25 7.98122 10.4812 6.75 12 6.75Z" fill="currentColor"/>
+</svg>
+<span></span></button><button id="inspector-close" type="button" aria-label="Detailansicht schließen">✕</button></div><div id="relation-context" class="relation-context"></div></aside>
+          <aside class="graph-empty-inspector"><h2>Baustein</h2><p>Wähle einen Baustein im Baum oder im Graphen aus.</p></aside>
         </div>
         <section id="graph-orphans" class="graph-orphans" aria-label="Bausteine ohne Verbindung" hidden><div class="graph-orphans-head"><h3 id="graph-orphans-title"></h3><button id="graph-orphans-show" type="button">Alle im Graphen zeigen</button></div><div id="graph-orphans-list" class="graph-orphans-list"></div></section>
       </section>
@@ -53,11 +87,15 @@
         <p id="node-count" class="result-count"></p>
         <div id="node-list" class="node-list"></div>
       </section>
-      <section class="card detail">
-        <div class="section-head"><div><p class="eyebrow">BAUSTEIN</p><h2 id="detail-title">Baustein auswählen</h2></div><div class="detail-actions"><button id="edit-node" type="button" hidden>Bearbeiten</button><button id="delete-node" class="danger" type="button" hidden>Entfernen</button></div></div>
+      <section class="card detail" id="node-detail-panel">
+        <div class="section-head"><div><p class="eyebrow">BAUSTEIN</p><h2 id="detail-title">Baustein auswählen</h2></div><div class="detail-actions"><button type="button" id="edit-selection-help" aria-label="Hilfe zur Auswahl" title="Hilfe zur Auswahl"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 2C17.523 2 22 6.478 22 12C22 17.522 17.523 22 12 22C6.477 22 2 17.522 2 12C2 6.478 6.477 2 12 2ZM12 3.667C7.405 3.667 3.667 7.405 3.667 12C3.667 16.595 7.405 20.333 12 20.333C16.595 20.333 20.333 16.595 20.333 12C20.333 7.405 16.595 3.667 12 3.667ZM12 15.5C12.5523 15.5 13 15.9477 13 16.5C13 17.0523 12.5523 17.5 12 17.5C11.4477 17.5 11 17.0523 11 16.5C11 15.9477 11.4477 15.5 12 15.5ZM12 6.75C13.5188 6.75 14.75 7.98122 14.75 9.5C14.75 10.5108 14.4525 11.074 13.6989 11.8586L13.5303 12.0303C12.9084 12.6522 12.75 12.9163 12.75 13.5C12.75 13.9142 12.4142 14.25 12 14.25C11.5858 14.25 11.25 13.9142 11.25 13.5C11.25 12.4892 11.5475 11.926 12.3011 11.1414L12.4697 10.9697C13.0916 10.3478 13.25 10.0837 13.25 9.5C13.25 8.80964 12.6904 8.25 12 8.25C11.3528 8.25 10.8205 8.74187 10.7565 9.37219L10.75 9.5C10.75 9.91421 10.4142 10.25 10 10.25C9.58579 10.25 9.25 9.91421 9.25 9.5C9.25 7.98122 10.4812 6.75 12 6.75Z" fill="currentColor"/>
+</svg>
+<span></span></button><button id="edit-node" type="button" hidden>Bearbeiten</button><button id="delete-node" class="danger" type="button" hidden>Entfernen</button></div></div>
         <div id="node-read" class="node-read"></div>
         <div id="node-form" class="node-form" hidden></div>
       </section>
+      <div id="node-detail-slot" hidden></div>
     </div>
     <section class="card relations-workspace" data-view="verbindungen" hidden>
       <div class="section-head"><div><p class="eyebrow">ZUSAMMENHÄNGE IM FALL</p><h2>Verbindungen</h2></div><span id="edge-count" class="result-count"></span></div>
@@ -128,6 +166,7 @@
         <button id="vocab-submit" type="button">Zur Fachprüfung einreichen</button><a id="vocab-pr-link" hidden target="_blank" rel="noopener noreferrer">Pull Request öffnen ↗</a>
       </div>
     </section>
+    <section class="help-workspace" data-view="hilfe" hidden><article id="help-content"></article></section>
     </div>
     </div>
   </main>
@@ -135,7 +174,7 @@
     <div class="preview-head"><div><p class="eyebrow">VOR DEM SPEICHERN</p><h2 id="preview-title">Änderung prüfen</h2></div><button id="close-preview" type="button" aria-label="Vorschau schließen">Schließen</button></div>
     <p id="preview-description">Prüfe die fachlichen Änderungen vor dem Speichern. Danach kannst du sie zur notariellen Fachprüfung einreichen.</p>
     <ul id="preview-list"></ul>
-    <div class="preview-actions"><button id="cancel-preview" type="button">Weiter bearbeiten</button><button id="confirm-save" class="primary" type="button">Änderung speichern</button></div>
+    <div class="preview-actions"><button id="cancel-preview" type="button">Weiter bearbeiten</button><button id="confirm-save" class="primary" type="button">Speichern</button></div>
   </dialog>
   <dialog id="case-node-search" aria-labelledby="case-node-search-title">
     <div class="preview-head"><h2 id="case-node-search-title">Baustein finden</h2><button id="case-node-search-close" type="button" aria-label="Suche schließen">✕</button></div>
@@ -153,12 +192,16 @@
     <div id="overview-editor" hidden><label for="summary">Kurzbeschreibung</label><textarea id="summary" rows="3"></textarea><label for="sources">Rechtsquellen <span class="hint">eine HTTPS-Adresse pro Zeile</span></label><textarea id="sources" rows="3"></textarea></div>
     <details id="case-history" class="case-history"><summary>Änderungsverlauf und frühere Fassung</summary><div id="history-list" class="history-list"></div><div id="history-preview" class="history-preview" hidden><h3>Änderung vor der Übernahme prüfen</h3><p id="history-target"></p><ul id="history-changes"></ul><button id="history-apply" type="button">Als neuen Prüfentwurf übernehmen</button></div></details>
   </dialog>
+<button id="global-search" type="button" hidden>Suchen</button>
   <dialog id="catalog-search" aria-labelledby="catalog-search-title">
     <div class="preview-head"><div><p class="eyebrow">ALLE VORGANGSARTEN</p><h2 id="catalog-search-title">Bausteine suchen</h2></div><button id="catalog-search-close" type="button">Schließen</button></div>
     <label for="case-index-query">Frage, Dokument oder Begriff</label><input id="case-index-query" type="search" placeholder="z. B. Erbschein, Identität oder Vollmacht" autocomplete="off">
     <p id="case-index-status" class="context-help">Mindestens zwei Zeichen eingeben. Die Suche zeigt fachliche Bausteine aus dem aktuellen Katalogstand.</p>
     <div id="case-index-results" class="case-index-results" aria-live="polite"></div>
   </dialog>
-  <footer class="release-footer" aria-label="Softwarestand"><span>Editor-Release:</span> <a id="release-link" hidden target="_blank" rel="noopener noreferrer"></a><span id="release-status" role="status">Wird geladen …</span></footer>
+  <dialog id="selection-help-dialog" aria-labelledby="selection-help-title"><div class="preview-head"><h2 id="selection-help-title">Hilfe zur Auswahl</h2><button id="selection-help-close" type="button">Schließen</button></div><div id="selection-help-content"></div></dialog>
+  <section id="print-document" class="print-document" aria-label="Druckfassung"></section>
+  <footer class="release-footer" aria-label="Softwarestand"><div id="notice" class="notice" role="status" aria-live="polite">Lade Fälle …</div><span id="branch" class="branch"></span><span id="repository-name"></span><span>Editor-Release:</span> <a id="release-link" hidden target="_blank" rel="noopener noreferrer"></a><span id="release-status" role="status">Wird geladen …</span></footer>
+</div>
 </body>
 </html>

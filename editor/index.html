@@ -5,12 +5,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>editor8 · Fachmodelle</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/brand/e8_32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/brand/e8_192.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/assets/brand/e8_192.png">
   <link rel="stylesheet" href="/style.css">
   <script src="/app.js" defer></script>
 </head>
 <body>
   <div id="office-app" class="office-app">
-  <header class="topbar"><strong class="brand">editor8</strong><span class="app-title">Fachmodelle</span><label class="visually-hidden" for="app-search">Suchen</label><input id="app-search" type="search" placeholder="Suchen" title="Suchen; Eingabetaste durchsucht alle Bausteine"><span id="session-user" class="session-user"></span><button type="button" id="fullscreen" ><span>Vollbild</span></button><button type="button" id="logout" hidden><span>Abmelden</span></button></header>
+  <header class="topbar"><strong class="brand"><img id="editor-brand" src="/assets/brand/e8_32.png" srcset="/assets/brand/e8_32.png 32w, /assets/brand/e8_192.png 192w, /assets/brand/e8_526.png 526w" sizes="32px" width="32" height="32" alt="e8"><span>editor8</span></strong><span class="app-title">Fachmodelle</span><label class="visually-hidden" for="app-search">Suchen</label><input id="app-search" type="search" placeholder="Suchen" title="Suchen; Eingabetaste durchsucht alle Bausteine"><span id="session-user" class="session-user"></span><button type="button" id="fullscreen" ><span>Vollbild</span></button><button type="button" id="logout" hidden><span>Abmelden</span></button></header>
   <nav class="menubar" aria-label="Menüband"><button type="button" id="navigation-toggle" aria-label="Navigationsbereich ausblenden" aria-expanded="true" title="Navigationsbereich ausblenden"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M2.75254 17.9997H21.2525C21.6668 17.9997 22.0025 18.3355 22.0025 18.7497C22.0025 19.1294 21.7204 19.4432 21.3543 19.4928L21.2525 19.4997H2.75254C2.33832 19.4997 2.00254 19.1639 2.00254 18.7497C2.00254 18.37 2.28469 18.0562 2.65077 18.0065L2.75254 17.9997H21.2525H2.75254ZM2.75254 11.5027H21.2525C21.6668 11.5027 22.0025 11.8385 22.0025 12.2527C22.0025 12.6324 21.7204 12.9462 21.3543 12.9959L21.2525 13.0027H2.75254C2.33832 13.0027 2.00254 12.6669 2.00254 12.2527C2.00254 11.873 2.28469 11.5592 2.65077 11.5095L2.75254 11.5027H21.2525H2.75254ZM2.75168 5.00293H21.2517C21.6659 5.00293 22.0017 5.33872 22.0017 5.75293C22.0017 6.13263 21.7195 6.44642 21.3535 6.49608L21.2517 6.50293H2.75168C2.33746 6.50293 2.00168 6.16714 2.00168 5.75293C2.00168 5.37323 2.28383 5.05944 2.64991 5.00978L2.75168 5.00293H21.2517H2.75168Z" fill="currentColor"/>
 </svg>
@@ -54,7 +57,7 @@
 </svg>
 <span>Prüfen</span></button></nav>
     <aside class="case-sidebar" aria-label="Vorgangsarten">
-      <section id="repository-picker" class="repository-picker" aria-label="Datenquelle" hidden><label class="visually-hidden" for="repository-select">Datenrepository</label><select id="repository-select"></select></section>
+      <section id="repository-picker" class="repository-picker" aria-label="Datenquelle" hidden><label class="visually-hidden" for="repository-select">Datenrepository</label><img id="data-brand" src="/assets/brand/n8_32.png" srcset="/assets/brand/n8_32.png 32w, /assets/brand/n8_192.png 192w, /assets/brand/n8_526.png 526w" sizes="24px" width="24" height="24" alt="NaC" hidden><select id="repository-select"></select></section>
       <h2 class="navigation-heading" id="navigation-heading">Vorgangsarten <span id="case-count"></span></h2>
       <label class="visually-hidden" for="case-search">Vorgangsart suchen</label><input id="case-search" type="search" placeholder="Vorgangsart suchen …">
       <div id="case-list" class="case-list"></div><nav id="task-navigation" class="task-navigation" aria-label="Aufgabenauswahl" hidden></nav>    <section id="draft-panel" class="draft-panel" aria-label="Meine gespeicherten Entwürfe" hidden>

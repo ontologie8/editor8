@@ -40,6 +40,9 @@ jobs:
           done
           curl --fail --silent http://127.0.0.1:18765/healthz
           curl --fail --silent http://127.0.0.1:18765/ > /dev/null
+          for asset in editor/assets/brand/*.png; do
+            curl --fail --silent "http://127.0.0.1:18765/${asset#editor/}" > /dev/null
+          done
           test "$(curl --fail --silent http://127.0.0.1:18765/api/release | python -c 'import json,sys; print(json.load(sys.stdin)["commit"])')" = "$GITHUB_SHA"
           test "$(curl --silent --output /dev/null --write-out '%{http_code}' http://127.0.0.1:18765/api/status)" = 401
           docker exec editor8-smoke python -c "from pathlib import Path; assert not Path('/app/catalog').exists(); assert not Path('/app/cases').exists()"
@@ -100,6 +103,11 @@ jobs:
                 remote_css_hash=$(curl --fail --silent --show-error "$base/style.css" | sha256sum | cut -d ' ' -f1)
                 test "$remote_html_hash" = "$local_html_hash"
                 test "$remote_css_hash" = "$local_css_hash"
+                for asset in editor/assets/brand/*.png; do
+                  expected_asset_hash=$(sha256sum "$asset" | cut -d ' ' -f1)
+                  live_asset_hash=$(curl --fail --silent --show-error "$base/${asset#editor/}" | sha256sum | cut -d ' ' -f1)
+                  test "$live_asset_hash" = "$expected_asset_hash"
+                done
                 release=$(curl --fail --silent --show-error "$base/api/release" | python -c 'import json,sys; print(json.load(sys.stdin)["commit"])')
                 test "$release" = "$GITHUB_SHA"
                 exit 0

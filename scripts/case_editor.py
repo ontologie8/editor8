@@ -27,6 +27,7 @@ from case_index import build_case_index
 from vocabulary_editor import model as vocabulary_model, prepare_change as prepare_vocabulary_change
 from vocabulary_impact import impact_index
 from release_info import release_info
+from brand_assets import BRAND_ASSETS
 
 
 ASSETS = APP_ROOT / "editor"
@@ -339,6 +340,8 @@ class EditorHandler(BaseHTTPRequestHandler):
                 filename = "index.html" if path == "/" else path.lstrip("/")
                 types = {"index.html": "text/html", "app.js": "text/javascript", "style.css": "text/css"}
                 self._send(200, (ASSETS / filename).read_bytes(), types[filename] + "; charset=utf-8")
+            elif path in BRAND_ASSETS:
+                self._send(200, (ASSETS / BRAND_ASSETS[path]).read_bytes(), "image/png")
             else:
                 self._json(404, {"error": "Nicht gefunden"})
         except ValueError as exc:

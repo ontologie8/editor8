@@ -17,3 +17,10 @@ Upstream revision: a563cf9166f4f91aa617557ed272612b7f0a2f72
 Copyright (c) 2020 Microsoft Corporation. MIT license.
 License text: docs/design/assets/fluent/LICENSE and editor/vendor/fluent/LICENSE.
 SVGs are embedded in the preview with inherited color and accessibility attributes.
+software8-de e8 and n8 brand images:
+Source: https://github.com/software8-de/icons
+Upstream revision: 31766769bcb1c73417894859b02955140bd0d495
+Original files: png_32/{e8,n8}_32.png, png_192/{e8,n8}_192.png, png_526/{e8,n8}_526.png.
+Used unchanged at the user's explicit direction, 2026-10-02.
+The upstream repository contains no license declaration at this revision.
+These brand images are not assigned the editor code license.

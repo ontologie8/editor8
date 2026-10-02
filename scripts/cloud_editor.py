@@ -31,6 +31,7 @@ from rdflib import Graph, Namespace
 from rdflib.namespace import SKOS
 
 from data_contract import APP_ROOT
+from brand_assets import BRAND_ASSETS
 from release_info import release_info
 from repository_registry import load_repositories
 from github_store import GitHubError, GitHubStore
@@ -283,6 +284,8 @@ class CloudHandler(BaseHTTPRequestHandler):
                 filename = "index.html" if path.path == "/" else path.path.lstrip("/")
                 kind = {"index.html": "text/html", "app.js": "text/javascript", "style.css": "text/css"}
                 self._send(200, (ASSETS / filename).read_bytes(), kind[filename])
+            elif path.path in BRAND_ASSETS:
+                self._send(200, (ASSETS / BRAND_ASSETS[path.path]).read_bytes(), "image/png")
             elif path.path == "/api/status":
                 session = self._session()
                 self._json(200, {"token": session["csrf"], "branch": session["branch"], "purpose": session.get("purpose", "case"), "case": session.get("case", ""), "hosted": True, "user": session["user"], "notary_reviewer": session["user"].lower() in self._notaries(), "ontology_maintainer": session["user"].lower() in self._maintainers()})

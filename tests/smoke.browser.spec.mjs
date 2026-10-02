@@ -32,10 +32,15 @@ test('release links to the delivered commit and data targets can be switched', a
   await expect(page.locator('#release-link')).toHaveText(commit.slice(0,12));
   await expect(page.locator('#release-link')).toHaveAttribute('href', 'https://github.com/ontologie8/editor8/commit/' + commit);
   await expect(page.locator('#repository-select option')).toHaveCount(2);
+  await expect(page.locator('#editor-brand')).toBeVisible();
+  await expect(page.locator('#data-brand')).toBeVisible();
+  expect(await page.locator('#editor-brand').evaluate(image=>image.complete&&image.naturalWidth>0)).toBe(true);
+  expect(await page.locator('#data-brand').evaluate(image=>image.complete&&image.naturalWidth>0)).toBe(true);
   await page.request.post('/api/drafts/leave', {headers: {'Origin':'http://127.0.0.1:18767', 'X-Editor-Token':'browser-csrf'}, data: {}});
   await page.reload();
   await page.locator('#repository-select').selectOption('example/second-dataset');
   await expect(page.locator('#repository-name')).toHaveText('example/second-dataset');
+  await expect(page.locator('#data-brand')).toBeHidden();
   await expect(page.locator('#case-list .case-item')).toHaveCount(2);
   await page.setViewportSize({width:500, height:800});
   await expect(page.locator('#release-link')).toBeVisible();

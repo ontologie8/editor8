@@ -52,7 +52,7 @@ $env:NAC_TEST_PYTHON = (Resolve-Path .\.venv\Scripts\python.exe).Path
 npm run test:integration:browser
 ```
 
-Die Integration verändert keine echten GitHub-Daten. Ein produktiver OAuth-/Schreib-/PR-Durchlauf und die notarielle Fachprüfung sind eigene Abnahmen.
+Die Integration verändert keine echten GitHub-Daten. Sie läuft zusätzlich bei Datenänderungen, täglich und manuell im privaten Datenrepository; [Datenintegration in CI](docs/editor-integration-ci.md) beschreibt die getrennten Checkouts und die Wiederholung mit vollständigen Editor-/Datencommits. Ein produktiver OAuth-/Schreib-/PR-Durchlauf und die notarielle Fachprüfung sind eigene Abnahmen.
 
 ## Lizenz
 

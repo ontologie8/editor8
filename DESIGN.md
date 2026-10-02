@@ -18,6 +18,8 @@ Verstehen → Bearbeiten → Prüfen. Beim Öffnen steht das Verständnis der Fa
 
 ## Visuelle Richtung
 
+Die vom Nutzer vorgegebenen Markenlogos stammen aus `software8-de/icons`, Revision `31766769bcb1c73417894859b02955140bd0d495`: e8 für Editor-Titelleiste und Browser-Symbol, n8 für das NaC-Datenziel `notariat8/ontology`. Original-PNGs in 32, 192 und 526 Pixeln werden unverändert eingebunden; responsive Bildquellen berücksichtigen die Geräteskalierung. Andere Datenziele erhalten kein NaC-Logo. Herkunft und Lizenzzuordnung stehen in NOTICE und LICENSES/README.md.
+
 Microsoft Office / Outlook ist die primäre Referenz für Benennung, Menüband und räumliche Anordnung gemäß Nutzerkorrektur vom 02.10.2026. Die vom Nutzer gezeigte Outlook-Abbildung wird nur als visuelle Referenz verwendet; keine darin enthaltenen Konto- oder Nachrichtenwerte werden übernommen.
 
 Palantir Ontology Manager ist ergänzende Referenz für ruhige Navigation, Lesbarkeit, Detailanordnung und Beziehungen. Seine dauerhafte Kopf- und Seitenleiste dienen als Orientierung. Es werden keine Logos, Screenshots oder Produktassets übernommen.

@@ -931,6 +931,7 @@ async function init() {
         select.append(option);
       }
       select.value = sources.selected;
+      $("data-brand").hidden = sources.selected.toLowerCase() !== "notariat8/ontology";
       $("repository-name").textContent = sources.selected;
       $("repository-picker").hidden = false;
       select.addEventListener("change", async () => {

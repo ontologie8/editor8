@@ -1,6 +1,6 @@
 # Desktop-Arbeitsoberfläche
 
-Status: abgestimmte Anforderungen vom 02.10.2026; erster klickbarer Entwurf zur visuellen Entscheidung. Der Entwurf ist noch keine abgenommene Produktoberfläche.
+Status: verbindliche Nutzeranforderungen vom 02.10.2026. Der erste klickbare Entwurf wurde visuell abgelehnt; Maße und Proportionen müssen gemäß [Microsoft-Referenzprüfung](docs/design/microsoft-reference-audit.md) korrigiert werden. Keine Designabnahme.
 
 ## Aufgabe und Reihenfolge
 

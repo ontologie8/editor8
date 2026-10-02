@@ -73,3 +73,7 @@ Wenn auch die beiden ursprünglichen Ausschnitte bei diesen Einstellungen aufgen
 Die Zielwerte 68/236/36/44 sind aus Referenzschätzung und Fluent-Abstandsraster abgeleitet. Sie sind keine von Microsoft fest vorgeschriebenen Outlook-Werte. Der Screenshot erklärt die fast exakt zur aktuellen CSS-Höhe passende übergroße Befehlsleiste: 91×2,5≈228 Bildpixel gegenüber gemessenen 226.
 
 Für die nächste Umsetzung genügt die vorliegende Evidenz. Die App kann ihre nutzbare Innenfläche und das Gerätepixelverhältnis selbst messen. Kein neuer Kontozugang, Figma-Zugang, Secret oder weiterer Screenshot ist dafür erforderlich.
+
+## Korrigierte Vorschau nach Nutzerhinweisen
+
+Die nächste Vorschaufassung setzt die abgeleiteten Breiten und die 44-px-Befehlsleiste um, verwendet offizielle MIT-lizenzierte Fluent-Symbole und unterstützt ein reduziertes, vorübergehend ausgeklapptes sowie dauerhaft sichtbares Menüband. Die allgemeine Hilfe ist nur oben erreichbar; Objekt-Kontexthilfe nutzt ein Fragezeichen am rechten Detailbereich. Die äußere Leiste enthält nur die drei Arbeitsbereiche; die Suche liegt ausschließlich im Titelbereich und die Darstellungswahl unter Ansicht. Der ursprüngliche visuell abgelehnte Entwurf gilt weiterhin nicht als abgenommen; auch die Korrektur braucht visuelle Beurteilung.

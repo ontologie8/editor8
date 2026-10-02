@@ -11,8 +11,8 @@ Verstehen → Bearbeiten → Prüfen. Beim Öffnen steht das Verständnis der Fa
 - Primär: 27–34-Zoll-Monitore, 2K–4K. Auch bei Windows-Skalierung muss die Oberfläche ausreichend Platz und lesbare Schrift bieten. Deshalb CSS-Viewports zusätzlich bei 1440×900 und 1920×1080 prüfen, nicht nur physische Pixel zählen.
 - Die Anwendung füllt das Browserfenster. Kein Seitenscrollen, um Menüs, Hauptaktionen, Datenrepository- oder Vorgangsauswahl zu finden.
 - Titelbereich, Hauptmenü, kontextbezogene Befehle und Statusleiste bleiben sichtbar. Arbeitsfläche und einzelne Inhalte dürfen intern scrollen. Keine unbegrenzt wachsende Seite.
-- Ganz links: feste Bereichsnavigation (Verstehen, Bearbeiten, Prüfen, Hilfe). Daneben: ausgewähltes Datenziel, Suche und aufklappbarer Baum Datenziel → Vorgang → Baustein. Mitte: Fachgraph oder Arbeitsdokument. Rechts: Details, Bearbeitung, Prüfvergleich oder Hilfe. Die Auswahlposition bleibt beim Aufgabenwechsel erhalten.
-- Microsoft-Office-Menüführung: Datei, Startseite, Bearbeiten, Überprüfen, Ansicht, Hilfe. Standardbefehle heißen durchgängig Öffnen, Speichern, Drucken; keine eigenen Ersatznamen. Die Arbeitsfolge Verstehen → Bearbeiten → Prüfen wird durch Inhalt und Hilfe unterstützt, nicht als erfundene Standardmenüs ausgegeben. Befehle werden nach Aufgabe gruppiert; ein aktiver Menübereich zeigt die passenden Aktionen. Keine Ansammlung gleichgewichtiger Schaltflächen in der Kopfzeile.
+- Ganz links: feste Bereichsnavigation (Verstehen, Bearbeiten, Prüfen, Hilfe). Daneben: ausgewähltes Datenziel und aufklappbarer Baum Datenziel → Vorgang → Baustein. Mitte: Fachgraph oder Arbeitsdokument. Rechts: Details, Bearbeitung, Prüfvergleich oder Hilfe. Die Auswahlposition bleibt beim Aufgabenwechsel erhalten.
+- Microsoft-Office-Menüführung: Datei, Startseite, Ansicht, Hilfe. Standardbefehle heißen durchgängig Öffnen, Speichern, Drucken; keine eigenen Ersatznamen. Die Arbeitsfolge Verstehen → Bearbeiten → Prüfen wird durch Inhalt und Hilfe unterstützt, nicht als erfundene Standardmenüs ausgegeben. Befehle werden nach Aufgabe gruppiert; ein aktiver Menübereich zeigt die passenden Aktionen. Keine Ansammlung gleichgewichtiger Schaltflächen in der Kopfzeile.
 - Vollbild, Fensteransicht und einblendbare Details ändern die verfügbare Arbeitsfläche, nicht den Ort der Menüs.
 - Mobile ist sekundär. Kleinere Ansichten dürfen kompakter werden, ohne die Desktop-Arbeitsfläche als lange Webseite abzubilden.
 
@@ -53,3 +53,17 @@ Die gesamte Oberfläche folgt dem vom Nutzer vorgegebenen Office-/Outlook-Muster
 ## Tatsächlicher Desktop des Nutzers
 
 3840×2160, Windows-Skalierung 250 %, Browserzoom 100 % wurden am 02.10.2026 bestätigt. Für Layoutprüfung höchstens 1536×864 CSS-Pixel und zusätzlich eine kleinere Browser-Innenhöhe verwenden; Gerätepixelverhältnis 2,5 prüfen. Physische 4K-Auflösung nicht mit einem 4K-CSS-Viewport gleichsetzen. Näherungswerte für die nächste Office-Hülle: außen 68 px, innerer Baum 236 px, Menüzeile 36 px, kompakte Befehlsleiste 44 px; Herleitung und Grenzen stehen in der Referenzprüfung.
+
+## Menüband und Symbole
+
+Office-Verhalten: [Menüband ein-/ausblenden](https://support.microsoft.com/de-DE/Office/foundations-experiences/show-or-hide-the-ribbon-in-office). Nur Registerkarten anzeigen, bei Klick Befehle vorübergehend öffnen, dauerhaftes Anzeigen über Anheften; Strg+F1 und Doppelklick wechseln den Zustand. Escape bzw. Klick auf den Arbeitsbereich schließen die vorübergehende Befehlsleiste. Die Baum-Navigation wird unabhängig davon mit dem Hamburger-Schalter gesteuert.
+
+Die Vorschau verwendet originale Fluent-System-SVGs aus einem festgehaltenen Microsoft-Commit; MIT-Lizenz und Herkunft liegen bei den Assets und in NOTICE. Kompakte Befehlsleiste jetzt 44 px, äußere Leiste 68 px, innerer Baum 236 px. Dies ist eine neue Korrektur zur visuellen Prüfung, noch keine Abnahme.
+
+## Eindeutige Befehlsorte
+
+- Oben Hilfe: allgemeine Dokumentation, Kurzanleitung, Begriffe und Beispiele im mittleren Arbeitsbereich.
+- Am Objekt ein Fragezeichen: Kontexthilfe zur aktuellen Auswahl im rechten Bereich, kein zweites Hauptmenü Hilfe.
+- Links außen ausschließlich Verstehen, Bearbeiten, Prüfen. Eine einzige Suche im Titelbereich filtert den Baum. Keine doppelte Hilfe oder zusätzliche Bearbeiten-/Prüfen-Registerkarte oben.
+- Darstellungswahl ausschließlich unter Ansicht, keine wiederholte Ansichtsregisterleiste im Dokument.
+- Fluent-Komponentenregeln: [Toolbar](https://fluent2.microsoft.design/components/web/react/core/toolbar/usage), [Info label](https://fluent2.microsoft.design/components/web/react/core/info-label/usage), [Tooltip](https://fluent2.microsoft.design/components/web/react/core/tooltip/usage), [Tree](https://fluent2.microsoft.design/components/web/react/core/tree/usage). Komponentenregeln bilden die Gestaltung ab; die Zuordnung auf Editor-Aufgaben ist eine dokumentierte Implementierungsentscheidung.

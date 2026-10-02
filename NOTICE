@@ -10,3 +10,10 @@ The underlying NaC notarial template catalog remains in notariat8/ontology.
 NaC: Notariat as Code by funktion8 / ofunk: https://github.com/notariat8/NaC
 No trademark rights or notarial approval are implied.
 License allocation: LICENSES/README.md.
+
+Microsoft Fluent System Icons used in the desktop design preview:
+Source: https://github.com/microsoft/fluentui-system-icons
+Upstream revision: a563cf9166f4f91aa617557ed272612b7f0a2f72
+Copyright (c) 2020 Microsoft Corporation. MIT license.
+License text: docs/design/assets/fluent/LICENSE.
+SVGs are embedded in the preview with inherited color and accessibility attributes.

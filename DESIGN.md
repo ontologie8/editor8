@@ -49,3 +49,7 @@ NavigationView und TreeView beschreiben Windows-Steuerelemente; im Browser wird 
 ## Verbindliche Gesamtanordnung
 
 Die gesamte Oberfläche folgt dem vom Nutzer vorgegebenen Office-/Outlook-Muster, nicht nur einzelne Schaltflächen: heller Titelbereich mit Suche, oben links Hamburger-Schaltfläche zum Ein-/Ausblenden des inneren Navigationsbereichs, Registerkarten und Befehlsgruppen im Menüband, äußere feste Bereichsleiste, innere Baum-/Auswahlnavigation, mittlere Arbeitsfläche, rechter Detail-/Hilfebereich und Statusleiste. Die äußere Bereichsleiste bleibt beim Einklappen des Baums erreichbar. Der Bereich Verstehen zeigt die Modellhierarchie, Bearbeiten die Modellhierarchie mit bearbeitbarer Auswahl, Prüfen die gespeicherten Änderungen, Hilfe die Dokumentationsauswahl. Keine funktionslosen Outlook-Bereiche wie E-Mail oder Kalender übernehmen.
+
+## Tatsächlicher Desktop des Nutzers
+
+3840×2160, Windows-Skalierung 250 %, Browserzoom 100 % wurden am 02.10.2026 bestätigt. Für Layoutprüfung höchstens 1536×864 CSS-Pixel und zusätzlich eine kleinere Browser-Innenhöhe verwenden; Gerätepixelverhältnis 2,5 prüfen. Physische 4K-Auflösung nicht mit einem 4K-CSS-Viewport gleichsetzen. Näherungswerte für die nächste Office-Hülle: außen 68 px, innerer Baum 236 px, Menüzeile 36 px, kompakte Befehlsleiste 44 px; Herleitung und Grenzen stehen in der Referenzprüfung.

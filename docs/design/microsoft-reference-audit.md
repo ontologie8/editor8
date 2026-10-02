@@ -6,7 +6,7 @@ Stand: 02.10.2026. Der bisherige Entwurf ist funktional geprüft, aber vom Nutze
 
 Die beiden vom Nutzer bereitgestellten Original-PNGs wurden in Originalauflösung ausgelesen: Outlook 2527×1167, Editor 2705×1230. Gemessen wurden Grenzen homogener Hintergrundflächen mit System.Drawing und visuell kontrollierte Trennlinien. Keine Konto- oder Nachrichteninhalte werden übernommen; die Screenshots bleiben außerhalb des Repositorys.
 
-Alle folgenden Angaben sind ungefähr und in **Bildpixeln**, nicht CSS-Pixeln. Abweichende Windows-Skalierung, Browserzoom und Ausschnitt sind nicht bekannt. Der Editor-Ausschnitt zeigt die Titelzeile nur teilweise und den rechten Bereich nicht vollständig. Ganze Fensterhöhen, vollständige Spaltenanteile und exakte CSS-Schriftgrößen sind daraus nicht belastbar vergleichbar. Verhältnisse benachbarter Elemente innerhalb eines Bildes sind trotzdem brauchbar.
+Alle folgenden Angaben sind ungefähr und in **Bildpixeln**, nicht CSS-Pixeln. Der Nutzer hat anschließend Windows-Skalierung 250 %, Bildschirmauflösung 3840×2160 und Browserzoom 100 % bestätigt. Ob beide früheren Ausschnitte unter exakt diesen Einstellungen aufgenommen wurden, ist nicht gesondert bestätigt. Der Editor-Ausschnitt zeigt die Titelzeile nur teilweise und den rechten Bereich nicht vollständig. Ganze Fensterhöhen, vollständige Spaltenanteile und exakte CSS-Schriftgrößen sind daraus nicht belastbar vergleichbar. Verhältnisse benachbarter Elemente innerhalb eines Bildes sind trotzdem brauchbar.
 
 | Element | Outlook-Referenz | Abgelehnter Editor-Ausschnitt | Befund |
 |---|---:|---:|---|
@@ -53,6 +53,23 @@ Fluent ist die Bauteil- und Gestaltungsgrundlage. Die konkrete Outlook-Anordnung
 
 ## Fehlende Information und Grenzen
 
-Für die proportionale Korrektur reichen die vorhandenen Bilder. Für eine exakt kalibrierte Umsetzung fehlen Windows-Anzeigeskalierung, Browserzoom und gegebenenfalls der vollständige sichtbare App-Viewport. Dafür werden keine Geheimnisse, Kontozugänge oder Zugriff auf das alte Datenrepository benötigt. Ein zusätzlicher Screenshot oder Figma ist keine Voraussetzung für den nächsten Korrekturschritt.
+Für die proportionale Korrektur reichen die vorhandenen Bilder. Windows-Anzeigeskalierung und Browserzoom sind nun bekannt. Die exakte nutzbare Browser-Innenfläche hängt noch von Fenstergröße und Browserleisten ab und kann im Editor selbst gemessen werden. Dafür werden keine Geheimnisse, Kontozugänge oder Zugriff auf das alte Datenrepository benötigt. Ein zusätzlicher Screenshot oder Figma ist keine Voraussetzung für den nächsten Korrekturschritt.
 
 Derzeit steht das Outlook-Original als Bild zur Verfügung, nicht sein DOM oder sein CSS. Ein Screenshot verrät keine exakten CSS-Werte, versteckten Zustände oder Interaktionen. Reale Outlook-Maße könnten bei ausdrücklich bereitgestellter Browsermessung ergänzt werden; auf private Nachrichten muss dafür nicht zugegriffen werden. Interaktionen wie Hover, Fokus, Auswahl, deaktiviert, Menü geöffnet und eingeklappter Baum werden aus den öffentlichen Microsoft-Komponenten spezifiziert und im Editor geprüft.
+
+## Bestätigte Zielumgebung und abgeleitete Maßtabelle
+
+Nutzerbestätigt: 3840×2160 physische Pixel, Windows 250 %, Browser 100 %. Rechnerische logische Bildschirmfläche: 1536×864; Browserleisten und Fensterrahmen verkleinern die tatsächliche Innenfläche. 3840×2160 als CSS-Testfenster bildet diesen Arbeitsplatz nicht ab. Zusätzlich zur bisherigen Matrix müssen 1536×864 und eine konservative Fenster-Innenfläche von 1536×760 bei Gerätepixelverhältnis 2,5 geprüft werden. 760 ist eine Testannahme, kein gemessener Wert des Nutzerfensters.
+
+Wenn auch die beiden ursprünglichen Ausschnitte bei diesen Einstellungen aufgenommen wurden, ergeben sich durch Division der Bildpixel durch 2,5 folgende **Referenzschätzungen**:
+
+| Maß | Outlook in CSS-Pixeln, ungefähr | Bisheriger Entwurf | Korrekturgrundlage |
+|---|---:|---:|---|
+| Äußere Bereichsleiste | 68 | 88 | 68 px |
+| Innerer Baum-/Navigationsbereich | 235 | 260 | 236 px, verstellbar |
+| Menüzeile | 34 | 36 | 36 px |
+| Kompakte Befehlsleiste | 42 | 91 | 44 px ohne zusätzliche Gruppenunterzeile |
+
+Die Zielwerte 68/236/36/44 sind aus Referenzschätzung und Fluent-Abstandsraster abgeleitet. Sie sind keine von Microsoft fest vorgeschriebenen Outlook-Werte. Der Screenshot erklärt die fast exakt zur aktuellen CSS-Höhe passende übergroße Befehlsleiste: 91×2,5≈228 Bildpixel gegenüber gemessenen 226.
+
+Für die nächste Umsetzung genügt die vorliegende Evidenz. Die App kann ihre nutzbare Innenfläche und das Gerätepixelverhältnis selbst messen. Kein neuer Kontozugang, Figma-Zugang, Secret oder weiterer Screenshot ist dafür erforderlich.

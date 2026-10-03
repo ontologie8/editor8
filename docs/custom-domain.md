@@ -24,3 +24,13 @@ Die folgende Folge dient der Wiederholung. Der Deployment-Workflow prüft jetzt 
 4. Eine echte Anmeldung unter der neuen Domain prüfen. Bestehende Nutzer- und Notarrechte getrennt prüfen; Domain und Zertifikat ändern diese Rechte nicht.
 
 Die vorhandenen Werkzeuge bedienen Azure und GitHub-Repositories, jedoch nicht die angemeldete GitHub-App-Einstellungsseite. Der Betreiber hat deren Eintrag selbst vorgenommen. Neue Secrets oder eine neue App waren nicht erforderlich.
+
+## Fehlerbehandlung der Anmeldung
+
+Am 03.10.2026 meldete der Betreiber beim persönlichen Callback `Serverfehler bei der Anfrage`. Die Logs der Revision `0000016` bestätigten HTTP 500; ein vorheriger Callback hatte HTTP 401. Da diese Version Ausnahmen im Callback ohne Ursache abfing, lässt sich die genaue Ursache dieses Versuchs nachträglich nicht feststellen. Eine Diagnose aus dem laufenden Container erreichte GitHub und dessen API. Ein neu angelegter, browsergebundener Versuch mit einem ausdrücklich ungültigen künstlichen Code endete erwartungsgemäß mit HTTP 401. Diese Prüfungen bestätigen keine erfolgreiche persönliche Anmeldung.
+
+Der Editor leitet den Anmeldeeinstieg auf einem anderen öffentlichen Host zuerst nach `PUBLIC_ORIGIN` um. Erst dort legt er das an den Browser gebundene OAuth-Cookie an. Dadurch passt ein Einstieg über den alten Azure-Namen zur Rückkehr auf `www.ontologie8.de`. Die Anmeldung bleibt mit State, PKCE und einem sicheren Cookie geschützt; deren Prüfung wird nicht abgeschwächt.
+
+Callback-Fehler erhalten eine deutsche HTML-Seite mit **Erneut anmelden** und einer zufälligen Diagnose-Kennung. Die sicheren Logfelder `id`, `stage`, `category` und `status` unterscheiden Browserbindung, Tokenaustausch, GitHub-Benutzerprüfung, Repository-Zugriff und Sitzungserstellung. Provider-Antworten, Ausnahmetexte, Abfrageparameter, Codes, Cookies und Tokens werden dafür nicht protokolliert. Verbindungs- und Zeitfehler liefern HTTP 503, ungültige Provider-Antworten HTTP 502. Ein persönlicher Versuch nach der Auslieferung bleibt erforderlich, um den ursprünglichen Fehler zu beheben oder seine Ursache sicher einzugrenzen.
+
+Bei einer fehlgeschlagenen Anmeldung immer **Erneut anmelden** wählen. Das erneute Öffnen einer alten Callback-Adresse kann weder einen verbrauchten Code noch einen abgelaufenen Anmeldezustand erneuern. Nur Fehlermeldung und Diagnose-Kennung weitergeben. [GitHub beschreibt State, PKCE und den einmaligen Codeaustausch](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-user-access-token-for-a-github-app).

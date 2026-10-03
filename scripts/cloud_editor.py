@@ -15,6 +15,7 @@ from contextlib import nullcontext
 import base64
 from datetime import datetime, timezone
 import hashlib
+from html import escape
 from http.cookies import SimpleCookie
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
@@ -23,7 +24,7 @@ from pathlib import Path
 import secrets
 import threading
 import time
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.parse import parse_qs, quote, urlencode, urlparse
 from urllib.request import Request, urlopen
 
@@ -42,6 +43,10 @@ ASSETS = APP_ROOT / "editor"
 MAX_REQUEST = 250_000
 SESSION_LIFETIME = 8 * 60 * 60
 AUTH_LIFETIME = 5 * 60
+
+
+class AuthenticationRejected(PermissionError):
+    """A fixed editor message safe to show on the sign-in error page."""
 
 
 def require_config() -> dict[str, str]:
@@ -195,6 +200,12 @@ class CloudHandler(BaseHTTPRequestHandler):
         return self._role("ONTOLOGY_MAINTAINERS")
 
     def _login(self) -> None:
+        # A host-only OAuth cookie must be set on the callback's origin.
+        origin = self.server.config["PUBLIC_ORIGIN"].rstrip("/")
+        hostname = urlparse("//" + self.headers.get("Host", "")).hostname
+        if hostname and hostname not in (urlparse(origin).hostname, "127.0.0.1", "localhost", "::1"):
+            self._redirect(origin + "/login")
+            return
         state = secrets.token_urlsafe(24)
         verifier = secrets.token_urlsafe(48)
         challenge = base64.urlsafe_b64encode(hashlib.sha256(verifier.encode()).digest()).decode().rstrip("=")
@@ -215,16 +226,58 @@ class CloudHandler(BaseHTTPRequestHandler):
         ])
 
     def _callback(self, query: dict[str, list[str]]) -> None:
+        self._auth_stage = "browser-state"
+        try:
+            self._authorize(query)
+        except AuthenticationRejected as error:
+            self._auth_failure(401, str(error), "rejected")
+        except HTTPError as error:
+            message = "GitHub konnte die Anmeldung nicht bestätigen. Bitte die Anmeldung erneut beginnen."
+            self._auth_failure(503 if error.code >= 500 or error.code == 429 else 403, message, "github-http-" + str(error.code))
+        except (URLError, TimeoutError, OSError) as error:
+            category = "github-connection"
+            if isinstance(error, TimeoutError) or isinstance(getattr(error, "reason", None), TimeoutError):
+                category = "github-timeout"
+            self._auth_failure(503, "Die Verbindung zu GitHub ist fehlgeschlagen. Bitte die Anmeldung erneut beginnen.", category)
+        except (ValueError, KeyError, TypeError):
+            self._auth_failure(502, "GitHub hat keine gültige Antwort für die Anmeldung geliefert. Bitte die Anmeldung erneut beginnen.", "invalid-response")
+        except Exception:
+            self._auth_failure(500, "Die Anmeldung konnte nicht abgeschlossen werden. Bitte die Anmeldung erneut beginnen und bei erneutem Fehler die Diagnose-Kennung melden.", "internal-error")
+
+    def _auth_failure(self, status: int, message: str, category: str) -> None:
+        request_id = secrets.token_hex(6)
+        # Never log exception text, provider response bodies, URLs or credentials.
+        self.log_message("auth_failure id=%s stage=%s category=%s status=%s", request_id, self._auth_stage, category, status)
+        login = self.server.config["PUBLIC_ORIGIN"].rstrip("/") + "/login"
+        body = (
+            '<!doctype html><html lang="de"><head><meta charset="utf-8">'
+            '<meta name="viewport" content="width=device-width,initial-scale=1">'
+            '<title>Anmeldung – editor8</title><link rel="stylesheet" href="/style.css"></head>'
+            '<body class="auth-page"><main class="auth-card">'
+            '<img src="/assets/brand/e8_192.png" width="48" height="48" alt="e8">'
+            '<h1>Anmeldung nicht abgeschlossen</h1><p>' + escape(message) + '</p>'
+            '<a class="auth-retry" href="' + escape(login, quote=True) + '">Erneut anmelden</a>'
+            '<p class="auth-diagnostic">Diagnose-Kennung: <code>' + request_id + '</code></p>'
+            '<p>Bei Rückfragen nur die Fehlermeldung und Diagnose-Kennung weitergeben.</p>'
+            '</main></body></html>'
+        )
+        self._send(status, body.encode("utf-8"), "text/html", {
+            "X-Request-ID": request_id,
+            "Set-Cookie": "nac_oauth_state=; Path=/callback; Max-Age=0; HttpOnly; Secure; SameSite=Lax",
+        })
+
+    def _authorize(self, query: dict[str, list[str]]) -> None:
         state = query.get("state", [""])[0]
         code = query.get("code", [""])[0]
         jar = SimpleCookie()
         jar.load(self.headers.get("Cookie", ""))
         if not state or "nac_oauth_state" not in jar or jar["nac_oauth_state"].value != state:
-            raise PermissionError("Anmeldung stimmt nicht mit diesem Browser überein")
+            raise AuthenticationRejected("Anmeldung stimmt nicht mit diesem Browser überein")
         with self.server.lock:
             pending = self.server.pending.pop(state, None)
         if not pending or time.time() - pending["created"] > AUTH_LIFETIME or not code:
-            raise PermissionError("Anmeldung abgelaufen. Bitte erneut beginnen.")
+            raise AuthenticationRejected("Anmeldung abgelaufen. Bitte erneut beginnen.")
+        self._auth_stage = "token-exchange"
         params = {
             "client_id": self.server.config["GITHUB_APP_CLIENT_ID"],
             "client_secret": self.server.config["GITHUB_APP_CLIENT_SECRET"],
@@ -239,18 +292,27 @@ class CloudHandler(BaseHTTPRequestHandler):
             result = json.load(response)
         token = result.get("access_token")
         if not token:
-            raise PermissionError("GitHub-Anmeldung fehlgeschlagen")
+            errors = {
+                "bad_verification_code": "Der Anmeldecode ist abgelaufen oder wurde bereits verwendet. Bitte die Anmeldung erneut beginnen.",
+                "incorrect_client_credentials": "Die GitHub-App-Konfiguration muss vom Betreiber geprüft werden.",
+                "redirect_uri_mismatch": "Die Callback-Adresse der GitHub-App muss vom Betreiber geprüft werden.",
+                "bad_code_verifier": "Die Anmeldedaten passen nicht zu dieser Anmeldung. Bitte erneut beginnen.",
+            }
+            raise AuthenticationRejected(errors.get(result.get("error"), "GitHub-Anmeldung fehlgeschlagen. Bitte erneut beginnen."))
+        self._auth_stage = "github-user"
         user = github_json("https://api.github.com/user", token)
         allowed = {name.strip().lower() for name in self.server.config["EDITOR_USERS"].split(",")}
         if user["login"].lower() not in allowed:
-            raise PermissionError("Dieses GitHub-Konto ist nicht als Editor freigeschaltet")
+            raise AuthenticationRejected("Dieses GitHub-Konto ist nicht als Editor freigeschaltet")
         # A readable repo and a working user token are required; write permission
         # is enforced again by GitHub when creating branches or commits.
+        self._auth_stage = "repository-access"
         available = self._available_repositories(user["login"], token)
         if not available:
-            raise PermissionError("Kein freigeschaltetes Datenrepository ist für dieses Konto zugänglich")
+            raise AuthenticationRejected("Kein freigeschaltetes Datenrepository ist für dieses Konto zugänglich")
         default = self.server.config["GITHUB_REPOSITORY"]
         repository = default if any(entry["repository"] == default for entry in available) else available[0]["repository"]
+        self._auth_stage = "session-create"
         sid = secrets.token_urlsafe(32)
         with self.server.lock:
             self.server.sessions[sid] = {

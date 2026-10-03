@@ -245,7 +245,7 @@ window.EDITOR8_LEARNING = {
           {
             "id": "speichern-1",
             "title": "Speichern zeigt zuerst den Vergleich",
-            "text": "Ungespeicherte Eingaben sind zunächst Browserzustand. Datei → Speichern oder Strg+S öffnet die fachliche Vorschau. Erst die Bestätigung schreibt in deinen Datenentwurf.",
+            "text": "Ungespeicherte Eingaben sind zunächst Browserzustand. Datei → Speichern oder Strg+S öffnet die fachliche Vorschau. Erst die Bestätigung schreibt in deinen Datenentwurf. Während der Speicherung kurz warten; bei einem Fehler bleiben die Eingaben offen und müssen erneut gespeichert werden.",
             "steps": [
               "Vergleiche alte und neue Bezeichnung.",
               "Prüfe, ob weitere unbeabsichtigte Änderungen auftauchen."
@@ -619,7 +619,8 @@ window.EDITOR8_LEARNING = {
           "Tippen verändert zunächst den Browserzustand. Speichern öffnet die fachliche Vorschau. Bestätigung schreibt in deinen Entwurfszweig im Datenrepository. Einreichen erzeugt einen Pull Request. Diese Schritte erteilen keine notarielle Freigabe.",
           "Eine andere berechtigte Person prüft die eingereichte Änderung. Fachliche Freigaben sind für eingetragene Notarkonten vorgesehen und beziehen sich auf den geprüften Commit. Änderungen nach der Prüfung benötigen eine Beurteilung des neuen Stands.",
           "Der vereinbarte Pilot verwendet einen manuellen Merge-Weg: verantwortliche Person prüft fachliche Freigabe auf dem aktuellen Commit und erfolgreiche CI vor Übernahme. Eine technisch erzwungene GitHub-Mergesperre ist eine separate optionale Betriebsentscheidung.",
-          "Eigene gespeicherte Entwürfe lassen sich wieder öffnen oder ablegen. Ungespeicherte Eingaben sind nach Browserverlust nicht dauerhaft gesichert. Eine frühere Fassung erzeugt einen neuen Prüfentwurf nach Vergleich und ersetzt main nicht direkt."
+          "Eigene gespeicherte Entwürfe lassen sich wieder öffnen oder ablegen. Beim Abmelden mit offenen Eingaben fragt der Editor vor dem Verwerfen. Ungespeicherte Eingaben sind nach Browserverlust nicht dauerhaft gesichert. Eine frühere Fassung erzeugt einen neuen Prüfentwurf nach Vergleich und ersetzt main nicht direkt.",
+          "Gespeichert wird genau die bestätigte Vorschau. Ändern sich Eingaben während deren Vorbereitung, muss Speichern erneut gewählt werden. Während des Schreibens bleiben Schließen und Weiter bearbeiten gesperrt. Bei einem Fehler zeigt die Vorschau den Hinweis und erlaubt einen erneuten Versuch; die Eingaben bleiben ungespeichert erhalten. Eine langsame Antwort beim Öffnen kann keine spätere Auswahl oder neu eingegebene Änderung ersetzen."
         ],
         "steps": [
           "Änderungsgrund und fachlichen Quellenstand lesen.",

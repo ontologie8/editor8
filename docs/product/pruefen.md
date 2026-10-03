@@ -6,7 +6,9 @@ Eine andere berechtigte Person prüft die eingereichte Änderung. Fachliche Frei
 
 Der vereinbarte Pilot verwendet einen manuellen Merge-Weg: verantwortliche Person prüft fachliche Freigabe auf dem aktuellen Commit und erfolgreiche CI vor Übernahme. Eine technisch erzwungene GitHub-Mergesperre ist eine separate optionale Betriebsentscheidung.
 
-Eigene gespeicherte Entwürfe lassen sich wieder öffnen oder ablegen. Ungespeicherte Eingaben sind nach Browserverlust nicht dauerhaft gesichert. Eine frühere Fassung erzeugt einen neuen Prüfentwurf nach Vergleich und ersetzt main nicht direkt.
+Eigene gespeicherte Entwürfe lassen sich wieder öffnen oder ablegen. Beim Abmelden mit offenen Eingaben fragt der Editor vor dem Verwerfen. Ungespeicherte Eingaben sind nach Browserverlust nicht dauerhaft gesichert. Eine frühere Fassung erzeugt einen neuen Prüfentwurf nach Vergleich und ersetzt main nicht direkt.
+
+Gespeichert wird genau die bestätigte Vorschau. Ändern sich Eingaben während deren Vorbereitung, muss Speichern erneut gewählt werden. Während des Schreibens bleiben Schließen und Weiter bearbeiten gesperrt. Bei einem Fehler zeigt die Vorschau den Hinweis und erlaubt einen erneuten Versuch; die Eingaben bleiben ungespeichert erhalten. Eine langsame Antwort beim Öffnen kann keine spätere Auswahl oder neu eingegebene Änderung ersetzen.
 
 ## Vorgehen
 

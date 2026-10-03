@@ -1,0 +1,355 @@
+{
+  "version": 1,
+  "synthetic": true,
+  "title": "Ontologien verstehen und pflegen",
+  "lessons": [
+    {
+      "id": "grundlagen",
+      "title": "1. Was pflegen wir?",
+      "goal": "Eine Vorlage von einer konkreten Akte unterscheiden.",
+      "slides": [
+        {
+          "id": "grundlagen-1",
+          "title": "Eine Ontologie macht Begriffe und Beziehungen eindeutig",
+          "text": "Das Fachmodell beschreibt, welche Arten von Angaben, Dokumenten, Entscheidungen und Prüfungen zu einem Vorgang gehören. Die Fantasiewerkstatt ist unser vollständig künstliches Lernbeispiel.",
+          "steps": [
+            "Lies die fünf Bausteine rechts.",
+            "Frage dich: Was soll eine Person mit diesem Modell verstehen können?"
+          ],
+          "focus": "local.schutz",
+          "question": "Was wird hier gepflegt?",
+          "choices": [
+            "Eine Fachvorlage",
+            "Eine konkrete Teilnehmerakte"
+          ],
+          "answer": 0,
+          "explanation": "Wir pflegen wiederverwendbare Begriffe und Beziehungen. Reale Angaben einzelner Personen werden hier nicht erfasst."
+        },
+        {
+          "id": "grundlagen-2",
+          "title": "Vorlage und konkreter Wert haben verschiedene Aufgaben",
+          "text": "„Benötigte Schutzausrüstung“ bezeichnet eine benötigte Angabe. „Helm der Teilnehmerin Lisa“ wäre ein konkreter Wert. Im Editor pflegen wir die Vorlage und ihre Bedeutung.",
+          "steps": [
+            "Formuliere die benötigte Angabe.",
+            "Lass konkrete Namen, Aktenwerte und ausgefüllte Dokumente weg."
+          ],
+          "focus": "local.schutz",
+          "question": "Welcher Inhalt passt in die Vorlage?",
+          "choices": [
+            "Name einer konkreten Person",
+            "Erläuterung der benötigten Angabe"
+          ],
+          "answer": 1,
+          "explanation": "Die Erläuterung beschreibt das Modell. Personenwerte gehören in eine dafür vorgesehene Anwendung."
+        },
+        {
+          "id": "grundlagen-3",
+          "title": "Eine Modelländerung beantwortet eine fachliche Frage",
+          "text": "Beginne mit dem Zweck: Was fehlt, ist unklar oder stimmt nicht mehr? Suche zuerst einen vorhandenen Baustein. Ein neuer Baustein braucht einen eigenen fachlichen Gegenstand.",
+          "steps": [
+            "Beispiel: Die Schutzausrüstung ist zu unklar bezeichnet.",
+            "Wir präzisieren die vorhandene Frage statt eine zweite gleiche Frage anzulegen."
+          ],
+          "focus": "local.schutz",
+          "question": "Was ist der erste Schritt?",
+          "choices": [
+            "Sofort einen neuen Baustein anlegen",
+            "Zweck klären und vorhandenes Modell prüfen"
+          ],
+          "answer": 1,
+          "explanation": "Eine gezielte Änderung beginnt mit einer begründeten Lücke und vermeidet doppelte Begriffe."
+        }
+      ]
+    },
+    {
+      "id": "baum",
+      "title": "2. Baum und Bausteine",
+      "goal": "Die passende Bausteinart auswählen.",
+      "slides": [
+        {
+          "id": "baum-1",
+          "title": "Der Baum sortiert nach der Art des Bausteins",
+          "text": "Fragen, Dokumenttypen, Entscheidungen, Prüfschritte und Nachweistypen sind Kategorien. Ihre Position im Baum legt keine zeitliche Reihenfolge fest. Der Graph zeigt die fachlichen Beziehungen.",
+          "steps": [
+            "Wähle einen Baustein rechts durch Anklicken.",
+            "Lies seine Kategorie und Erläuterung."
+          ],
+          "focus": "local.liste",
+          "question": "Wo steht die Ausrüstungsliste?",
+          "choices": [
+            "Dokumenttypen",
+            "Prüfschritte"
+          ],
+          "answer": 0,
+          "explanation": "Die Liste ist eine Dokumentart. Das Prüfen der Liste wäre ein eigener Prüfschritt."
+        },
+        {
+          "id": "baum-2",
+          "title": "Dokumenttyp und Nachweistyp haben unterschiedliche Schwerpunkte",
+          "text": "Ein Dokumenttyp beschreibt eine benötigte Dokumentart, etwa die Ausrüstungsliste. Ein Nachweistyp beschreibt einen Beleg für eine Angabe oder Prüfung, etwa den Prüfvermerk. Welche Rolle ein Artefakt hat, entscheidet das Fachmodell.",
+          "steps": [
+            "Prüfe, ob du eine Dokumentart oder die Art eines Belegs beschreibst.",
+            "Bei Unklarheit eine offene Fachfrage dokumentieren."
+          ],
+          "focus": "local.vermerk",
+          "question": "Was beschreibt „Prüfvermerk“ im Beispiel?",
+          "choices": [
+            "Eine tatsächlich abgeschlossene Prüfung",
+            "Eine Art des möglichen Nachweises"
+          ],
+          "answer": 1,
+          "explanation": "Der Nachweistyp ist eine Vorlage. Er bestätigt nicht, dass jemand die Prüfung bereits durchgeführt hat."
+        },
+        {
+          "id": "baum-3",
+          "title": "Eine Entscheidung wählt, ein Prüfschritt kontrolliert",
+          "text": "„Leihmaterial auswählen“ beschreibt eine Auswahl. „Ausrüstung prüfen“ beschreibt eine Kontrolle. Ein Baum-Eintrag ist kein automatisch ausgeführter Arbeitsschritt. Abläufe bleiben im Prozessmodell.",
+          "steps": [
+            "Prüfe die Bedeutung der beiden Bausteine.",
+            "Verschiebe einen Typ nur bei fachlich begründeter Änderung."
+          ],
+          "focus": "local.auswahl",
+          "question": "Welcher Baustein beschreibt eine Auswahl?",
+          "choices": [
+            "Leihmaterial auswählen",
+            "Ausrüstung prüfen"
+          ],
+          "answer": 0,
+          "explanation": "Eine Entscheidung hat Alternativen. Ein Prüfschritt prüft Bedingungen oder Vollständigkeit."
+        }
+      ]
+    },
+    {
+      "id": "beziehungen",
+      "title": "3. Beziehungen lesen",
+      "goal": "Quelle, Beziehung und Ziel als Satz lesen.",
+      "slides": [
+        {
+          "id": "beziehungen-1",
+          "title": "Eine Verbindung ist ein gerichteter Satz",
+          "text": "Lies den Pfeil als Quelle, Beziehung, Ziel. Im Beispiel: „Benötigte Schutzausrüstung – belegt durch – Ausrüstungsliste“. Der Baum allein sagt diese Verbindung nicht aus.",
+          "steps": [
+            "Wähle die Frage als Quelle.",
+            "Lies den Beziehungstyp und anschließend das Ziel."
+          ],
+          "focus": "local.schutz",
+          "question": "Welche Richtung wird erklärt?",
+          "choices": [
+            "Frage wird durch Liste belegt",
+            "Liste wird durch Frage belegt"
+          ],
+          "answer": 0,
+          "explanation": "Die Pfeilrichtung gehört zur Aussage. Umkehren kann die Bedeutung verändern."
+        },
+        {
+          "id": "beziehungen-2",
+          "title": "Information und Voraussetzung sind verschiedene Aussagen",
+          "text": "„Informiert“ beschreibt einen Informationsbezug. „Erfordert“ beschreibt eine benötigte Voraussetzung. „Wartet auf Prüfung“ ist eine modellierte Abhängigkeit. Der Editor führt dadurch keine Prüfung automatisch aus.",
+          "steps": [
+            "Wähle den Typ wegen seiner Bedeutung, nicht wegen der Pfeilfarbe.",
+            "Bei mehreren möglichen Bedeutungen eine Fachfrage stellen."
+          ],
+          "focus": "local.auswahl",
+          "question": "Was folgt aus einem Pfeil „informiert“?",
+          "choices": [
+            "Die Zielprüfung wurde durchgeführt",
+            "Die Quelle liefert Informationen für das Ziel"
+          ],
+          "answer": 1,
+          "explanation": "Die Beziehung beschreibt einen Zusammenhang im Modell und keinen erledigten Vorgang."
+        },
+        {
+          "id": "beziehungen-3",
+          "title": "Neue Beziehungen brauchen zwei vorhandene Bausteine",
+          "text": "Im Editor öffnest du Ansicht → Verbindungen und wählst Quelle, Typ und Ziel. Prüfe den Satz vor dem Hinzufügen. Eine sachlich passende Verbindung kann Kategorien übergreifen.",
+          "steps": [
+            "Suche Quelle und Ziel anhand ihrer Bezeichnungen.",
+            "Prüfe Richtung und Typ im gespeicherten Vergleich."
+          ],
+          "focus": "local.pruefung",
+          "question": "Was muss vor dem Hinzufügen feststehen?",
+          "choices": [
+            "Nur der Name des Ziels",
+            "Quelle, Beziehungstyp und Ziel"
+          ],
+          "answer": 1,
+          "explanation": "Alle drei Teile bilden gemeinsam die fachliche Aussage."
+        }
+      ]
+    },
+    {
+      "id": "pflegen",
+      "title": "4. Gezielt bearbeiten",
+      "goal": "Eine kleine begründete Änderung vorbereiten.",
+      "slides": [
+        {
+          "id": "pflegen-1",
+          "title": "Der erste Pflegefall präzisiert eine Bezeichnung",
+          "text": "Unser künstlicher Anlass: Die Frage soll ausdrücklich Schutzausrüstung für den Workshop betreffen. Vorher: „Benötigte Schutzausrüstung“. Nachher: „Benötigte Schutzausrüstung für den Workshop“.",
+          "steps": [
+            "Öffne Bearbeiten und wähle den vorhandenen Baustein.",
+            "Wähle Entwurf erstellen oder Bearbeiten am Baustein."
+          ],
+          "focus": "local.schutz",
+          "question": "Brauchen wir dafür einen zweiten Baustein?",
+          "choices": [
+            "Ja, bei jeder Umbenennung",
+            "Nein, die Bedeutung bleibt derselbe Gegenstand"
+          ],
+          "answer": 1,
+          "explanation": "Wir präzisieren die Bezeichnung des vorhandenen Bausteins und behalten seine Kennung und Beziehungen."
+        },
+        {
+          "id": "pflegen-2",
+          "title": "Eine Erläuterung macht den Pflegegrund nachvollziehbar",
+          "text": "Bezeichnung ist der kurze sichtbare Name. Fachliche Erläuterung erklärt seine Bedeutung. Offene Fachfrage hält eine ungelöste Frage fest. Der Status einer übernommenen NaC-Vorlage ist im Formular schreibgeschützt.",
+          "steps": [
+            "Ändere nur die begründeten Felder.",
+            "Dokumentiere Unsicherheit als offene Frage statt eine Antwort zu erfinden."
+          ],
+          "focus": "local.schutz",
+          "question": "Wo gehört eine ungelöste Bedeutungsfrage hin?",
+          "choices": [
+            "Offene Fachfrage",
+            "Als erfundene Entscheidungsoption"
+          ],
+          "answer": 0,
+          "explanation": "Eine offene Frage bleibt sichtbar und kann fachlich geprüft werden."
+        },
+        {
+          "id": "pflegen-3",
+          "title": "Neue Bausteine und Löschungen ändern die Struktur",
+          "text": "Ein neuer Baustein ist sinnvoll, wenn ein eigenständiger Gegenstand fehlt. Seine Kategorie, Bezeichnung und Beziehungen müssen erklärt werden. Beim Löschen müssen auch betroffene Beziehungen und Quellen geprüft werden.",
+          "steps": [
+            "Suche vor dem Anlegen nach ähnlichen Bausteinen.",
+            "Prüfe nach der Änderung, ob Nachbarn oder Bezüge fehlen."
+          ],
+          "focus": "local.liste",
+          "question": "Wann ist ein neuer Baustein begründet?",
+          "choices": [
+            "Ein eigenständiger benötigter Gegenstand fehlt",
+            "Die alte Bezeichnung gefällt nicht"
+          ],
+          "answer": 0,
+          "explanation": "Eine Umbenennung ist eine Feldänderung. Ein neuer Gegenstand ist eine Strukturänderung."
+        }
+      ]
+    },
+    {
+      "id": "speichern",
+      "title": "5. Speichern und prüfen",
+      "goal": "Browser-Eingabe, Entwurf und Freigabe unterscheiden.",
+      "slides": [
+        {
+          "id": "speichern-1",
+          "title": "Speichern zeigt zuerst den Vergleich",
+          "text": "Ungespeicherte Eingaben sind zunächst Browserzustand. Datei → Speichern oder Strg+S öffnet die fachliche Vorschau. Erst die Bestätigung schreibt in deinen Datenentwurf.",
+          "steps": [
+            "Vergleiche alte und neue Bezeichnung.",
+            "Prüfe, ob weitere unbeabsichtigte Änderungen auftauchen."
+          ],
+          "focus": "local.schutz",
+          "question": "Wann wird der Datenentwurf aktualisiert?",
+          "choices": [
+            "Beim Tippen jedes Buchstabens",
+            "Nach Bestätigung der Speichervorschau"
+          ],
+          "answer": 1,
+          "explanation": "Die Vorschau ist eine Kontrolle vor dem Schreiben in den Entwurfszweig."
+        },
+        {
+          "id": "speichern-2",
+          "title": "Ein gespeicherter Entwurf ist noch keine freigegebene Vorlage",
+          "text": "Unter Prüfen → Meine Änderung begründest du die Änderung und nennst den Quellenstand. Einreichen erzeugt einen Pull Request im Datenrepository. Eine andere Person prüft den aktuellen Commit.",
+          "steps": [
+            "Grund: Bezeichnung im künstlichen Workshop präzisiert.",
+            "Quelle: künstliche Trainingsbeschreibung, keine Rechtsquelle."
+          ],
+          "focus": "local.schutz",
+          "question": "Erteilt Speichern eine notarielle Freigabe?",
+          "choices": [
+            "Nein",
+            "Ja"
+          ],
+          "answer": 0,
+          "explanation": "Speichern, Einreichen, fachliche Freigabe und Übernahme sind getrennte Schritte."
+        },
+        {
+          "id": "speichern-3",
+          "title": "Eine neue Änderung braucht eine Prüfung des neuen Stands",
+          "text": "Freigaben beziehen sich auf einen geprüften Commit. Eine spätere Änderung kann eine erneute Prüfung nötig machen. Der vereinbarte manuelle Merge-Weg bleibt Aufgabe einer berechtigten Person.",
+          "steps": [
+            "Prüfe Begriffe, Quellen und Beziehungen.",
+            "Prüfe vor Übernahme den tatsächlichen Commit und die CI."
+          ],
+          "focus": "local.pruefung",
+          "question": "Welcher Stand ist für eine Freigabe maßgeblich?",
+          "choices": [
+            "Der aktuelle geprüfte Commit",
+            "Irgendeine frühere Ansicht"
+          ],
+          "answer": 0,
+          "explanation": "Eine Freigabe ist nur aussagekräftig, wenn erkennbar ist, welcher Stand geprüft wurde."
+        }
+      ]
+    },
+    {
+      "id": "routine",
+      "title": "6. Pflege im Alltag",
+      "goal": "Eine Änderung vollständig und wiederholbar abschließen.",
+      "slides": [
+        {
+          "id": "routine-1",
+          "title": "Ein kleiner Pflegeauftrag ist leichter zu prüfen",
+          "text": "Beschreibe Anlass, betroffene Vorgangsart und erwartete Änderung vor dem Bearbeiten. Halte Fachquellen und Software-Release auseinander. Ein Entwurf sollte einen klaren fachlichen Zweck haben.",
+          "steps": [
+            "Notiere die fragliche Bezeichnung oder Verbindung.",
+            "Nenne den erwarteten Unterschied in einem Satz."
+          ],
+          "focus": "local.schutz",
+          "question": "Welche Kennung beschreibt die Software?",
+          "choices": [
+            "Editor-Release",
+            "Die Bezeichnung eines Bausteins"
+          ],
+          "answer": 0,
+          "explanation": "Editor-Release bezeichnet die Software. Der Datencommit bezeichnet den Fachmodellstand."
+        },
+        {
+          "id": "routine-2",
+          "title": "Beispiele erklären Funktionen ohne echte Daten zu ändern",
+          "text": "Die Übung in diesem Training verändert nur das künstliche Beispiel im Speicher des Browsers. Sie meldet sich nicht bei GitHub an und erzeugt weder Branches noch Pull Requests. Neu laden setzt sie zurück.",
+          "steps": [
+            "Wähle unten „Bezeichnung üben“.",
+            "Ändere die Beispielbezeichnung, prüfe den Vergleich und bestätige Speichern."
+          ],
+          "focus": "local.schutz",
+          "question": "Wo wird diese Übung gespeichert?",
+          "choices": [
+            "Im echten Datenrepository",
+            "Nur im Browser bis zum Neuladen"
+          ],
+          "answer": 1,
+          "explanation": "Der Trainingsbereich ist eine geschützte Erklärung mit künstlichen Beispielen."
+        },
+        {
+          "id": "routine-3",
+          "title": "Die Pflege endet mit einem nachgewiesenen Ergebnis",
+          "text": "Für Modellpflege zählt der geprüfte Datenstand. Für Software zählt die gesunde Azure-Revision mit passender Release-Kennung. Bei einer Fehlermeldung bewahre den Entwurf und dokumentiere Schritt und Meldung.",
+          "steps": [
+            "Nutze das Handbuch für Rollen und Fehlerbehebung.",
+            "Prüfe eine kleine konkrete Änderung statt mehrere Themen gleichzeitig."
+          ],
+          "focus": "local.vermerk",
+          "question": "Was gehört zur dokumentierten Modelländerung?",
+          "choices": [
+            "Grund, Quelle, Änderung und geprüfter Stand",
+            "Nur eine neue Überschrift"
+          ],
+          "answer": 0,
+          "explanation": "Eine nachvollziehbare Pflege verbindet die fachliche Begründung mit der tatsächlichen Änderung und Prüfung."
+        }
+      ]
+    }
+  ]
+}

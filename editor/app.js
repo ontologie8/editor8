@@ -1109,17 +1109,27 @@ function renderOffice(){
   // Keep the count element attached: the catalog and repository remain discoverable.
   $("navigation-heading").firstChild.textContent=state.view==='hilfe'?'Dokumentation ':office.area==='review'?'Änderungen ':'Vorgangsarten ';
   if(state.view==='hilfe'){
-    [['start','Kurzanleitung'],['example','Beispiel'],['terms','Begriffe']].forEach(([topic,label])=>{const b=element('button',label);b.type='button';b.addEventListener('click',()=>showHelp(topic));tasks.append(b);});
+    const sections=$("learning-frame")?.contentDocument?.querySelectorAll('#sections button');
+    if(sections?.length){
+      $("navigation-heading").firstChild.textContent=office.helpTopic==='handbook'?'Kapitel ':'Lektionen ';
+      sections.forEach(section=>{const b=element('button',section.textContent);b.type='button';if(section.getAttribute('aria-current')==='page')b.setAttribute('aria-current','page');b.addEventListener('click',()=>{section.click();renderOffice();});tasks.append(b);});
+    }else $("help-content").querySelectorAll('h3').forEach(heading=>{const b=element('button',heading.textContent);b.type='button';b.addEventListener('click',()=>heading.scrollIntoView({block:'start'}));tasks.append(b);});
   }else if(office.area==='review'){
     [['pruefung','Meine Änderung'],['fachpruefung','Fachprüfung']].filter(([view])=>view!=='fachpruefung'||state.user).forEach(([view,label])=>{const b=element('button',label);b.type='button';b.setAttribute('aria-current',view===state.view?'page':'false');b.addEventListener('click',()=>setView(view));tasks.append(b);});
     if(state.branch!=='main')tasks.append(element('p','Geöffneter Arbeitsentwurf · '+(state.cases.find(item=>item.slug===state.activeCase)?.title||state.activeCase||'Gemeinsame Begriffe'),'context-help'));
   }
+  $("case-count").hidden=taskMode;
 }
 function toggleRibbon(){office.pinned=!office.pinned;office.open=office.pinned;renderOffice();}
 function showHelp(topic='start'){
   if(state.view!=='hilfe')office.lastView=state.view;
   setView('hilfe');if(state.view!=='hilfe')return;
-  office.menu='help';renderOffice();const root=$("help-content");root.replaceChildren();
+  office.menu='help';office.helpTopic=topic;renderOffice();const root=$("help-content");root.replaceChildren();
+  root.parentElement.classList.toggle('learning-workspace',['training','handbook'].includes(topic));
+  if(['training','handbook'].includes(topic)){
+    const frame=document.createElement('iframe');frame.id='learning-frame';frame.title=topic==='training'?'Training: Ontologien verstehen und pflegen':'editor8 Produkthandbuch';frame.src='/learning/?embedded=1&mode='+topic;frame.addEventListener('load',()=>{if($("learning-frame")!==frame)return;renderOffice();frame.contentDocument.addEventListener('learning-change',()=>renderOffice());});root.append(frame);return;
+  }
+  renderOffice();
   root.append(element('h2',topic==='example'?'Beispiel':topic==='terms'?'Begriffe':'Kurzanleitung'));
   const blocks=topic==='example'?[
     ['Künstliches Beispiel','Eine Angabenfrage „Angabe A“ ist mit einem Dokumenttyp „Nachweis A“ verbunden. Beide Namen sind ausschließlich ein künstliches Beispiel.'],
@@ -1139,6 +1149,9 @@ function showHelp(topic='start'){
     ['Ansicht und Drucken','Unter Ansicht wechselst du zwischen Zusammenhängen, Bausteinen, Verbindungen und gemeinsamen Begriffen. Datei → Drucken erstellt eine Lesefassung der aktuellen Auswahl.'],
     ['Menüband','Strg+F1 oder Doppelklick reduziert das Menüband. Ein Klick auf eine Registerkarte öffnet die Befehle vorübergehend. Der Schalter rechts hält sie dauerhaft sichtbar. Die Baum-Navigation wird unabhängig über das Menü-Symbol links gesteuert.']
   ];blocks.forEach(([title,text])=>root.append(element('h3',title),element('p',text)));
+  root.append(element('h3','Herkunft und Lizenz'),element('p','Based on NaC: Notariat as Code by funktion8 / ofunk. Code: AGPL-3.0-or-later; Dokumentation: CC-BY-4.0.'));
+  const attribution=element('p');const source=element('a','NaC-Originalprojekt');source.href='https://github.com/notariat8/NaC';const license=element('a','Lizenz und Markenhinweise');license.href='https://github.com/ontologie8/editor8/blob/main/LICENSES/README.md';attribution.append(source,document.createTextNode(' · '),license);root.append(attribution);
+  renderOffice();
 }
 function selectionHelp(){
   const root=$("selection-help-content");root.replaceChildren();const node=state.current?.nodes.find(item=>item.id===state.selected);
@@ -1148,6 +1161,7 @@ function selectionHelp(){
   $("selection-help-dialog").showModal();
 }
 function printSelection(){
+  if(state.view==='hilfe'&&$("learning-frame")){const print=$("learning-frame").contentDocument?.getElementById('print');if(print)print.click();return;}
   const root=$("print-document");root.replaceChildren();
   if(state.view==='hilfe'){const copy=$("help-content").cloneNode(true);copy.removeAttribute('id');root.append(copy);}
   else if(state.view==='vokabular'&&state.vocabulary){root.append(element('h1','Gemeinsame Begriffe'));state.vocabulary.terms.forEach(term=>root.append(element('h2',term.label),element('p',term.comment||'')));}

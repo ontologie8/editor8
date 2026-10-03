@@ -1,0 +1,11 @@
+# Auf NaC CODEOWNERS gestützt; editor8-Dateien und Verantwortlichkeit.
+/LICENSE @ofunk
+/LICENSES/ @ofunk
+/NOTICE @ofunk
+/AUTHORS.md @ofunk
+/CITATION.cff @ofunk
+/TRADEMARK.md @ofunk
+/SECURITY.md @ofunk
+/AGENTS.md @ofunk
+/.github/ @ofunk
+/config/ @ofunk

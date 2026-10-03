@@ -1,6 +1,6 @@
 # Roadmap für editor8
 
-Stand: 02.10.2026. editor8 pflegt Software, Oberfläche, Anmeldung, Datenadapter und Betrieb. Fachmodelle liegen im ausdrücklich gewählten Datenrepository. Die 20 kanonischen Vorgangsarten gehören zu `notariat8/ontology`; der Editor übernimmt die Fallanzahl aus dem jeweiligen Katalog.
+Stand: 03.10.2026. editor8 pflegt Software, Oberfläche, Anmeldung, Datenadapter und Betrieb. Fachmodelle liegen im ausdrücklich gewählten Datenrepository. Die 20 kanonischen Vorgangsarten gehören zu `notariat8/ontology`; der Editor übernimmt die Fallanzahl aus dem jeweiligen Katalog.
 
 Herkunft: Die ursprüngliche Planung wurde aus dem ontology-Editorzweig übernommen. Historische Nachweise dieses Zweigs sind keine Deploymentbestätigung für editor8. Der heutige Stand und verbleibende Abnahmen sind hier getrennt aufgeführt.
 
@@ -10,7 +10,9 @@ Die Office-Oberfläche wurde mit [editor8 PR #4](https://github.com/ontologie8/e
 
 Umgesetzt sind Verstehen → Bearbeiten → Prüfen, äußere Bereichsnavigation, innerer Datenbaum, Graph mit rechter Detail-/Bearbeitungsfläche, einklappbares Office-Menüband, deutsche Standardbefehle, allgemeine und kontextbezogene Hilfe, Drucken, Repository-Auswahl und Release-Anzeige. [DESIGN.md](../DESIGN.md) ist die verbindliche UI-Vorgabe.
 
-Die Software-CI prüft Python, JavaScript, sechs synthetische Browserwege und den Container. Die Datenintegration umfasst 48 Python- und fünf Browserprüfungen gegen den getrennten Notardatensatz. Der regelmäßige Workflow liegt ausschließlich im privaten Datenrepository; genaue Revisionspaare und Wiederholung beschreibt [Datenintegration in CI](editor-integration-ci.md).
+Die Software-CI prüft Python, JavaScript, acht synthetische Browserwege und den Container. Die Datenintegration umfasst 48 Python- und fünf Browserprüfungen gegen den getrennten Notardatensatz. Der regelmäßige Workflow liegt ausschließlich im privaten Datenrepository; genaue Revisionspaare und Wiederholung beschreibt [Datenintegration in CI](editor-integration-ci.md).
+
+Der [Trainingsbereich](../training/README.md) enthält sechs Lektionen mit 18 Browserfolien, Lernfragen und einer rein künstlichen Speicherübung. Das [Produkthandbuch](product/README.md) beschreibt acht Themen von Einstieg bis Fehlerbehandlung. JSON-Quellen erzeugen Browser- und Markdownfassung gemeinsam; CI prüft ihren Gleichstand. Training und Handbuch gehören zur Pflege jedes geänderten Produktablaufs. Die produktive Zwei-Personen-Abnahme bleibt offen.
 
 GitHub bleibt die versionierte Datenquelle. Turtle ist Pflegequelle, Mermaid wird daraus erzeugt. Die App speichert keine realen Aktenwerte. NaC bleibt Quelle der Prozessabläufe. Technische Prüfung und notarielle Fachfreigabe sind getrennte Nachweise.
 

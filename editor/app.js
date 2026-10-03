@@ -21,6 +21,9 @@ const relations = {
 const $ = id => document.getElementById(id);
 const svgNS = "http://www.w3.org/2000/svg";
 let state = { token: "", branch: "", purpose: "case", activeCase: "", hosted: false, user: "", notaryReviewer: false, ontologyMaintainer: false, reviewDetail: null, current: null, cases: [], selected: null, nodeEditing: false, dirty: false, graphFocused: false, graphMode: "linked", graphZoom: 1, graphSearchTarget: "node", view: "fall", vocabulary: null, vocabSelected: null, vocabEditing: false, vocabNew: false, vocabularyImpact: null, impactLoading: false, impactError: "", caseIndex: null, caseIndexPromise: null, caseHistory: null, historyTarget: "", drafts: [] };
+const saveFlow = {pending: "", preview: null};
+let caseLoadSequence = 0;
+let viewSequence = 0;
 
 function element(tag, text, className) {
   const el = document.createElement(tag);
@@ -43,8 +46,12 @@ async function api(path, body) {
     headers: {"Content-Type": "application/json", "X-Editor-Token": state.token},
     body: JSON.stringify(body)
   };
-  const response = await fetch(path, options);
-  const result = await response.json();
+  let response;
+  try{response=await fetch(path,options);}
+  catch{throw new Error("Die Verbindung zum Editor ist fehlgeschlagen. Bitte erneut versuchen.");}
+  let result;
+  try{result=await response.json();}
+  catch{throw new Error("Der Editor hat keine gültige Antwort geliefert. Bitte erneut versuchen.");}
   if (response.status === 401) {
     window.location.assign("/login");
     throw new Error("Anmeldung erforderlich");
@@ -53,8 +60,11 @@ async function api(path, body) {
   return result;
 }
 function dirty() {
+  caseLoadSequence++;
+  if(state.current)$("case-select").value=state.current.slug;
   state.dirty = true;
   refreshBranch();
+  renderCaseList();
   notice("Änderungen sind noch nicht gespeichert.");
 }
 function displayNodeLabel(node) {
@@ -77,7 +87,7 @@ function refreshBranch() {
   $("start-branch").disabled = !state.current;
   $("leave-draft").hidden = !state.hosted || state.branch === "main";
   $("save").hidden = false;
-  $("save").disabled = !state.dirty || (state.view==="vokabular" ? state.purpose!=="vocabulary" : !caseEditable());
+  $("save").disabled = !!saveFlow.pending || !state.dirty || (state.view==="vokabular" ? state.purpose!=="vocabulary" : !caseEditable());
   $("add-node").hidden=!caseEditable();
   $("edge-create").hidden=!caseEditable();
   for(const id of ["add-node","add-edge","submit-review"]) $(id).disabled=!caseEditable();
@@ -340,6 +350,7 @@ async function resumeDraft(draft) {
   notice("Gespeicherten Entwurf wieder geöffnet. Du kannst die Änderung weiterbearbeiten oder zur Prüfung geben.","success");
 }
 async function leaveDraft() {
+  if(saveFlow.pending)throw new Error("Bitte den laufenden Speichervorgang abwarten.");
   if(state.dirty && !window.confirm("Ungespeicherte Eingaben verwerfen? Bereits auf GitHub gespeicherte Änderungen bleiben erhalten."))return;
   const slug=state.current.slug;
   await api("/api/drafts/leave",{});
@@ -480,6 +491,7 @@ function setView(view) {
   if(view!=="fall")office.graphEdit=false;
   if(view!=="hilfe")office.lastView=view;
   state.view=view;
+  viewSequence++;
   if(view!=="fall")closeGraphInspector();
   document.body.classList.toggle("review-mode",view==="fachpruefung" || view==="vokabular");
   if(view==="bausteine" && state.current && !state.selected){
@@ -498,12 +510,18 @@ function setView(view) {
   refreshBranch();
   renderCaseList();
 }
-async function loadCase(slug) {
+async function loadCase(slug, view="fall", navigation=viewSequence) {
+  if(saveFlow.pending){$("case-select").value=state.current.slug;notice("Bitte den laufenden Speichervorgang abwarten.");return;}
   if (state.dirty && !window.confirm("Ungespeicherte Änderungen verwerfen und anderen Fall öffnen?")) {
     $("case-select").value = state.current.slug;
     return;
   }
-  state.current = await api("/api/cases/" + encodeURIComponent(slug));
+  const sequence=++caseLoadSequence;
+  let model;
+  try{model=await api("/api/cases/" + encodeURIComponent(slug));}
+  catch(error){if(sequence!==caseLoadSequence)return;if(state.current)$("case-select").value=state.current.slug;throw error;}
+  if(sequence!==caseLoadSequence)return;
+  state.current = model;
   state.selected = null;
   state.graphFocused=false;
   state.graphMode="linked";
@@ -521,7 +539,8 @@ async function loadCase(slug) {
   if($("case-node-search").open)$("case-node-search").close();
   $("graph-query").value="";
   $("edge-from").value="";$("edge-to").value="";
-  setView("fall");
+  if(viewSequence===navigation)setView(view);
+  else refreshBranch();
   $("case-title").textContent = state.current.title;
   $("summary").value = state.current.summary;
   $("sources").value = state.current.sources.join("\n");
@@ -867,35 +886,80 @@ function renderEdges() {
     root.append(row);
   });
 }
+function setSavePending(phase) {
+  saveFlow.pending=phase;
+  $("change-preview").setAttribute("aria-busy",String(phase==="save"));
+  $("confirm-save").disabled=!!phase || !saveFlow.preview?.changed;
+  $("confirm-save").textContent=phase==="save" ? "Wird gespeichert …" : "Speichern";
+  for(const id of ["close-preview","cancel-preview"])$(id).disabled=phase==="save";
+  refreshBranch();
+}
+function closeSavePreview() {
+  if(saveFlow.pending==="save")return;
+  $("change-preview").close();saveFlow.preview=null;
+  if(state.dirty)notice("Änderungen sind noch nicht gespeichert.");
+}
+function previewStatus(message, error=false) {
+  $("preview-status").hidden=!message;
+  $("preview-status").textContent=message;
+  $("preview-status").className=error ? "notice error" : "";
+}
+function previewIsCurrent(preview) {
+  return state.branch===preview.branch && (preview.vocabulary ? state.vocabulary : state.current)===preview.subject && JSON.stringify(preview.subject)===JSON.stringify(preview.snapshot);
+}
 async function save() {
+  if(saveFlow.pending || $("change-preview").open)return;
   try {
     if (state.branch === "main") throw new Error("Bitte zuerst unter Bearbeiten einen Entwurf erstellen.");
     if(state.view!=="vokabular" && !caseEditable())throw new Error("Dieser Entwurf gehört zu einem anderen Fall. Lege ihn zuerst ab.");
     const vocabulary=state.view==="vokabular";
     if((vocabulary && state.purpose!=="vocabulary") || (!vocabulary && state.purpose!=="case"))throw new Error("Dieser Arbeitszweig gehört zu einem anderen Arbeitsbereich.");
-    const result=await api(vocabulary ? "/api/vocabulary/preview" : "/api/cases/" + state.current.slug + "/preview",vocabulary ? state.vocabulary : state.current);
+    const subject=vocabulary ? state.vocabulary : state.current;
+    const preview={vocabulary,subject,branch:state.branch,snapshot:structuredClone(subject),path:vocabulary ? "/api/vocabulary" : "/api/cases/" + state.current.slug};
+    saveFlow.preview=null;previewStatus("");caseLoadSequence++;
+    setSavePending("preview");
+    notice("Änderungsvorschau wird vorbereitet …");
+    const result=await api(preview.path+"/preview",preview.snapshot);
+    if(!previewIsCurrent(preview))throw new Error("Die Eingaben haben sich während der Vorschau geändert. Bitte erneut Speichern wählen.");
+    saveFlow.preview={...preview,changed:result.changed};
     $("preview-description").textContent="Prüfe die fachlichen Änderungen vor dem Speichern. Danach kannst du sie zur notariellen Fachprüfung einreichen.";
     const list=$("preview-list");list.replaceChildren();
     result.changes.forEach(change=>list.append(element("li",change)));
     if(!result.changed) list.append(element("li","Keine fachliche Änderung erkannt."));
     $("confirm-save").disabled=!result.changed;
     $("change-preview").showModal();
+    notice("Bitte die Vorschau prüfen und Speichern bestätigen.");
   } catch (error) {notice(error.message,"error");}
+  finally{setSavePending("");}
 }
 async function confirmSave() {
+  const preview=saveFlow.preview;
+  if(saveFlow.pending || !preview?.changed)return;
+  if(!previewIsCurrent(preview)){closeSavePreview();notice("Die Eingaben haben sich geändert. Bitte erneut Speichern wählen und die aktuelle Vorschau prüfen.","error");return;}
+  setSavePending("save");previewStatus("Änderungen werden gespeichert …");
+  notice("Änderungen werden gespeichert …");
   try {
-    const vocabulary=state.view==="vokabular";
-    const result=await api(vocabulary ? "/api/vocabulary/save" : "/api/cases/" + state.current.slug + "/save",vocabulary ? state.vocabulary : state.current);
-    const subject=vocabulary ? state.vocabulary : state.current;
-    subject.revision=result.revision;state.dirty=false;refreshBranch();
+    const {vocabulary,subject}=preview;
+    const result=await api(preview.path+"/save",preview.snapshot);
+    const unchanged=previewIsCurrent(preview);
+    subject.revision=result.revision;
     if(result.expected_ref) subject.expected_ref=result.expected_ref;
+    if(unchanged)state.dirty=false;
     if(result.changed && !vocabulary){
       state.caseIndex=null;state.caseIndexPromise=null;
       if($("case-index-query").value.trim().length>=2)loadCaseIndex().catch(()=>{});
     }
     $("change-preview").close();
-    notice(result.changed ? (vocabulary ? "Gemeinsame Begriffe gespeichert. Reiche die Änderung nun zur Fachprüfung ein." : "Fallvorlage gespeichert. Reiche die Änderung nun zur Fachprüfung ein.") : "Keine Änderungen zu speichern.","success");
-  } catch (error) {notice(error.message,"error");}
+    saveFlow.preview=null;
+    notice(!unchanged ? "Geprüfte Fassung gespeichert. Neuere Eingaben sind noch nicht gespeichert." : result.changed ? (vocabulary ? "Gemeinsame Begriffe gespeichert. Reiche die Änderung nun zur Fachprüfung ein." : "Fallvorlage gespeichert. Reiche die Änderung nun zur Fachprüfung ein.") : "Keine Änderungen zu speichern.","success");
+  } catch (error) {previewStatus("Speichern fehlgeschlagen: "+error.message,true);notice(error.message,"error");}
+  finally{setSavePending("");if($("change-preview").open)$("confirm-save").focus();}
+}
+async function logout() {
+  if(saveFlow.pending){notice("Bitte den laufenden Speichervorgang abwarten.");return;}
+  if(state.dirty && !window.confirm("Ungespeicherte Änderungen verwerfen und abmelden? Bereits gespeicherte Entwürfe bleiben erhalten."))return;
+  try{await api("/api/logout",{});state.dirty=false;window.location.assign("/login");}
+  catch(error){notice(error.message,"error");}
 }
 async function submitReview() {
   try {
@@ -918,6 +982,7 @@ async function submitReview() {
 }
 async function init() {
   try {
+    const initialNavigation=viewSequence;
     const initialView=window.location.hash.slice(1);
     const requestedCase=new URLSearchParams(window.location.search).get("case");
     const status=await api("/api/status");state.token=status.token;state.branch=status.branch;state.purpose=status.purpose || "case";state.activeCase=status.case || "";state.hosted=!!status.hosted;state.ontologyMaintainer=!!status.ontology_maintainer;refreshBranch();
@@ -949,7 +1014,7 @@ async function init() {
         }
       });
     }
-    $("logout").addEventListener("click",async()=>{try{await api("/api/logout",{});window.location.assign("/login");}catch(error){notice(error.message,"error");}});
+    $("logout").addEventListener("click",logout);
     $("leave-draft").addEventListener("click",()=>leaveDraft().catch(error=>notice(error.message,"error")));
     const cases=await api("/api/cases");state.cases=cases;$("case-count").textContent=String(cases.length);
     cases.forEach(item=>{const option=element("option",item.title);option.value=item.slug;$("case-select").append(option);});
@@ -1061,10 +1126,12 @@ async function init() {
       }
     });
     $("catalog-search-close").addEventListener("click",()=>$("catalog-search").close());
-    for(const id of ["close-preview","cancel-preview"]) $(id).addEventListener("click",()=>$("change-preview").close());
+    for(const id of ["close-preview","cancel-preview"]) $(id).addEventListener("click",closeSavePreview);
+    $("change-preview").addEventListener("cancel",event=>{if(saveFlow.pending==="save")event.preventDefault();});
+    $("change-preview").addEventListener("close",()=>{if(!saveFlow.pending && !$("change-preview").open)saveFlow.preview=null;});
     window.addEventListener("beforeunload",event=>{if(state.dirty){event.preventDefault();event.returnValue="";}});
-    await loadCase(cases.some(item=>item.slug===requestedCase) ? requestedCase : cases[0].slug);
-    if(["fall","bausteine","verbindungen","pruefung","vokabular"].includes(initialView) || (initialView==="fachpruefung" && state.user)) setView(initialView);
+    const firstView=["fall","bausteine","verbindungen","pruefung","vokabular"].includes(initialView) || (initialView==="fachpruefung" && state.user) ? initialView : "fall";
+    await loadCase(cases.some(item=>item.slug===requestedCase) ? requestedCase : cases[0].slug,firstView,initialNavigation);
     if(state.user)loadDrafts().catch(error=>notice(error.message,"error"));
   } catch(error){notice(error.message,"error");}
 }

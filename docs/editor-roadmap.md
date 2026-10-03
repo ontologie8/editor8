@@ -35,6 +35,8 @@ Der Live-Nachweis braucht eine konkrete, fachlich sinnvolle Korrektur. Eine Pers
 
 ### P1: Zustände und Bedienung
 
+Der Speicherablauf hat einen eigenen Zustand für Vorschau und laufende Anfrage. Wiederholtes Speichern erzeugt keine parallelen Anfragen; bestätigt wird die zuvor geprüfte Fassung. Fehler bleiben im Vorschaufenster sichtbar, offene Eingaben erhalten. Abmelden fragt vor dem Verwerfen. Langsame Fallantworten dürfen eine spätere Auswahl oder neue Eingaben nicht ersetzen. Synthetische Browserprüfungen decken diese Verzögerungs-, Fehler- und Abbruchwege ab. Die vollständige Aufteilung von `app.js` und die abschließende Bedienabnahme bleiben offen.
+
 Alle Vorgangsarten des angegebenen Datenkatalogs müssen funktional gleich bleiben. Tastatur-/Fokusprüfungen und sichtbare Zustände für Lesen, ungespeicherte Änderung, Entwurf, Einreichen und Fehler ergänzen. Primär ist die bildschirmfüllende Desktop-App bei 27–34 Zoll und 2K–4K; Windows-Skalierung und reduzierte Browserhöhe sind zu berücksichtigen. Mobil ist sekundär. Dieser Umbau verändert keine Fachmodelle.
 
 ### P2: Graphvergleich

@@ -156,7 +156,7 @@ Browser-Eingabe, Entwurf und Freigabe unterscheiden.
 
 ### Speichern zeigt zuerst den Vergleich
 
-Ungespeicherte Eingaben sind zunächst Browserzustand. Datei → Speichern oder Strg+S öffnet die fachliche Vorschau. Erst die Bestätigung schreibt in deinen Datenentwurf.
+Ungespeicherte Eingaben sind zunächst Browserzustand. Datei → Speichern oder Strg+S öffnet die fachliche Vorschau. Erst die Bestätigung schreibt in deinen Datenentwurf. Während der Speicherung kurz warten; bei einem Fehler bleiben die Eingaben offen und müssen erneut gespeichert werden.
 
 - Vergleiche alte und neue Bezeichnung.
 - Prüfe, ob weitere unbeabsichtigte Änderungen auftauchen.

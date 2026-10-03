@@ -1,5 +1,13 @@
 editor8 — SaaS editor software
 
+Copyright (c) 2026 funktion8 / ofunk.
+Based on NaC: Notariat as Code by funktion8 / ofunk (https://github.com/notariat8/NaC).
+
+Community, attribution and trademark files adapted from notariat8/NaC,
+revision 0acfde4cecc039b7a8a0e05ef3ad84c9f0875bda, 2026-10-03.
+License text, AUTHORS, CITATION, TRADEMARK, SECURITY, CONTRIBUTING,
+CODE_OF_CONDUCT and GitHub contribution templates follow that source.
+
 Derived from the NaC ontology editor by funktion8 / ofunk.
 Software source: https://github.com/notariat8/ontology
 Source branch: codex/editor-workbench
@@ -24,3 +32,9 @@ Original files: png_32/{e8,n8}_32.png, png_192/{e8,n8}_192.png, png_526/{e8,n8}_
 Used unchanged at the user's explicit direction, 2026-10-02.
 The upstream repository contains no license declaration at this revision.
 These brand images are not assigned the editor code license.
+
+Ontology training and product handbook, 2026-10-03:
+Original editor8 text and fully artificial workshop examples, CC-BY-4.0.
+Teaching references: Palantir documentation, Stanford Ontology Development 101,
+and Protege/WebProtege guides. No third-party screenshots or videos reproduced.
+Source links and adaptation notes: docs/research/2026-10-03-ontology-training.md.

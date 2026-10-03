@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "Bitte zitieren Sie editor8 von funktion8 / ofunk und erhalten Sie die NaC-Attribution aus NOTICE."
+title: "editor8: Ontologien verstehen und pflegen"
+authors:
+  - name: "funktion8 / ofunk"
+repository-code: "https://github.com/ontologie8/editor8"
+url: "https://www.ontologie8.de"
+license:
+  - AGPL-3.0-or-later
+  - CC-BY-4.0

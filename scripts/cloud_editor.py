@@ -32,6 +32,7 @@ from rdflib.namespace import SKOS
 
 from data_contract import APP_ROOT
 from brand_assets import BRAND_ASSETS
+from learning_assets import LEARNING_ASSETS
 from release_info import release_info
 from repository_registry import load_repositories
 from github_store import GitHubError, GitHubStore
@@ -109,7 +110,8 @@ class CloudHandler(BaseHTTPRequestHandler):
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Referrer-Policy", "no-referrer")
-        self.send_header("Content-Security-Policy", "default-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'")
+        ancestors = "'self'" if urlparse(self.path).path in LEARNING_ASSETS else "'none'"
+        self.send_header("Content-Security-Policy", f"default-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; frame-ancestors {ancestors}; form-action 'none'")
         for key, value in (extra or {}).items():
             self.send_header(key, value)
         self.end_headers()
@@ -286,6 +288,9 @@ class CloudHandler(BaseHTTPRequestHandler):
                 self._send(200, (ASSETS / filename).read_bytes(), kind[filename])
             elif path.path in BRAND_ASSETS:
                 self._send(200, (ASSETS / BRAND_ASSETS[path.path]).read_bytes(), "image/png")
+            elif path.path in LEARNING_ASSETS:
+                filename, kind = LEARNING_ASSETS[path.path]
+                self._send(200, (ASSETS / filename).read_bytes(), kind)
             elif path.path == "/api/status":
                 session = self._session()
                 self._json(200, {"token": session["csrf"], "branch": session["branch"], "purpose": session.get("purpose", "case"), "case": session.get("case", ""), "hosted": True, "user": session["user"], "notary_reviewer": session["user"].lower() in self._notaries(), "ontology_maintainer": session["user"].lower() in self._maintainers()})

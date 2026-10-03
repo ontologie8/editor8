@@ -97,8 +97,13 @@ class ContractTests(unittest.TestCase):
         server=CloudServer(('127.0.0.1',0),{'GITHUB_REPOSITORY':'example/dataset','PUBLIC_ORIGIN':'https://example.org','EDITOR_USERS':'tester','GITHUB_APP_CLIENT_ID':'fake','GITHUB_APP_CLIENT_SECRET':'fake'})
         thread=threading.Thread(target=server.serve_forever,daemon=True); thread.start()
         try:
-            for path,expected in [('/healthz',200),('/',200),('/app.js',200),('/assets/brand/e8_32.png',200),('/assets/brand/n8_192.png',200),('/assets/brand/e8_526.png',200),('/assets/brand/../../.git/config',404),('/assets/brand/unknown.png',404),('/api/status',401),('/catalog/nac-baseline.json',404),('/.git/config',404)]:
+            for path,expected in [('/healthz',200),('/',200),('/app.js',200),('/learning/?mode=handbook',200),('/learning/content.js',200),('/learning/app.js',200),('/learning/style.css',200),('/learning/../../.git/config',404),('/learning/course.json',404),('/assets/brand/e8_32.png',200),('/assets/brand/n8_192.png',200),('/assets/brand/e8_526.png',200),('/assets/brand/../../.git/config',404),('/assets/brand/unknown.png',404),('/api/status',401),('/catalog/nac-baseline.json',404),('/.git/config',404)]:
                 with self.subTest(path=path):
                     conn=http.client.HTTPConnection('127.0.0.1',server.server_port); conn.request('GET',path)
-                    response=conn.getresponse(); self.assertEqual(response.status,expected); response.read(); conn.close()
+                    response=conn.getresponse(); self.assertEqual(response.status,expected)
+                    if path.startswith('/learning/') and expected == 200:
+                        self.assertIn("frame-ancestors 'self'", response.getheader('Content-Security-Policy'))
+                    elif path == '/':
+                        self.assertIn("frame-ancestors 'none'", response.getheader('Content-Security-Policy'))
+                    response.read(); conn.close()
         finally: server.shutdown(); thread.join(); server.server_close()

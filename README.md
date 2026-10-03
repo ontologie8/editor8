@@ -35,9 +35,13 @@ Der Container startet diesen Server. `GITHUB_REPOSITORY` bezeichnet das Datenrep
 
 ## Prüfen
 
+Das [Produkthandbuch](docs/product/README.md) beschreibt Einstieg, Modell, Bearbeitung, Felder, Fachprüfung, Rollen und Fehlerbehandlung. Der [Trainingsbereich](training/README.md) erklärt diese Abläufe mit 18 Browserfolien und einer künstlichen Speicherübung. Beide stehen im Editor unter **Hilfe**; die Recherche und die Pflegequellen liegen im Repository.
+
 ```powershell
 python -m unittest discover -s tests -q
+python scripts/build_learning.py --check
 node --check editor/app.js
+node --check editor/learning/app.js
 npm ci
 npx playwright install chromium --only-shell
 npm run test:browser
@@ -57,3 +61,5 @@ Die Integration verändert keine echten GitHub-Daten. Sie läuft zusätzlich bei
 ## Lizenz
 
 Code: AGPL-3.0-or-later; Dokumentation: CC-BY-4.0. Siehe [Lizenzzuordnung](LICENSES/README.md) und [Herkunft](NOTICE). Keine Aktenwerte, privaten Fachmodelle oder Zugangsdaten sind im Softwareprojekt enthalten.
+
+Copyright (c) 2026 funktion8 / ofunk. Based on NaC: Notariat as Code by funktion8 / ofunk ([Originalprojekt](https://github.com/notariat8/NaC)). [Autoren](AUTHORS.md), [Markenregeln](TRADEMARK.md), [Mitwirken](CONTRIBUTING.md), [Verhaltensregeln](CODE_OF_CONDUCT.md) und [Sicherheit](SECURITY.md) folgen dem NaC-Lizenz- und Projektmodell. Der Editor ist unter [www.ontologie8.de](https://www.ontologie8.de) bereitgestellt; Domainbetrieb und Anmeldeprüfung beschreibt [HTTPS-Betrieb](docs/custom-domain.md).

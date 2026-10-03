@@ -1,0 +1,53 @@
+{
+  "synthetic": true,
+  "title": "Künstliches Beispiel: Fantasiewerkstatt",
+  "nodes": [
+    {
+      "id": "local.schutz",
+      "category": "required_information",
+      "label": "Benötigte Schutzausrüstung",
+      "detail": "Fragevorlage: Welche Schutzausrüstung ist für die Übung vorgesehen?"
+    },
+    {
+      "id": "local.liste",
+      "category": "documents",
+      "label": "Ausrüstungsliste",
+      "detail": "Dokumentart mit den vorgesehenen Ausrüstungsarten."
+    },
+    {
+      "id": "local.auswahl",
+      "category": "decisions",
+      "label": "Leihmaterial auswählen",
+      "detail": "Entscheidungsvorlage: eigene Ausrüstung oder Leihmaterial."
+    },
+    {
+      "id": "local.pruefung",
+      "category": "gates",
+      "label": "Ausrüstung prüfen",
+      "detail": "Prüfvorlage: Ausrüstungsliste und Auswahl auf Übereinstimmung prüfen."
+    },
+    {
+      "id": "local.vermerk",
+      "category": "evidence",
+      "label": "Prüfvermerk",
+      "detail": "Nachweisart, die eine durchgeführte Prüfung dokumentieren würde."
+    }
+  ],
+  "edges": [
+    {
+      "from": "local.schutz",
+      "relation": "belegtDurch",
+      "to": "local.liste"
+    },
+    {
+      "from": "local.auswahl",
+      "relation": "informiert",
+      "to": "local.pruefung"
+    },
+    {
+      "from": "local.pruefung",
+      "relation": "belegtDurch",
+      "to": "local.vermerk"
+    }
+  ]
+}

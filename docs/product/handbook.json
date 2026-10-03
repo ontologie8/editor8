@@ -1,0 +1,293 @@
+{
+  "version": 1,
+  "title": "editor8 Produkthandbuch",
+  "chapters": [
+    {
+      "id": "ueberblick",
+      "title": "Produkt und Zweck",
+      "paragraphs": [
+        "editor8 ist eine gehostete Arbeitsoberfläche für versionierte Fachvorlagen. Eine Ontologie benennt die Gegenstände eines Fachgebiets, ihre Eigenschaften und ihre Beziehungen so, dass Menschen und Software dieselben Kennungen verwenden können.",
+        "Der Editor pflegt das Fachmodell eines Vorgangs. Die tatsächlichen Antworten einer Person, eine ausgefüllte Akte oder ein erledigter Prüfschritt werden dadurch nicht gespeichert. Im Notardatenprojekt liegen 20 kanonische Vorgangsarten. Weitere Datenziele benötigen den passenden Datenvertrag; der Editor hat keine feste Fallanzahl.",
+        "Software und Fachmodelle liegen in getrennten Repositories. GitHub ist Pflege- und Versionsquelle für Daten. NaC bleibt Quelle für Prozessabläufe. Der Trainingsbereich verwendet ausschließlich künstliche Beispiele."
+      ],
+      "steps": [],
+      "facts": [
+        [
+          "Software",
+          "Oberfläche, Anmeldung, Adapter, Tests, Betrieb und Editor-Release."
+        ],
+        [
+          "Datenrepository",
+          "Fachmodelle, Katalog und Datencommit."
+        ],
+        [
+          "Prozessmodell",
+          "Beschreibt den Ablauf; der Baum im Editor ordnet Bausteine nach Art."
+        ]
+      ]
+    },
+    {
+      "id": "einstieg",
+      "title": "Einstieg und Orientierung",
+      "paragraphs": [
+        "Öffne die App und melde dich mit deinem zugelassenen GitHub-Konto an. Die Repository-Auswahl zeigt nur erlaubte und für dein Konto zugängliche Datenziele. Ein Eintrag in der Liste erteilt keine GitHub-Rechte.",
+        "Links außen liegen Verstehen, Bearbeiten und Prüfen. Daneben stehen Datenrepository und Baum. In der Mitte liegt der Graph beziehungsweise die Arbeitsansicht. Rechts stehen Details oder Formular. Allgemeine Hilfe steht oben; das Fragezeichen am ausgewählten Baustein öffnet Kontexthilfe.",
+        "Das Menüband wird mit Strg+F1 oder Doppelklick reduziert. Eine Registerkarte öffnet die Befehle vorübergehend. Das Hamburger-Menü schaltet den inneren Datenbaum unabhängig davon. Menüs und Auswahl bleiben erreichbar, während Inhalte innerhalb ihrer Bereiche scrollen."
+      ],
+      "steps": [
+        "Datenrepository auswählen und eine Vorgangsart öffnen.",
+        "Im Baum einen Baustein wählen; Kategorie, Bedeutung und Beziehungen rechts prüfen.",
+        "Informationen öffnen, um Beschreibung, Quellen und Verlauf zu lesen.",
+        "Hilfe → Training für den Grundkurs oder Hilfe → Handbuch für die Referenz öffnen."
+      ],
+      "facts": [
+        [
+          "Strg+K / Eingabetaste in Suche",
+          "Bausteine im gesamten Datenkatalog suchen."
+        ],
+        [
+          "Strg+S",
+          "Speichervorschau öffnen."
+        ],
+        [
+          "Datei → Drucken",
+          "Lesefassung der aktuellen Auswahl drucken."
+        ],
+        [
+          "Editor-Release",
+          "Softwarecommit in der Fußzeile; der Datencommit ist eine andere Kennung."
+        ]
+      ]
+    },
+    {
+      "id": "modell",
+      "title": "Bausteine und Beziehungen",
+      "paragraphs": [
+        "Der Baum ist eine gegliederte Übersicht. Er zeigt keine Ausführungsreihenfolge und keine Klassenhierarchie eines allgemeinen OWL-Editors. Derselbe fachliche Graph kann mehrere Kategorien verbinden.",
+        "Fragen im Baum entsprechen Angabenfragen im Datenmodell: Sie beschreiben, welche Angabe benötigt wird. Die Antwort eines Einzelfalls gehört nicht in die Vorlage. Dokumenttypen beschreiben Dokumentarten. Entscheidungen beschreiben Auswahlpunkte. Prüfschritte beschreiben Prüfbedingungen oder Gates. Nachweistypen beschreiben Arten von Belegen.",
+        "Ein Dokument kann in einem Fachmodell zugleich eine Belegfunktion haben. Die richtige Modellierung hängt vom Zweck ab; der Kategoriename allein entscheidet das nicht. Bei Unklarheit zuerst die fachliche Bedeutung klären.",
+        "Lies jede Verbindung als Quelle – Beziehung – Ziel. Zum Beispiel: „Benötigte Schutzausrüstung“ wird durch „Ausrüstungsliste“ belegt. Ein Pfeil definiert eine Aussage im Modell; er führt keinen Vorgang aus und bestätigt keine erledigte Prüfung."
+      ],
+      "steps": [],
+      "facts": [
+        [
+          "Fragen",
+          "Welche Information wird benötigt? Beispiel: benötigte Schutzausrüstung."
+        ],
+        [
+          "Dokumenttypen",
+          "Welche Art von Dokument wird benötigt? Beispiel: Ausrüstungsliste."
+        ],
+        [
+          "Entscheidungen",
+          "Welche Auswahl wird beschrieben? Beispiel: Leihmaterial auswählen."
+        ],
+        [
+          "Prüfschritte",
+          "Welche Bedingung soll geprüft werden? Beispiel: Ausrüstung prüfen."
+        ],
+        [
+          "Nachweistypen",
+          "Welche Art von Beleg wäre vorgesehen? Beispiel: Prüfvermerk."
+        ],
+        [
+          "erfordert",
+          "Quelle benötigt das Ziel als Voraussetzung."
+        ],
+        [
+          "informiert",
+          "Quelle liefert Informationen für das Ziel."
+        ],
+        [
+          "belegt durch",
+          "Quelle wird durch das Ziel belegt."
+        ],
+        [
+          "wartet auf vollständige Angaben / wartet auf Prüfung",
+          "Modellierte Abhängigkeit, keine automatisierte Prüfung."
+        ],
+        [
+          "erfordert Entscheidung / füllt / bestimmt",
+          "Weitere vom Adapter angebotene Beziehungen; Bedeutung und Richtung vor Änderung prüfen."
+        ]
+      ]
+    },
+    {
+      "id": "pflege",
+      "title": "Modellpflege Schritt für Schritt",
+      "paragraphs": [
+        "Beginne mit einem kleinen Auftrag: Welche Bezeichnung, Erläuterung oder Beziehung ist unklar? Was soll sich fachlich ändern? Suche zuerst vorhandene Bausteine, um Doppelungen zu vermeiden.",
+        "Eine Umbenennung präzisiert einen vorhandenen Gegenstand. Ein neuer Baustein ist begründet, wenn ein eigenständiger Gegenstand fehlt. Kategorie, Kennung, Bedeutung und Beziehungen gehören dann zur Änderung. Vor Löschen die betroffenen Beziehungen und Quellen prüfen.",
+        "Die Übung „Fantasiewerkstatt“ präzisiert „Benötigte Schutzausrüstung“ zu „Benötigte Schutzausrüstung für den Workshop“. Bedeutung und Kennung bleiben erhalten. Das Training zeigt die Änderung ausschließlich im Browser und schreibt keine GitHub-Daten."
+      ],
+      "steps": [
+        "Vorgangsart und betroffenen Baustein unter Verstehen prüfen.",
+        "Links Bearbeiten wählen und Entwurf erstellen oder Bearbeiten am Baustein öffnen.",
+        "Bezeichnung und fachliche Erläuterung gezielt pflegen; ungelöste Bedeutung als Offene Fachfrage dokumentieren.",
+        "Für eine Verbindung Ansicht → Verbindungen öffnen, Quelle, Typ und Ziel wählen und den Satz prüfen.",
+        "Datei → Speichern wählen, alle Unterschiede prüfen und erst dann die Vorschau bestätigen.",
+        "Unter Prüfen → Meine Änderung Grund und Quellenstand erfassen und die gespeicherte Änderung einreichen."
+      ],
+      "facts": [
+        [
+          "Keine neue Vorgangsart im Editor",
+          "Die Anlage beziehungsweise Umfangsänderung eines Datenkatalogs erfolgt im Datenprojekt."
+        ],
+        [
+          "Gemeinsame Begriffe",
+          "Änderungen am Vokabular haben eigene Entwürfe und benötigen die Maintainer-Rolle."
+        ],
+        [
+          "Kennungen",
+          "Stabile Identität des Gegenstands; eine Änderung der Bezeichnung ersetzt keine Kennung."
+        ]
+      ]
+    },
+    {
+      "id": "felder",
+      "title": "Feldreferenz",
+      "paragraphs": [
+        "Das Formular zeigt die Felder des ausgewählten Bausteins. Pflegen bedeutet, eine fachliche Aussage nachvollziehbar zu beschreiben; nicht jedes Feld muss für jeden Typ ausgefüllt sein.",
+        "Übernommene NaC-Kennungen und der Status einer NaC-Vorlage sind geschützt. Technische Entscheidungswerte bleiben unverändert, solange fachlich geprüfte Anzeigenamen fehlen. Die Anzeige der RDF-Verwendung beschreibt technische Modellbezüge und keine tatsächlichen Aktenzugriffe."
+      ],
+      "steps": [],
+      "facts": [
+        [
+          "Bezeichnung",
+          "Kurzer verständlicher Name. Beispiel: Benötigte Schutzausrüstung für den Workshop."
+        ],
+        [
+          "Bausteintyp",
+          "Kategorie des Gegenstands; Änderungen daran brauchen eine fachliche Begründung."
+        ],
+        [
+          "Fachliche Erläuterung",
+          "Bedeutung und Abgrenzung des Bausteins."
+        ],
+        [
+          "Offene Fachfrage",
+          "Ungelöste Modellierungsfrage, keine erfundene Antwort."
+        ],
+        [
+          "Abschnitt der Vorlage",
+          "Bezug zum Abschnitt der fachlichen Vorlage."
+        ],
+        [
+          "Status der NaC-Vorlage",
+          "Quellstatus; bei übernommenen Bausteinen schreibgeschützt."
+        ],
+        [
+          "Pflegestatus des lokalen Entwurfs",
+          "Status eines lokal ergänzten Bausteins."
+        ],
+        [
+          "Verantwortliche Rolle",
+          "Rolle für die betreffende Angabe oder Prüfung."
+        ],
+        [
+          "Datenschutzklasse / Kann Personendaten enthalten?",
+          "Klassifikation des Typs; hier keine tatsächlichen Personendaten eintragen."
+        ],
+        [
+          "Benötigt für / Entscheidungsoptionen",
+          "Eine Angabe pro Zeile; bestehende Maschinenwerte nicht frei übersetzen."
+        ],
+        [
+          "Dokumentquelle",
+          "Quellenbezug des Dokumenttyps."
+        ],
+        [
+          "Grund und Quellenstand beim Einreichen",
+          "Warum sich das Modell ändert und auf welche fachliche Quelle die Änderung gestützt wird."
+        ]
+      ]
+    },
+    {
+      "id": "pruefen",
+      "title": "Entwurf, Prüfung und Übernahme",
+      "paragraphs": [
+        "Tippen verändert zunächst den Browserzustand. Speichern öffnet die fachliche Vorschau. Bestätigung schreibt in deinen Entwurfszweig im Datenrepository. Einreichen erzeugt einen Pull Request. Diese Schritte erteilen keine notarielle Freigabe.",
+        "Eine andere berechtigte Person prüft die eingereichte Änderung. Fachliche Freigaben sind für eingetragene Notarkonten vorgesehen und beziehen sich auf den geprüften Commit. Änderungen nach der Prüfung benötigen eine Beurteilung des neuen Stands.",
+        "Der vereinbarte Pilot verwendet einen manuellen Merge-Weg: verantwortliche Person prüft fachliche Freigabe auf dem aktuellen Commit und erfolgreiche CI vor Übernahme. Eine technisch erzwungene GitHub-Mergesperre ist eine separate optionale Betriebsentscheidung.",
+        "Eigene gespeicherte Entwürfe lassen sich wieder öffnen oder ablegen. Ungespeicherte Eingaben sind nach Browserverlust nicht dauerhaft gesichert. Eine frühere Fassung erzeugt einen neuen Prüfentwurf nach Vergleich und ersetzt main nicht direkt."
+      ],
+      "steps": [
+        "Änderungsgrund und fachlichen Quellenstand lesen.",
+        "Begriffe, Quellen und Beziehungen mit dem aktuellen Datencommit vergleichen.",
+        "Als andere berechtigte Person eine begründete Rückfrage oder Freigabe dokumentieren.",
+        "Bei neuem Commit den neuen Stand erneut prüfen.",
+        "Vor manuellem Merge Freigabe, Dateiumfang und CI bestätigen."
+      ],
+      "facts": []
+    },
+    {
+      "id": "rollen",
+      "title": "Zugriff und Betrieb",
+      "paragraphs": [
+        "Die Anmeldung identifiziert den GitHub-Benutzer. Der Host erlaubt Benutzer über EDITOR_USERS. Das Datenrepository benötigt Read zum Lesen und Write zum Erstellen von Änderungen. Der GitHub-App-Benutzertoken ist auf die gemeinsamen Rechte von App und Benutzer beschränkt.",
+        "Die Reviewer-Rolle erlaubt fachliche Freigaben einer anderen Person; die Maintainer-Rolle erlaubt gemeinsame Begriffe. Rollen erteilen keine GitHub-Rechte. Weitere Datenziele brauchen Registry-Eintrag, App-Installation, Benutzerzugriff und passenden Adapter.",
+        "Der Editor läuft auf Azure. Secrets bleiben im Host. Lokale Entwicklung verlangt einen ausdrücklich separaten EDITOR8_DATA_ROOT. Die öffentliche Software-CI verwendet künstliche Daten; die Integration mit privaten Fachmodellen läuft im privaten Datenrepository.",
+        "Ein Softwarebuild endet erst mit dem erwarteten Azure-Image, aktiver gesunder Revision und passender Release-Kennung. Konfiguration und Betriebsanleitung stehen in docs/editor-hosting.md und docs/data-repositories-and-users.md."
+      ],
+      "steps": [],
+      "facts": [
+        [
+          "Leser",
+          "Zugelassenes GitHub-Konto mit Lesezugriff am Datenziel."
+        ],
+        [
+          "Bearbeitende",
+          "Zusätzlicher GitHub-Schreibzugriff für Entwürfe und PRs."
+        ],
+        [
+          "Notarielle Reviewer",
+          "Zusätzliche fachliche Rolle; keine Selbstfreigabe."
+        ],
+        [
+          "Ontology-Maintainer",
+          "Zusätzliche Rolle für das gemeinsame Vokabular."
+        ]
+      ]
+    },
+    {
+      "id": "fehler",
+      "title": "Fehlerbehebung und Grenzen",
+      "paragraphs": [
+        "Wenn ein Schritt scheitert, dokumentiere Software-Release, Datenziel, Arbeitsschritt und genaue Fehlermeldung. Keine Tokens, Callback-URLs oder Secrets in Kommentare kopieren. Bewahre gespeicherte Entwürfe, solange die Ursache unklar ist.",
+        "Der Editor bietet derzeit Textvergleich, Fachgraph und strukturierte Felder. Grafischer Vorher/Nachher-Vergleich, Rückfragen direkt am Baustein, kontrollierte deutsche Beziehungssätze und SHACL sind spätere Roadmap-Pakete.",
+        "Der echte angemeldete Schreib-/PR-Weg und die notarielle Zwei-Personen-Abnahme bleiben gesonderte Nachweise. Die Trainingsübung und grüne technische Tests ersetzen diese Abnahmen nicht."
+      ],
+      "steps": [],
+      "facts": [
+        [
+          "Datenziel fehlt",
+          "Registry-Eintrag, Benutzerzulassung, GitHub-Zugriff und App-Installation durch Betreiber prüfen lassen."
+        ],
+        [
+          "Speichern deaktiviert",
+          "Keine ungespeicherte Änderung oder kein passender Entwurf; aktive Vorgangsart und Entwurfszweck prüfen."
+        ],
+        [
+          "Stand hat sich inzwischen geändert",
+          "Nicht wiederholt überschreiben; aktuellen Datenstand neu prüfen und Entwurf vergleichen."
+        ],
+        [
+          "Freigabe deaktiviert",
+          "Eigene Änderung, fehlende Reviewer-Rolle, ungeklärter Befund oder nicht freigabefähiger PR."
+        ],
+        [
+          "Repository-Wechsel blockiert",
+          "Zuerst offene Eingaben speichern oder verwerfen und den Entwurf ablegen."
+        ],
+        [
+          "Alte Oberfläche",
+          "Editor-Release vergleichen und Browser neu laden; bei abweichender Kennung Betreiber informieren."
+        ],
+        [
+          "Training zurückgesetzt",
+          "Übungen sind flüchtig. Neu laden startet das künstliche Beispiel neu."
+        ]
+      ]
+    }
+  ]
+}

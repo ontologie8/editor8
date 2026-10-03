@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Produktdokumentation und Training
+    url: https://github.com/ontologie8/editor8/tree/main/docs/product
+    about: Zuerst das Handbuch und die künstlichen Beispiele prüfen.
+  - name: Sicherheitslücke vertraulich melden
+    url: https://github.com/ontologie8/editor8/security/advisories/new
+    about: Keine sensiblen Sicherheitsdetails in öffentlichen Issues veröffentlichen.

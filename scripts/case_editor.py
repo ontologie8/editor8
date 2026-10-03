@@ -28,6 +28,7 @@ from vocabulary_editor import model as vocabulary_model, prepare_change as prepa
 from vocabulary_impact import impact_index
 from release_info import release_info
 from brand_assets import BRAND_ASSETS
+from learning_assets import LEARNING_ASSETS
 
 
 ASSETS = APP_ROOT / "editor"
@@ -342,6 +343,9 @@ class EditorHandler(BaseHTTPRequestHandler):
                 self._send(200, (ASSETS / filename).read_bytes(), types[filename] + "; charset=utf-8")
             elif path in BRAND_ASSETS:
                 self._send(200, (ASSETS / BRAND_ASSETS[path]).read_bytes(), "image/png")
+            elif path in LEARNING_ASSETS:
+                filename, kind = LEARNING_ASSETS[path]
+                self._send(200, (ASSETS / filename).read_bytes(), kind)
             else:
                 self._json(404, {"error": "Nicht gefunden"})
         except ValueError as exc:

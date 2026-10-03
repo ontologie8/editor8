@@ -37,6 +37,20 @@ test('training save needs preview confirmation and never writes to the data API'
   await frame.getByRole('button',{name:'Schließen',exact:true}).click(); await expect(frame.locator('.model')).toContainText('Künstliche Übungsfrage'); expect(writes).toEqual([]);
   await page.reload(); await page.locator('[data-menu=help]').click(); await page.locator('[data-help-topic=training]').click(); await expect(frame.locator('.model')).toContainText('Benötigte Schutzausrüstung');
 });
+test('failed sign-in explains recovery and provides a safe diagnostic identifier', async ({page}) => {
+  await page.setViewportSize({width:1536,height:760});
+  const response=await page.goto('/callback?code=synthetic-browser-code');
+  expect(response.status()).toBe(401);
+  await expect(page.getByRole('heading',{name:'Anmeldung nicht abgeschlossen'})).toBeVisible();
+  await expect(page.locator('main')).toContainText('diesem Browser');
+  await expect(page.locator('.auth-diagnostic code')).toHaveText(/^[a-f0-9]{12}$/);
+  await expect(page.getByRole('link',{name:'Erneut anmelden'})).toHaveAttribute('href','http://127.0.0.1:18767/login');
+  await page.keyboard.press('Tab');await expect(page.getByRole('link',{name:'Erneut anmelden'})).toBeFocused();
+  expect(await page.locator('body').innerText()).not.toContain('synthetic-browser-code');
+  expect(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight)).toBe(true);
+  expect((await page.request.get('/api/status')).status()).toBe(200);
+});
+
 test('software opens a two-case external dataset and renders its graph',async ({page})=>{
   const errors=[]; page.on('pageerror',error=>errors.push(error.message));
   await page.goto('/');

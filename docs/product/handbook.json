@@ -30,7 +30,7 @@
       "id": "einstieg",
       "title": "Einstieg und Orientierung",
       "paragraphs": [
-        "Öffne die App und melde dich mit deinem zugelassenen GitHub-Konto an. Die Repository-Auswahl zeigt nur erlaubte und für dein Konto zugängliche Datenziele. Ein Eintrag in der Liste erteilt keine GitHub-Rechte.",
+        "Öffne https://www.ontologie8.de und melde dich mit deinem zugelassenen GitHub-Konto an. Die bisherige Azure-Adresse führt die Anmeldung zuerst zur aktuellen Domain, damit Anmelde-Cookie und Rückkehradresse zusammenpassen. Die Repository-Auswahl zeigt nur erlaubte und für dein Konto zugängliche Datenziele. Ein Eintrag in der Liste erteilt keine GitHub-Rechte.",
         "Links außen liegen Verstehen, Bearbeiten und Prüfen. Daneben stehen Datenrepository und Baum. In der Mitte liegt der Graph beziehungsweise die Arbeitsansicht. Rechts stehen Details oder Formular. Allgemeine Hilfe steht oben; das Fragezeichen am ausgewählten Baustein öffnet Kontexthilfe.",
         "Das Menüband wird mit Strg+F1 oder Doppelklick reduziert. Eine Registerkarte öffnet die Befehle vorübergehend. Das Hamburger-Menü schaltet den inneren Datenbaum unabhängig davon. Menüs und Auswahl bleiben erreichbar, während Inhalte innerhalb ihrer Bereiche scrollen."
       ],
@@ -259,6 +259,10 @@
       ],
       "steps": [],
       "facts": [
+        [
+          "Anmeldung nicht abgeschlossen",
+          "Auf der Fehlerseite Erneut anmelden wählen; eine alte Callback-Adresse nicht erneut öffnen. Bei erneutem Fehler nur Fehlermeldung und Diagnose-Kennung melden. Der Betreiber findet damit den fehlgeschlagenen Schritt, ohne Anmeldedaten zu protokollieren."
+        ],
         [
           "Datenziel fehlt",
           "Registry-Eintrag, Benutzerzulassung, GitHub-Zugriff und App-Installation durch Betreiber prüfen lassen."

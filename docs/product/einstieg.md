@@ -1,6 +1,6 @@
 # Einstieg und Orientierung
 
-Öffne die App und melde dich mit deinem zugelassenen GitHub-Konto an. Die Repository-Auswahl zeigt nur erlaubte und für dein Konto zugängliche Datenziele. Ein Eintrag in der Liste erteilt keine GitHub-Rechte.
+Öffne https://www.ontologie8.de und melde dich mit deinem zugelassenen GitHub-Konto an. Die bisherige Azure-Adresse führt die Anmeldung zuerst zur aktuellen Domain, damit Anmelde-Cookie und Rückkehradresse zusammenpassen. Die Repository-Auswahl zeigt nur erlaubte und für dein Konto zugängliche Datenziele. Ein Eintrag in der Liste erteilt keine GitHub-Rechte.
 
 Links außen liegen Verstehen, Bearbeiten und Prüfen. Daneben stehen Datenrepository und Baum. In der Mitte liegt der Graph beziehungsweise die Arbeitsansicht. Rechts stehen Details oder Formular. Allgemeine Hilfe steht oben; das Fragezeichen am ausgewählten Baustein öffnet Kontexthilfe.
 

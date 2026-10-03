@@ -10,6 +10,7 @@ Der echte angemeldete Schreib-/PR-Weg und die notarielle Zwei-Personen-Abnahme b
 
 | Begriff oder Meldung | Erläuterung |
 | --- | --- |
+| Anmeldung nicht abgeschlossen | Auf der Fehlerseite Erneut anmelden wählen; eine alte Callback-Adresse nicht erneut öffnen. Bei erneutem Fehler nur Fehlermeldung und Diagnose-Kennung melden. Der Betreiber findet damit den fehlgeschlagenen Schritt, ohne Anmeldedaten zu protokollieren. |
 | Datenziel fehlt | Registry-Eintrag, Benutzerzulassung, GitHub-Zugriff und App-Installation durch Betreiber prüfen lassen. |
 | Speichern deaktiviert | Keine ungespeicherte Änderung oder kein passender Entwurf; aktive Vorgangsart und Entwurfszweck prüfen. |
 | Stand hat sich inzwischen geändert | Nicht wiederholt überschreiben; aktuellen Datenstand neu prüfen und Entwurf vergleichen. |

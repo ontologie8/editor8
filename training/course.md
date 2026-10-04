@@ -49,6 +49,7 @@ Fragen, Dokumenttypen, Entscheidungen, Prüfschritte und Nachweistypen sind Kate
 
 - Wähle einen Baustein rechts durch Anklicken.
 - Lies seine Kategorie und Erläuterung.
+- Im Editor: Halte den Mauszeiger über einen Baustein für einen kurzen Hinweis; Rechtsklick oder Umschalt+F10 zeigt dessen Befehle.
 
 **Lernfrage:** Wo steht die Ausrüstungsliste?
 
@@ -123,6 +124,7 @@ Unser künstlicher Anlass: Die Frage soll ausdrücklich Schutzausrüstung für d
 
 - Öffne Bearbeiten und wähle den vorhandenen Baustein.
 - Wähle Entwurf erstellen oder Bearbeiten am Baustein.
+- Im Editor kannst du den gewünschten Baustein auch mit Rechtsklick → Bearbeiten öffnen. Ein Hinweis erklärt nicht verfügbare Befehle.
 
 **Lernfrage:** Brauchen wir dafür einen zweiten Baustein?
 
@@ -134,6 +136,7 @@ Bezeichnung ist der kurze sichtbare Name. Fachliche Erläuterung erklärt seine 
 
 - Ändere nur die begründeten Felder.
 - Dokumentiere Unsicherheit als offene Frage statt eine Antwort zu erfinden.
+- Beim Bearbeiten bleiben Ausschneiden, Kopieren und Einfügen in den Textfeldern verfügbar.
 
 **Lernfrage:** Wo gehört eine ungelöste Bedeutungsfrage hin?
 

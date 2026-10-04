@@ -18,6 +18,7 @@ jobs:
           node-version: '22'
           cache: npm
       - run: node --check editor/app.js
+      - run: node --check editor/interaction.js
       - run: node --check editor/learning/app.js
       - run: npm ci
       - run: npx playwright install --with-deps chromium --only-shell
@@ -42,6 +43,7 @@ jobs:
           done
           curl --fail --silent http://127.0.0.1:18765/healthz
           curl --fail --silent http://127.0.0.1:18765/ > /dev/null
+          curl --fail --silent http://127.0.0.1:18765/interaction.js > /dev/null
           for asset in editor/assets/brand/*.png; do
             curl --fail --silent "http://127.0.0.1:18765/${asset#editor/}" > /dev/null
           done
@@ -108,7 +110,7 @@ jobs:
                 remote_css_hash=$(curl --fail --silent --show-error "$base/style.css" | sha256sum | cut -d ' ' -f1)
                 test "$remote_html_hash" = "$local_html_hash"
                 test "$remote_css_hash" = "$local_css_hash"
-                for asset in editor/assets/brand/*.png editor/learning/*; do
+                for asset in editor/interaction.js editor/assets/brand/*.png editor/learning/*; do
                   expected_asset_hash=$(sha256sum "$asset" | cut -d ' ' -f1)
                   live_asset_hash=$(curl --fail --silent --show-error "$base/${asset#editor/}" | sha256sum | cut -d ' ' -f1)
                   test "$live_asset_hash" = "$expected_asset_hash"

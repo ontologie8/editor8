@@ -1,6 +1,6 @@
 # Roadmap für editor8
 
-Stand: 03.10.2026. editor8 pflegt Software, Oberfläche, Anmeldung, Datenadapter und Betrieb. Fachmodelle liegen im ausdrücklich gewählten Datenrepository. Die 20 kanonischen Vorgangsarten gehören zu `notariat8/ontology`; der Editor übernimmt die Fallanzahl aus dem jeweiligen Katalog.
+Stand: 04.10.2026. editor8 pflegt Software, Oberfläche, Anmeldung, Datenadapter und Betrieb. Fachmodelle liegen im ausdrücklich gewählten Datenrepository. Die 20 kanonischen Vorgangsarten gehören zu `notariat8/ontology`; der Editor übernimmt die Fallanzahl aus dem jeweiligen Katalog.
 
 Herkunft: Die ursprüngliche Planung wurde aus dem ontology-Editorzweig übernommen. Historische Nachweise dieses Zweigs sind keine Deploymentbestätigung für editor8. Der heutige Stand und verbleibende Abnahmen sind hier getrennt aufgeführt.
 
@@ -21,7 +21,7 @@ GitHub bleibt die versionierte Datenquelle. Turtle ist Pflegequelle, Mermaid wir
 | Paket | Bereits umgesetzt | Verbleibende Arbeit |
 | --- | --- | --- |
 | **P0 – Produktweg absichern** | Wiederholbare Software-/Browser-CI, getrennte Datenintegration, Azure-Auslieferung mit Release- und Assetprüfung | Echte angemeldete fachlich sinnvolle Änderung über Azure bis zum Daten-PR; erwartete Dateien und Commit nachweisen; Prüfung und Freigabe durch ein zweites Konto |
-| **P1 – Bedienqualität und Wartbarkeit** | Freigegebene Office-Struktur, kompakte Desktopmaße, erneuerte CSS-Regeln, Hilfe und getestete Kernwege | `app.js` in klare Zustände und Ansichten ordnen; Fokus, Tastatur, Fehler, leere Ansichten und ungespeicherte Eingaben systematisch prüfen; abschließende Bedienabnahme |
+| **P1 – Bedienqualität und Wartbarkeit** | Freigegebene Office-Struktur, kompakte Desktopmaße, erneuerte CSS-Regeln, fachliche Hilfe, Hover-/Fokushinweise und objektbezogene Kontextmenüs; Interaktionsschicht in `interaction.js`; geprüfte Tastatur- und Entwurfsgrenzen | Übrige `app.js` in klare Zustände und Ansichten ordnen; Fehler und leere Ansichten vollständig prüfen; abschließende Bedienabnahme |
 | **P2 – Änderungsfolgen sichtbar machen** | Textliche Änderungsvorschau und technische Begriffsverwendung | Grafischer Vorher/Nachher-Vergleich aus tatsächlichen RDF-Differenzen |
 | **P3 – Rückfragen am Gegenstand** | Prüfkorb, begründete Änderungswünsche und commitgebundene Freigabe | Direkt zum betroffenen Baustein oder zur Beziehung springen; Rückfragen mit stabilen Kennungen und geprüftem Stand verbinden |
 | **P4 – Geführte deutsche Formulierungen** | Strukturierte Felder und Beziehungsauswahl | Kontrollierte Sätze aus vorhandenen Bausteinen und zulässigen Beziehungen; fachlich freigegebene Anzeigenamen |

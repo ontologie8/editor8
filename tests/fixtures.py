@@ -26,8 +26,8 @@ class DemoDataset:
             text += f'# Beziehungen aus dem NaC-Vorlagengraphen; keine BPMN-Sequenzflüsse.\n{nodes[0]} n8:erfordert {nodes[1]} .\n'
             (directory/'ontology.ttl').write_text(text,encoding='utf-8')
         (self.root/'catalog/nac-usecases.ttl').write_text(catalog,encoding='utf-8')
-        core=prefixes+'@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n'
-        for kind in classes: core+=f'n8:{kind} a rdfs:Class ; skos:prefLabel "Beispiel {kind}"@de .\n'
+        core=prefixes+'@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n'
+        for kind in classes: core+=f'n8:{kind} a rdfs:Class, owl:Class ; skos:prefLabel "Beispiel {kind}"@de ; rdfs:label "Beispiel {kind}"@de ; rdfs:comment "Vollständig künstlicher Begriff für die Bedienprüfung."@de .\n'
         (self.root/'ontology/core.ttl').write_text(core,encoding='utf-8')
     def close(self):
         self.temp.cleanup()

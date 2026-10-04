@@ -17,3 +17,13 @@ dialog{border:1px solid var(--line);border-radius:8px;padding:24px;width:min(720
 .brand{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}.brand img{width:32px;height:32px;object-fit:contain;flex-shrink:0}.repository-picker{display:flex;align-items:center;gap:8px}.repository-picker img{width:24px;height:24px;object-fit:contain;flex-shrink:0}.repository-picker select{min-width:0;flex:1}
 .help-workspace.learning-workspace{padding:0;overflow:hidden}.learning-workspace #help-content{max-width:none;height:100%;width:100%}.learning-workspace iframe{border:0;width:100%;height:100%;display:block}
 .task-navigation button[aria-current=page]{background:#ebf3fc;color:var(--accent);border-left:3px solid var(--accent)}
+
+/* Fluent flyouts stay within the viewport; only workspace content scrolls. */
+.app-tooltip,.app-context-menu{position:fixed;background:var(--surface);border:1px solid var(--line);border-radius:4px;box-shadow:0 4px 12px #0002;color:var(--ink)}
+.app-tooltip{z-index:1002;display:grid;gap:4px;width:max-content;max-width:min(320px,calc(100vw - 16px));padding:8px 12px;font-size:12px;line-height:18px;overflow-wrap:anywhere}
+.app-tooltip strong{font-weight:600}.app-tooltip small{font-size:11px;color:var(--muted)}
+.app-context-menu{z-index:1001;min-width:min(240px,calc(100vw - 16px));max-width:min(300px,calc(100vw - 16px));max-height:calc(100dvh - 16px);overflow:auto;padding:4px}
+.context-heading{padding:6px 10px;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px}
+.context-command{display:flex;align-items:center;gap:10px;min-height:32px;width:100%;padding:4px 10px;text-align:left;border-radius:4px;font-size:14px}
+.context-command>span:not(.context-icon){flex:1}.context-command small{margin-left:16px;color:var(--muted);font-size:12px}.context-icon{width:16px;height:16px;flex:0 0 16px}.context-command:disabled{opacity:1;color:#707070}.context-command:disabled:hover{background:transparent}.context-separator{border-top:1px solid var(--line);margin:4px 6px}
+@media print{.app-tooltip,.app-context-menu{display:none!important}}

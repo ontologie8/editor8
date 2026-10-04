@@ -67,6 +67,91 @@ test('software opens a two-case external dataset and renders its graph',async ({
   }
   expect(errors).toEqual([]);
 });
+
+test('context hints support hover, keyboard focus, disabled commands and Escape',async ({page})=>{
+  await page.goto('/?case=demo-eins');await expect(page.locator('#case-count')).toHaveText('2');
+  await page.locator('.tree-node').first().click();await expect(page.locator('#graph-inspector')).toBeVisible();
+  await page.locator('#selection-help').hover();const tip=page.getByRole('tooltip');await expect(tip).toContainText('fachlichen Kontext');
+  await expect(page.locator('#selection-help')).toHaveAttribute('aria-describedby','app-tooltip');
+  await tip.hover();await expect(tip).toBeVisible();await page.keyboard.press('Escape');await expect(tip).toBeHidden();await expect(page.locator('#graph-inspector')).toBeVisible();
+  await page.locator('[data-menu=file]').click();await page.locator('#save').hover();await expect(tip).toContainText('keine ungespeicherten Änderungen');await expect(page.locator('#save')).toBeDisabled();
+  await page.locator('#app-search').click();await page.keyboard.press('Tab');await expect(tip).toBeVisible();
+  const bounds=await tip.boundingBox();const size=page.viewportSize();expect(bounds.x).toBeGreaterThanOrEqual(0);expect(bounds.x+bounds.width).toBeLessThanOrEqual(size.width);expect(bounds.y+bounds.height).toBeLessThanOrEqual(size.height);
+  await page.keyboard.press('Escape');await expect(tip).toBeHidden();await expect(page.locator('#graph-inspector')).toBeVisible();
+});
+
+test('right-click targets the clicked node without writes; keyboard menu returns focus and opens its help',async ({page})=>{
+  await page.goto('/?case=demo-eins');await expect(page.locator('#case-count')).toHaveText('2');
+  const writes=[];page.on('request',request=>{if(request.method()!=='GET')writes.push(request.url());});
+  await page.locator('.tree-node[data-context-node=demo0]').click();
+  const target=page.locator('.tree-node[data-context-node=demo1]');await target.click({button:'right'});
+  const menu=page.getByRole('menu',{name:'Befehle für Beispiel Dokumenttyp'});await expect(menu).toBeVisible();await expect(page.locator('#inspector-title')).toHaveText('Beispiel Angabenfrage');
+  await expect(menu.getByRole('menuitem',{name:'Entfernen',exact:true})).toHaveCount(0);await expect(page.locator('#branch')).toHaveText('Lesemodus');expect(writes).toEqual([]);
+  await page.keyboard.press('Escape');await expect(menu).toBeHidden();await expect(target).toBeFocused();await expect(page.locator('#graph-inspector')).toBeVisible();
+  await page.keyboard.press('Shift+F10');await expect(menu).toBeVisible();await expect(menu.getByRole('menuitem',{name:'Öffnen',exact:true})).toBeFocused();
+  await page.keyboard.press('ArrowDown');await expect(menu.getByRole('menuitem',{name:'Bearbeiten',exact:true})).toBeFocused();
+  await page.keyboard.press('End');await expect(menu.getByRole('menuitem',{name:'Hilfe zur Auswahl',exact:true})).toBeFocused();await page.keyboard.press('Enter');
+  await expect(page.locator('#selection-help-title')).toHaveText('Hilfe zu Beispiel Dokumenttyp');await expect(page.locator('#selection-help-dialog')).toBeVisible();expect(writes).toEqual([]);
+  await page.locator('#selection-help-close').click();await page.locator('.tree-node[data-context-node=demo0]').click({button:'right'});await page.getByRole('menuitem',{name:'Verbindungen',exact:true}).click();
+  await expect(page.locator('#inspector-title')).toHaveText('Beispiel Angabenfrage');await expect(page.locator('#relation-context')).toContainText('erfordert');expect(writes).toEqual([]);
+});
+
+test('graph context menu fits viewport edges and keeps native text editing commands',async ({page})=>{
+  await page.setViewportSize({width:1536,height:760});await page.goto('/?case=demo-eins');await expect(page.locator('#case-count')).toHaveText('2');
+  await page.locator('#graph [data-context-node=demo1]').click({button:'right'});await expect(page.getByRole('menu')).toHaveAttribute('aria-label','Befehle für Beispiel Dokumenttyp');
+  await page.keyboard.press('Escape');
+  // The event position can be at the viewport edge, independently of the node's position.
+  await page.locator('#graph [data-context-node=demo1]').dispatchEvent('contextmenu',{clientX:1534,clientY:758});const menu=page.getByRole('menu');await expect(menu).toBeVisible();
+  const rect=await menu.boundingBox();expect(rect.x+rect.width).toBeLessThanOrEqual(1536);expect(rect.y+rect.height).toBeLessThanOrEqual(760);
+  expect(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight&&document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  await page.keyboard.press('Tab');await expect(menu).toBeHidden();
+  await page.evaluate(()=>{window.textContextPrevented=null;document.addEventListener('contextmenu',event=>{if(event.target.id==='app-search')window.textContextPrevented=event.defaultPrevented;});});
+  await page.locator('#app-search').click({button:'right'});await expect(menu).toBeHidden();expect(await page.evaluate(()=>window.textContextPrevented)).toBe(false);
+});
+
+test('context editing and saving use the protected draft workflow; removing an own addition needs confirmation',async ({page})=>{
+  await page.goto('/?case=demo-eins');await expect(page.locator('#case-count')).toHaveText('2');
+  await page.locator('.tree-node[data-context-node=demo1]').click({button:'right'});await page.getByRole('menuitem',{name:'Bearbeiten',exact:true}).click();
+  await expect(page.locator('#branch')).toHaveText('Mein Entwurf');await expect(page.locator('#detail-title')).toHaveText('Beispiel Dokumenttyp');
+  const label=page.locator('#node-form label').filter({hasText:/^Bezeichnung$/}).locator('input');await expect(label).toBeFocused();await label.fill('Künstlicher Dokumenttyp aus dem Kontextmenü');
+  await label.hover();await expect(page.getByRole('tooltip')).toContainText('keine konkrete Akte');
+  await page.locator('.tree-node[data-context-node=demo0]').click({button:'right'});await page.getByRole('menuitem',{name:'Speichern',exact:true}).click();await expect(page.locator('#change-preview')).toBeVisible();await expect(page.locator('#preview-list')).toContainText('Bezeichnung');
+  await page.locator('#confirm-save').click();await expect(page.locator('#notice')).toContainText('Fallvorlage gespeichert');
+  await page.locator('[data-area=edit]').click();await page.locator('#new-node').click();await expect(page.locator('.tree-node[data-context-node="local.1"]')).toBeVisible();
+  let cancelled=false;page.once('dialog',async dialog=>{cancelled=true;await dialog.dismiss();});
+  await page.locator('.tree-node[data-context-node="local.1"]').click({button:'right'});await page.getByRole('menuitem',{name:'Entfernen',exact:true}).click();await expect.poll(()=>cancelled).toBe(true);await expect(page.locator('.tree-node[data-context-node="local.1"]')).toBeVisible();
+  page.once('dialog',dialog=>dialog.accept());await page.locator('.tree-node[data-context-node="local.1"]').click({button:'right'});await page.getByRole('menuitem',{name:'Entfernen',exact:true}).click();await expect(page.locator('.tree-node[data-context-node="local.1"]')).toHaveCount(0);
+});
+
+test('context commands respect another-case drafts and common-term maintenance permissions',async ({page})=>{
+  await page.goto('/?case=demo-eins');await expect(page.locator('#case-count')).toHaveText('2');await page.locator('[data-area=edit]').click();await page.locator('#start-branch').click();await expect(page.locator('#branch')).toHaveText('Mein Entwurf');
+  await page.locator('.case-item[data-context-case=demo-zwei]').click();await expect(page.locator('#case-title')).toHaveText('Künstlicher Fall demo-zwei');
+  await page.locator('.tree-node[data-context-node=demo0]').click({button:'right'});const edit=page.getByRole('menuitem',{name:'Bearbeiten',exact:true});await expect(edit).toBeDisabled();await edit.hover();await expect(page.getByRole('tooltip')).toContainText('anderen Arbeitsbereich');await page.keyboard.press('Escape');
+  // The same identity can read shared terms while lacking their separate maintenance role.
+  await page.route('**/api/status',async route=>{const response=await route.fetch();const status=await response.json();await route.fulfill({json:{...status,ontology_maintainer:false}});});
+  await page.reload();await page.locator('[data-menu=view]').click();await page.locator('#vocab-nav').click();await expect(page.locator('.vocab-item').first()).toBeVisible();
+  const writes=[];page.on('request',request=>{if(request.method()!=='GET')writes.push(request.url());});
+  await page.locator('.vocab-item').first().click({button:'right'});await expect(edit).toBeDisabled();await edit.hover();await expect(page.getByRole('tooltip')).toContainText('zusätzliche fachliche Berechtigung');
+  await page.getByRole('menuitem',{name:'Hilfe zur Auswahl',exact:true}).click();await expect(page.locator('#selection-help-title')).toContainText('Hilfe zu Beispiel');expect(writes).toEqual([]);
+});
+
+test('opening another case from its context menu retains the unsaved-change guard',async ({page})=>{
+  await page.goto('/?case=demo-eins');await expect(page.locator('#case-count')).toHaveText('2');await page.locator('.tree-node[data-context-node=demo0]').click({button:'right'});await page.getByRole('menuitem',{name:'Bearbeiten',exact:true}).click();
+  const label=page.locator('#node-form label').filter({hasText:/^Bezeichnung$/}).locator('input');await label.fill('Nicht gespeicherte künstliche Änderung');
+  page.once('dialog',dialog=>dialog.dismiss());await page.locator('.case-item[data-context-case=demo-zwei]').click({button:'right'});await page.getByRole('menuitem',{name:'Öffnen',exact:true}).click();await expect(page.locator('#case-title')).toHaveText('Künstlicher Fall demo-eins');await expect(label).toHaveValue('Nicht gespeicherte künstliche Änderung');
+  await page.locator('.case-item[data-context-case=demo-eins]').click({button:'right'});await page.getByRole('menuitem',{name:'Informationen',exact:true}).click();await expect(page.locator('#case-sources')).toBeVisible();await expect(page.locator('#summary-read')).toContainText('Künstliches Modell');
+});
+
+test('a pending save disables context mutations and closes an obsolete menu',async ({page})=>{
+  await editArtificialLabel(page,'Künstliche Änderung vor verzögerter Vorschau');
+  let release;const pending=new Promise(resolve=>{release=resolve;});let previews=0;
+  await page.route('**/api/cases/demo-eins/preview',async route=>{previews++;await pending;await route.continue();});
+  await page.locator('.tree-node[data-context-node=demo0]').click({button:'right'});await expect(page.getByRole('menu')).toBeVisible();
+  await page.keyboard.press('Control+s');await expect.poll(()=>previews).toBe(1);await expect(page.getByRole('menu')).toBeHidden();
+  await page.locator('#graph [data-context-node=demo0]').click({button:'right'});await expect(page.getByRole('menuitem',{name:'Bearbeiten',exact:true})).toBeDisabled();await expect(page.getByRole('menuitem',{name:'Speichern',exact:true})).toBeDisabled();await expect(page.getByRole('menu')).toBeFocused();
+  await page.getByRole('menuitem',{name:'Bearbeiten',exact:true}).hover();await expect(page.getByRole('tooltip')).toContainText('laufenden Vorgang');
+  release();await expect(page.locator('#change-preview')).toBeVisible();await expect(page.getByRole('menu')).toBeHidden();expect(previews).toBe(1);await expect(page.locator('#preview-list')).toContainText('Bezeichnung');
+});
 test('two-case search index and draft creation use configured catalog scope',async ({page})=>{
   const request=page.request;
   const index=await request.get('/api/case-index'); expect(index.status()).toBe(200);

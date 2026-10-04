@@ -337,9 +337,9 @@ class EditorHandler(BaseHTTPRequestHandler):
                 self._json(200, impact_index(read("ontology/core.ttl"), read("catalog/nac-usecases.ttl"), {slug: read(f"cases/{slug}/ontology.ttl") for slug in slugs()}, "lokaler Arbeitsstand"))
             elif path == "/api/vocabulary/turtle":
                 self._json(200, {"turtle": (ROOT / "ontology/core.ttl").read_text(encoding="utf-8")})
-            elif path in ("/", "/index.html", "/app.js", "/style.css"):
+            elif path in ("/", "/index.html", "/app.js", "/interaction.js", "/style.css"):
                 filename = "index.html" if path == "/" else path.lstrip("/")
-                types = {"index.html": "text/html", "app.js": "text/javascript", "style.css": "text/css"}
+                types = {"index.html": "text/html", "app.js": "text/javascript", "interaction.js": "text/javascript", "style.css": "text/css"}
                 self._send(200, (ASSETS / filename).read_bytes(), types[filename] + "; charset=utf-8")
             elif path in BRAND_ASSETS:
                 self._send(200, (ASSETS / BRAND_ASSETS[path]).read_bytes(), "image/png")

@@ -6,6 +6,10 @@ Eine Umbenennung präzisiert einen vorhandenen Gegenstand. Ein neuer Baustein is
 
 Die künstliche Übung „Fantasiewerkstatt“ präzisiert „Benötigte Schutzausrüstung“ zu „Benötigte Schutzausrüstung für den Workshop“. Der Gegenstand, seine Kennung und seine Beziehungen bleiben erhalten. In der Übung änderst du ausschließlich das Beispiel; echte Fachmodelle bleiben unberührt.
 
+Du kannst Bearbeiten auch per Rechtsklick auf den gewünschten Baustein wählen. Der Editor beginnt bei Bedarf einen Arbeitsentwurf und öffnet genau diesen Baustein. Speichern zeigt weiterhin zuerst den Vergleich; erst deine Bestätigung sichert die Änderung. Entfernen ist nur für zusätzlich angelegte Bausteine verfügbar und fragt vorher nach. Ein Baustein aus der Vorlage wird dadurch nicht gelöscht.
+
+Beim Bearbeiten von Text bleiben Ausschneiden, Kopieren und Einfügen über die rechte Maustaste verfügbar. Ungespeicherte Eingaben bleiben beim Wechsel der Bausteinauswahl im Entwurf erhalten. Für den Wechsel zu einer anderen Vorgangsart prüfe zuerst den Speicherstatus.
+
 ## Vorgehen
 
 1. Unter Verstehen die Vorgangsart, den betroffenen Baustein, seine Beziehungen und Quellen prüfen.

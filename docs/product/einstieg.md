@@ -1,25 +1,27 @@
 # Einstieg und Orientierung
 
-Öffne https://www.ontologie8.de und melde dich mit deinem zugelassenen GitHub-Konto an. Die bisherige Azure-Adresse führt die Anmeldung zuerst zur aktuellen Domain, damit Anmelde-Cookie und Rückkehradresse zusammenpassen. Die Repository-Auswahl zeigt nur erlaubte und für dein Konto zugängliche Datenziele. Ein Eintrag in der Liste erteilt keine GitHub-Rechte.
+Öffne https://www.ontologie8.de und melde dich mit deinem zugelassenen GitHub-Konto an. Wähle links den Fachmodellbestand, den du pflegen möchtest. Die Auswahl zeigt die für dich zugänglichen Bestände. Fehlt ein benötigter Bestand, wende dich an dessen fachlich verantwortliche Person.
 
-Links außen liegen Verstehen, Bearbeiten und Prüfen. Daneben stehen Datenrepository und Baum. In der Mitte liegt der Graph beziehungsweise die Arbeitsansicht. Rechts stehen Details oder Formular. Allgemeine Hilfe steht oben; das Fragezeichen am ausgewählten Baustein öffnet Kontexthilfe.
+Links außen stehen Verstehen, Bearbeiten und Prüfen. Daneben findest du die Auswahl der Fachmodelle und den aufklappbaren Baum. In der Mitte siehst du die Zusammenhänge; rechts erscheinen Details oder Bearbeitungsfelder zum gewählten Baustein.
 
-Das Menüband wird mit Strg+F1 oder Doppelklick reduziert. Eine Registerkarte öffnet die Befehle vorübergehend. Das Hamburger-Menü schaltet den inneren Datenbaum unabhängig davon. Menüs und Auswahl bleiben erreichbar, während Inhalte innerhalb ihrer Bereiche scrollen.
+Allgemeine Anleitungen stehen oben unter Hilfe. Das Fragezeichen am ausgewählten Baustein erläutert dessen fachlichen Kontext. Unter Informationen findest du Beschreibung, Quellen und frühere Fassungen der Vorgangsart.
+
+Mit Strg+F1 oder einem Doppelklick auf eine Registerkarte klappst du das Menüband ein oder aus. Die Menü-Schaltfläche oben links blendet den inneren Baum ein oder aus. Menüs und Auswahl bleiben erreichbar, während du innerhalb des Arbeitsbereichs blätterst oder scrollst.
 
 ## Vorgehen
 
-1. Datenrepository auswählen und eine Vorgangsart öffnen.
-2. Im Baum einen Baustein wählen; Kategorie, Bedeutung und Beziehungen rechts prüfen.
-3. Informationen öffnen, um Beschreibung, Quellen und Verlauf zu lesen.
-4. Hilfe → Training für den Grundkurs oder Hilfe → Handbuch für die Referenz öffnen.
+1. Den richtigen Fachmodellbestand auswählen und unter Datei → Öffnen beziehungsweise im Baum eine Vorgangsart öffnen.
+2. Unter Verstehen einen Baustein auswählen und seine Bedeutung sowie die verbundenen Bausteine lesen.
+3. Vor einer Änderung klären, was fachlich fehlt oder unklar ist; dafür unter Informationen auch die Quellen lesen.
+4. Für eine geführte Übung Hilfe → Training öffnen; für einzelne Fragen Hilfe → Handbuch oder Begriffe verwenden.
 
 ## Referenz
 
 | Begriff oder Meldung | Erläuterung |
 | --- | --- |
-| Strg+K / Eingabetaste in Suche | Bausteine im gesamten Datenkatalog suchen. |
-| Strg+S | Speichervorschau öffnen. |
-| Datei → Drucken | Lesefassung der aktuellen Auswahl drucken. |
-| Editor-Release | Softwarecommit in der Fußzeile; der Datencommit ist eine andere Kennung. |
+| Suche oben | Filtert den Baum. Eingabetaste oder Strg+K sucht Bausteine im gesamten ausgewählten Modellbestand. |
+| Strg+S / Datei → Speichern | Öffnet den Vergleich deiner Änderungen vor dem Speichern. |
+| Datei → Drucken | Druckt eine Lesefassung der aktuellen Auswahl. |
+| Editor-Release | Versionskennung der verwendeten App in der Fußzeile; bei einer Fehlermeldung mit angeben. |
 
 [Zur Übersicht](README.md) · [Training](../../training/README.md)

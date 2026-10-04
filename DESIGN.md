@@ -32,6 +32,8 @@ Zur Prüfung vorgeschlagene Gestaltungswerte: Segoe UI als Windows-Systemschrift
 
 Hilfe muss direkt im Arbeitsbereich erreichbar sein. Ein Beispiel erklärt Auswahl, Baustein, Beziehung und den Übergang zur Bearbeitung. Beispiele geben keine notarielle Rechtsauskunft.
 
+Die gesamte sichtbare Hilfe richtet sich an Ontologiepfleger und Notare. Kurzanleitung, Begriffe, Kontexthilfe, Produkthandbuch und Training erklären die fachliche Nutzung des ausgewählten Modellbestands. Editorentwicklung, Programmierung, Hosting, Konfiguration und Softwarebuilds gehören ausschließlich in die getrennte [Entwickler- und Betriebsdokumentation](docs/development/README.md). Fachliche Nutzer pflegen Modelle in den Datenrepositories; die Pflege dieses Software-Repositories liegt beim Editorverantwortlichen. GitHub wird in der Nutzungshilfe nur erklärt, soweit Anmeldung oder ein verlinkter fachlicher Änderungsvorschlag es erfordern.
+
 Lesemodus, ungespeicherte Eingaben, gespeicherter Entwurf und eingereichte Änderung müssen eindeutig unterscheidbar sein. Eine simulierte Freigabe im Entwurf darf nicht wie eine tatsächliche notarielle Freigabe erscheinen. Release und Datenziel bleiben sichtbar.
 
 ## Erster Entwurf

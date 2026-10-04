@@ -1,14 +1,14 @@
 # Ontologien verstehen und pflegen
 
-Künstliches Beispiel: Fantasiewerkstatt. Keine echten Akten, GitHub-Schreibvorgänge oder fachlichen Freigaben.
+Grundkurs für Ontologiepfleger und Notare. Künstliches Beispiel: Fantasiewerkstatt. Die Übungen verändern keine echten Fachmodelle und erteilen keine notarielle Freigabe.
 
 ## 1. Was pflegen wir?
 
-Eine Vorlage von einer konkreten Akte unterscheiden.
+Als Ontologiepfleger oder Notar eine Fachvorlage von einer konkreten Akte unterscheiden.
 
 ### Eine Ontologie macht Begriffe und Beziehungen eindeutig
 
-Das Fachmodell beschreibt, welche Arten von Angaben, Dokumenten, Entscheidungen und Prüfungen zu einem Vorgang gehören. Die Fantasiewerkstatt ist unser vollständig künstliches Lernbeispiel.
+Dieser Kurs richtet sich an Ontologiepfleger und Notare. Du pflegst die Begriffe und Beziehungen eines Fachmodells: Welche Angaben, Dokumenttypen, Entscheidungen und Prüfungen gehören zu einem Vorgang? Die Fantasiewerkstatt ist unser vollständig künstliches Lernbeispiel.
 
 - Lies die fünf Bausteine rechts.
 - Frage dich: Was soll eine Person mit diesem Modell verstehen können?
@@ -56,7 +56,7 @@ Fragen, Dokumenttypen, Entscheidungen, Prüfschritte und Nachweistypen sind Kate
 
 ### Dokumenttyp und Nachweistyp haben unterschiedliche Schwerpunkte
 
-Ein Dokumenttyp beschreibt eine benötigte Dokumentart, etwa die Ausrüstungsliste. Ein Nachweistyp beschreibt einen Beleg für eine Angabe oder Prüfung, etwa den Prüfvermerk. Welche Rolle ein Artefakt hat, entscheidet das Fachmodell.
+Ein Dokumenttyp beschreibt eine benötigte Dokumentart, etwa die Ausrüstungsliste. Ein Nachweistyp beschreibt einen Beleg für eine Angabe oder Prüfung, etwa den Prüfvermerk. Welche Rolle ein Dokument hat, entscheidet sein Zweck im Fachmodell.
 
 - Prüfe, ob du eine Dokumentart oder die Art eines Belegs beschreibst.
 - Bei Unklarheit eine offene Fachfrage dokumentieren.
@@ -152,22 +152,22 @@ Ein neuer Baustein ist sinnvoll, wenn ein eigenständiger Gegenstand fehlt. Sein
 
 ## 5. Speichern und prüfen
 
-Browser-Eingabe, Entwurf und Freigabe unterscheiden.
+Ungespeicherte Eingabe, gespeicherten Entwurf und fachliche Freigabe unterscheiden.
 
 ### Speichern zeigt zuerst den Vergleich
 
-Ungespeicherte Eingaben sind zunächst Browserzustand. Datei → Speichern oder Strg+S öffnet die fachliche Vorschau. Erst die Bestätigung schreibt in deinen Datenentwurf. Während der Speicherung kurz warten; bei einem Fehler bleiben die Eingaben offen und müssen erneut gespeichert werden.
+Deine Eingaben sind zunächst ungespeichert. Datei → Speichern oder Strg+S öffnet den Vergleich. Erst Speichern bestätigen sichert die gezeigte Fassung in deinem Arbeitsentwurf. Während der Speicherung kurz warten; bei einem Fehler bleiben die Eingaben offen und können erneut gespeichert werden.
 
 - Vergleiche alte und neue Bezeichnung.
 - Prüfe, ob weitere unbeabsichtigte Änderungen auftauchen.
 
-**Lernfrage:** Wann wird der Datenentwurf aktualisiert?
+**Lernfrage:** Wann wird dein Arbeitsentwurf gespeichert?
 
-**Erklärung:** Die Vorschau ist eine Kontrolle vor dem Schreiben in den Entwurfszweig.
+**Erklärung:** Die Vorschau zeigt die fachlichen Unterschiede. Erst deine Bestätigung sichert sie im Arbeitsentwurf.
 
 ### Ein gespeicherter Entwurf ist noch keine freigegebene Vorlage
 
-Unter Prüfen → Meine Änderung begründest du die Änderung und nennst den Quellenstand. Einreichen erzeugt einen Pull Request im Datenrepository. Eine andere Person prüft den aktuellen Commit.
+Unter Prüfen → Meine Änderung begründest du deine Änderung und nennst die verwendete Fachquelle samt Fassung oder Datum. Zur Fachprüfung einreichen gibt den gespeicherten Entwurf an eine andere berechtigte Person zur Prüfung. Die gemeinsam verwendete Vorlage bleibt bis zur Übernahme erhalten.
 
 - Grund: Bezeichnung im künstlichen Workshop präzisiert.
 - Quelle: künstliche Trainingsbeschreibung, keine Rechtsquelle.
@@ -178,10 +178,10 @@ Unter Prüfen → Meine Änderung begründest du die Änderung und nennst den Qu
 
 ### Eine neue Änderung braucht eine Prüfung des neuen Stands
 
-Freigaben beziehen sich auf einen geprüften Commit. Eine spätere Änderung kann eine erneute Prüfung nötig machen. Der vereinbarte manuelle Merge-Weg bleibt Aufgabe einer berechtigten Person.
+Eine notarielle Fachfreigabe gehört zur tatsächlich geprüften Fassung einer Änderung. Weitere Änderungen müssen erneut beurteilt werden. Die verantwortliche Person für den Modellbestand übernimmt die Änderung nach der nötigen Freigabe und erfolgreichen Prüfungen.
 
 - Prüfe Begriffe, Quellen und Beziehungen.
-- Prüfe vor Übernahme den tatsächlichen Commit und die CI.
+- Prüfe vor der Übernahme, ob Freigabe und Prüfergebnisse zur aktuellen Fassung gehören.
 
 **Lernfrage:** Welcher Stand ist für eine Freigabe maßgeblich?
 
@@ -193,18 +193,18 @@ Eine Änderung vollständig und wiederholbar abschließen.
 
 ### Ein kleiner Pflegeauftrag ist leichter zu prüfen
 
-Beschreibe Anlass, betroffene Vorgangsart und erwartete Änderung vor dem Bearbeiten. Halte Fachquellen und Software-Release auseinander. Ein Entwurf sollte einen klaren fachlichen Zweck haben.
+Beschreibe Anlass, betroffene Vorgangsart und erwartete Änderung vor dem Bearbeiten. Arbeite am ausgewählten Fachmodellbestand. Ein Entwurf sollte einen klaren fachlichen Zweck haben, etwa eine unklare Bezeichnung zu präzisieren.
 
 - Notiere die fragliche Bezeichnung oder Verbindung.
 - Nenne den erwarteten Unterschied in einem Satz.
 
-**Lernfrage:** Welche Kennung beschreibt die Software?
+**Lernfrage:** Was macht einen Pflegeauftrag nachvollziehbar?
 
-**Erklärung:** Editor-Release bezeichnet die Software. Der Datencommit bezeichnet den Fachmodellstand.
+**Erklärung:** Ein klarer Pflegeauftrag erklärt, was fachlich unklar ist und welchen Unterschied die Änderung bewirken soll.
 
 ### Beispiele erklären Funktionen ohne echte Daten zu ändern
 
-Die Übung in diesem Training verändert nur das künstliche Beispiel im Speicher des Browsers. Sie meldet sich nicht bei GitHub an und erzeugt weder Branches noch Pull Requests. Neu laden setzt sie zurück.
+Die Übung verändert ausschließlich das künstliche Beispiel im Training. Deine echten Fachmodelle und Arbeitsentwürfe bleiben unberührt. Die Übung erteilt auch keine notarielle Freigabe. Neu laden setzt sie zurück.
 
 - Wähle unten „Bezeichnung üben“.
 - Ändere die Beispielbezeichnung, prüfe den Vergleich und bestätige Speichern.
@@ -215,7 +215,7 @@ Die Übung in diesem Training verändert nur das künstliche Beispiel im Speiche
 
 ### Die Pflege endet mit einem nachgewiesenen Ergebnis
 
-Für Modellpflege zählt der geprüfte Datenstand. Für Software zählt die gesunde Azure-Revision mit passender Release-Kennung. Bei einer Fehlermeldung bewahre den Entwurf und dokumentiere Schritt und Meldung.
+Eine Modelländerung ist nachvollziehbar, wenn Grund, Fachquelle, tatsächliche Änderung und geprüfte Fassung zusammengehören. Kontrolliere nach der Übernahme das Ergebnis im gemeinsamen Modellbestand. Bei einer Fehlermeldung bewahre den Entwurf und notiere Arbeitsschritt und Meldung.
 
 - Nutze das Handbuch für Rollen und Fehlerbehebung.
 - Prüfe eine kleine konkrete Änderung statt mehrere Themen gleichzeitig.

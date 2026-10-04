@@ -1,24 +1,24 @@
 # Feldreferenz
 
-Das Formular zeigt die Felder des ausgewählten Bausteins. Pflegen bedeutet, eine fachliche Aussage nachvollziehbar zu beschreiben; nicht jedes Feld muss für jeden Typ ausgefüllt sein.
+Die Bearbeitungsfelder beschreiben den ausgewählten fachlichen Baustein. Nicht jedes Feld ist für jede Bausteinart erforderlich. Ändere nur die Angaben, die dein Pflegeauftrag begründet.
 
-Übernommene NaC-Kennungen und der Status einer NaC-Vorlage sind geschützt. Technische Entscheidungswerte bleiben unverändert, solange fachlich geprüfte Anzeigenamen fehlen. Die Anzeige der RDF-Verwendung beschreibt technische Modellbezüge und keine tatsächlichen Aktenzugriffe.
+Kennungen und der Status einer übernommenen NaC-Vorlage sind geschützt. Bestehende Entscheidungswerte bleiben erhalten, bis eine fachlich abgestimmte Änderung vorliegt. Die angezeigte Verwendung eines Begriffs beschreibt Bezüge zwischen Vorlagen, keine tatsächlichen Zugriffe auf Akten.
 
 ## Referenz
 
 | Begriff oder Meldung | Erläuterung |
 | --- | --- |
 | Bezeichnung | Kurzer verständlicher Name. Beispiel: Benötigte Schutzausrüstung für den Workshop. |
-| Bausteintyp | Kategorie des Gegenstands; Änderungen daran brauchen eine fachliche Begründung. |
-| Fachliche Erläuterung | Bedeutung und Abgrenzung des Bausteins. |
-| Offene Fachfrage | Ungelöste Modellierungsfrage, keine erfundene Antwort. |
-| Abschnitt der Vorlage | Bezug zum Abschnitt der fachlichen Vorlage. |
-| Status der NaC-Vorlage | Quellstatus; bei übernommenen Bausteinen schreibgeschützt. |
-| Pflegestatus des lokalen Entwurfs | Status eines lokal ergänzten Bausteins. |
-| Verantwortliche Rolle | Rolle für die betreffende Angabe oder Prüfung. |
-| Datenschutzklasse / Kann Personendaten enthalten? | Klassifikation des Typs; hier keine tatsächlichen Personendaten eintragen. |
-| Benötigt für / Entscheidungsoptionen | Eine Angabe pro Zeile; bestehende Maschinenwerte nicht frei übersetzen. |
-| Dokumentquelle | Quellenbezug des Dokumenttyps. |
-| Grund und Quellenstand beim Einreichen | Warum sich das Modell ändert und auf welche fachliche Quelle die Änderung gestützt wird. |
+| Bausteintyp | Fachliche Art des Gegenstands, etwa Frage oder Dokumenttyp. Eine Änderung braucht eine fachliche Begründung. |
+| Fachliche Erläuterung | Bedeutung und Abgrenzung des Bausteins. Was ist gemeint, und wofür wird er benötigt? |
+| Offene Fachfrage | Ungelöste Frage zur Bedeutung oder Modellierung, die fachlich geklärt werden muss. |
+| Abschnitt der Vorlage | Bezug zum passenden Abschnitt der fachlichen Vorlage. |
+| Status der NaC-Vorlage | Status der übernommenen Quelle; bei übernommenen Bausteinen schreibgeschützt. |
+| Pflegestatus des lokalen Entwurfs | Status eines im Modellbestand ergänzten Bausteins; keine notarielle Freigabe. |
+| Verantwortliche Rolle | Fachliche Zuständigkeit für die betreffende Angabe oder Prüfung. |
+| Datenschutzklasse / Kann Personendaten enthalten? | Einordnung der vorgesehenen Angabe; hier keine tatsächlichen Personendaten eintragen. |
+| Benötigt für / Entscheidungsoptionen | Eine Angabe pro Zeile. Bestehende Auswahlwerte nur nach fachlicher Abstimmung ändern. |
+| Dokumentquelle | Quellenbezug des Dokumenttyps, etwa das maßgebliche Dokument und dessen Fassung. |
+| Grund und Quellenstand beim Einreichen | Warum sich das Fachmodell ändert und auf welche Quelle samt Fassung oder Datum du dich stützt. |
 
 [Zur Übersicht](README.md) · [Training](../../training/README.md)

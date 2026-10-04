@@ -6,11 +6,17 @@ SaaS-Editor für versionierte Fachmodelle: Oberfläche, Python-API, GitHub-Anmel
 
 ## Bedienung
 
+Für **Ontologiepfleger und Notare** stehen das [Produkthandbuch](docs/product/README.md) und der [Grundkurs](training/README.md) bereit, im Editor unter **Hilfe**. Sie erklären die Pflege der ausgewählten Fachmodelle. Fachliche Nutzer benötigen keine Programmierkenntnisse und wirken über die Modellpflege nicht an diesem Software-Repository mit.
+
 Die Desktop-Oberfläche folgt der freigegebenen Office-Struktur: außen **Verstehen, Bearbeiten, Prüfen**, daneben das Datenrepository mit seinem Baum und in der Mitte der Arbeitsbereich. Beim Bearbeiten bleibt der Graph sichtbar; Details und Formular stehen rechts. **Datei, Startseite, Ansicht und Hilfe** liegen oben. Das Menüband lässt sich mit seinem Pfeil oder **Strg+F1** einklappen und durch Anklicken einer Registerkarte vorübergehend öffnen. Das Hamburger-Menü schaltet den Datenbaum unabhängig davon um.
 
 **Öffnen, Speichern und Drucken** stehen unter Datei. Speichern zeigt zunächst den Vergleich und verlangt die Bestätigung der Änderung im Datenentwurf. Die allgemeine Hilfe steht oben; das Fragezeichen am ausgewählten Baustein erläutert dessen Kontext. Menüs und Datenrepository-Auswahl bleiben erreichbar, während Baum und Arbeitsinhalt bei Bedarf innerhalb ihrer Bereiche scrollen. [DESIGN.md](DESIGN.md) hält die Maße und Microsoft-Referenzen fest.
 
-## Lokal starten
+## Editorentwicklung und Betrieb
+
+Die folgenden technischen Abschnitte richten sich an den Verantwortlichen dieses Software-Repositories. Die [Entwickler- und Betriebsdokumentation](docs/development/README.md) bündelt Konfiguration, Hosting, Tests und die Pflege der Hilfetexte. Fachmodelle und ihre Zuständigkeiten verbleiben in den getrennten Datenrepositories.
+
+### Lokal starten
 
 Python 3.12 oder neuer, Git und ein separater Datencheckout werden benötigt.
 
@@ -23,7 +29,7 @@ $env:EDITOR8_DATA_ROOT = 'C:\Users\ofunk\srv\github\ofunk\notariat8\ontology'
 
 Der Server öffnet `http://127.0.0.1:8765/`. Er liest und bearbeitet ausschließlich den ausdrücklich angegebenen Datencheckout. Für lokale Änderungsvorschläge verwendet er dessen Branch, Validatoren, Git-Push und Pull Requests. Die Cloudvariante benötigt auf Nutzergeräten weder Python noch Git.
 
-## Cloudbetrieb
+### Cloudbetrieb
 
 Die App zeigt den ausgelieferten Softwarecommit als „Editor-Release“ mit einem direkten GitHub-Link. Die Liste auswählbarer Datenziele liegt in `config/data-repositories.json`. [Datenrepositories und Benutzer](docs/data-repositories-and-users.md) beschreibt Auswahl, Nutzerzulassung und notarielle Rollen.
 
@@ -33,9 +39,9 @@ python scripts/cloud_editor.py
 
 Der Container startet diesen Server. `GITHUB_REPOSITORY` bezeichnet das Datenrepository, etwa `notariat8/ontology`, niemals `ontologie8/editor8`. GitHub-App-Zugang, erlaubte Nutzer, Reviewer und HTTPS-Ursprung werden im Host konfiguriert. [Datenvertrag](docs/data-contract.md), [Betrieb](docs/editor-hosting.md), [Produktstand](docs/editor-produktstand.md) und [Migration](docs/migration.md) erklären Voraussetzungen und Prüfgrenzen. Secrets ausschließlich im Host speichern.
 
-## Prüfen
+### Software prüfen
 
-Das [Produkthandbuch](docs/product/README.md) beschreibt Einstieg, Modell, Bearbeitung, Felder, Fachprüfung, Rollen und Fehlerbehandlung. Der [Trainingsbereich](training/README.md) erklärt diese Abläufe mit 18 Browserfolien und einer künstlichen Speicherübung. Beide stehen im Editor unter **Hilfe**; die Recherche und die Pflegequellen liegen im Repository.
+Handbuch und Training werden mit der Software gepflegt. Die [Pflegeanleitung](docs/development/README.md#produkthilfe-und-training-pflegen) beschreibt ihre Quellen und Generierung; die Browserprüfung kontrolliert alle 18 Folien, Lernfragen und die künstliche Speicherübung.
 
 ```powershell
 python -m unittest discover -s tests -q

@@ -8,12 +8,12 @@ window.EDITOR8_LEARNING = {
       {
         "id": "grundlagen",
         "title": "1. Was pflegen wir?",
-        "goal": "Eine Vorlage von einer konkreten Akte unterscheiden.",
+        "goal": "Als Ontologiepfleger oder Notar eine Fachvorlage von einer konkreten Akte unterscheiden.",
         "slides": [
           {
             "id": "grundlagen-1",
             "title": "Eine Ontologie macht Begriffe und Beziehungen eindeutig",
-            "text": "Das Fachmodell beschreibt, welche Arten von Angaben, Dokumenten, Entscheidungen und Prüfungen zu einem Vorgang gehören. Die Fantasiewerkstatt ist unser vollständig künstliches Lernbeispiel.",
+            "text": "Dieser Kurs richtet sich an Ontologiepfleger und Notare. Du pflegst die Begriffe und Beziehungen eines Fachmodells: Welche Angaben, Dokumenttypen, Entscheidungen und Prüfungen gehören zu einem Vorgang? Die Fantasiewerkstatt ist unser vollständig künstliches Lernbeispiel.",
             "steps": [
               "Lies die fünf Bausteine rechts.",
               "Frage dich: Was soll eine Person mit diesem Modell verstehen können?"
@@ -88,7 +88,7 @@ window.EDITOR8_LEARNING = {
           {
             "id": "baum-2",
             "title": "Dokumenttyp und Nachweistyp haben unterschiedliche Schwerpunkte",
-            "text": "Ein Dokumenttyp beschreibt eine benötigte Dokumentart, etwa die Ausrüstungsliste. Ein Nachweistyp beschreibt einen Beleg für eine Angabe oder Prüfung, etwa den Prüfvermerk. Welche Rolle ein Artefakt hat, entscheidet das Fachmodell.",
+            "text": "Ein Dokumenttyp beschreibt eine benötigte Dokumentart, etwa die Ausrüstungsliste. Ein Nachweistyp beschreibt einen Beleg für eine Angabe oder Prüfung, etwa den Prüfvermerk. Welche Rolle ein Dokument hat, entscheidet sein Zweck im Fachmodell.",
             "steps": [
               "Prüfe, ob du eine Dokumentart oder die Art eines Belegs beschreibst.",
               "Bei Unklarheit eine offene Fachfrage dokumentieren."
@@ -240,29 +240,29 @@ window.EDITOR8_LEARNING = {
       {
         "id": "speichern",
         "title": "5. Speichern und prüfen",
-        "goal": "Browser-Eingabe, Entwurf und Freigabe unterscheiden.",
+        "goal": "Ungespeicherte Eingabe, gespeicherten Entwurf und fachliche Freigabe unterscheiden.",
         "slides": [
           {
             "id": "speichern-1",
             "title": "Speichern zeigt zuerst den Vergleich",
-            "text": "Ungespeicherte Eingaben sind zunächst Browserzustand. Datei → Speichern oder Strg+S öffnet die fachliche Vorschau. Erst die Bestätigung schreibt in deinen Datenentwurf. Während der Speicherung kurz warten; bei einem Fehler bleiben die Eingaben offen und müssen erneut gespeichert werden.",
+            "text": "Deine Eingaben sind zunächst ungespeichert. Datei → Speichern oder Strg+S öffnet den Vergleich. Erst Speichern bestätigen sichert die gezeigte Fassung in deinem Arbeitsentwurf. Während der Speicherung kurz warten; bei einem Fehler bleiben die Eingaben offen und können erneut gespeichert werden.",
             "steps": [
               "Vergleiche alte und neue Bezeichnung.",
               "Prüfe, ob weitere unbeabsichtigte Änderungen auftauchen."
             ],
             "focus": "local.schutz",
-            "question": "Wann wird der Datenentwurf aktualisiert?",
+            "question": "Wann wird dein Arbeitsentwurf gespeichert?",
             "choices": [
               "Beim Tippen jedes Buchstabens",
               "Nach Bestätigung der Speichervorschau"
             ],
             "answer": 1,
-            "explanation": "Die Vorschau ist eine Kontrolle vor dem Schreiben in den Entwurfszweig."
+            "explanation": "Die Vorschau zeigt die fachlichen Unterschiede. Erst deine Bestätigung sichert sie im Arbeitsentwurf."
           },
           {
             "id": "speichern-2",
             "title": "Ein gespeicherter Entwurf ist noch keine freigegebene Vorlage",
-            "text": "Unter Prüfen → Meine Änderung begründest du die Änderung und nennst den Quellenstand. Einreichen erzeugt einen Pull Request im Datenrepository. Eine andere Person prüft den aktuellen Commit.",
+            "text": "Unter Prüfen → Meine Änderung begründest du deine Änderung und nennst die verwendete Fachquelle samt Fassung oder Datum. Zur Fachprüfung einreichen gibt den gespeicherten Entwurf an eine andere berechtigte Person zur Prüfung. Die gemeinsam verwendete Vorlage bleibt bis zur Übernahme erhalten.",
             "steps": [
               "Grund: Bezeichnung im künstlichen Workshop präzisiert.",
               "Quelle: künstliche Trainingsbeschreibung, keine Rechtsquelle."
@@ -279,15 +279,15 @@ window.EDITOR8_LEARNING = {
           {
             "id": "speichern-3",
             "title": "Eine neue Änderung braucht eine Prüfung des neuen Stands",
-            "text": "Freigaben beziehen sich auf einen geprüften Commit. Eine spätere Änderung kann eine erneute Prüfung nötig machen. Der vereinbarte manuelle Merge-Weg bleibt Aufgabe einer berechtigten Person.",
+            "text": "Eine notarielle Fachfreigabe gehört zur tatsächlich geprüften Fassung einer Änderung. Weitere Änderungen müssen erneut beurteilt werden. Die verantwortliche Person für den Modellbestand übernimmt die Änderung nach der nötigen Freigabe und erfolgreichen Prüfungen.",
             "steps": [
               "Prüfe Begriffe, Quellen und Beziehungen.",
-              "Prüfe vor Übernahme den tatsächlichen Commit und die CI."
+              "Prüfe vor der Übernahme, ob Freigabe und Prüfergebnisse zur aktuellen Fassung gehören."
             ],
             "focus": "local.pruefung",
             "question": "Welcher Stand ist für eine Freigabe maßgeblich?",
             "choices": [
-              "Der aktuelle geprüfte Commit",
+              "Die aktuelle geprüfte Fassung",
               "Irgendeine frühere Ansicht"
             ],
             "answer": 0,
@@ -303,24 +303,24 @@ window.EDITOR8_LEARNING = {
           {
             "id": "routine-1",
             "title": "Ein kleiner Pflegeauftrag ist leichter zu prüfen",
-            "text": "Beschreibe Anlass, betroffene Vorgangsart und erwartete Änderung vor dem Bearbeiten. Halte Fachquellen und Software-Release auseinander. Ein Entwurf sollte einen klaren fachlichen Zweck haben.",
+            "text": "Beschreibe Anlass, betroffene Vorgangsart und erwartete Änderung vor dem Bearbeiten. Arbeite am ausgewählten Fachmodellbestand. Ein Entwurf sollte einen klaren fachlichen Zweck haben, etwa eine unklare Bezeichnung zu präzisieren.",
             "steps": [
               "Notiere die fragliche Bezeichnung oder Verbindung.",
               "Nenne den erwarteten Unterschied in einem Satz."
             ],
             "focus": "local.schutz",
-            "question": "Welche Kennung beschreibt die Software?",
+            "question": "Was macht einen Pflegeauftrag nachvollziehbar?",
             "choices": [
-              "Editor-Release",
-              "Die Bezeichnung eines Bausteins"
+              "Anlass und erwartete fachliche Änderung",
+              "Nur ein anderer Name ohne Begründung"
             ],
             "answer": 0,
-            "explanation": "Editor-Release bezeichnet die Software. Der Datencommit bezeichnet den Fachmodellstand."
+            "explanation": "Ein klarer Pflegeauftrag erklärt, was fachlich unklar ist und welchen Unterschied die Änderung bewirken soll."
           },
           {
             "id": "routine-2",
             "title": "Beispiele erklären Funktionen ohne echte Daten zu ändern",
-            "text": "Die Übung in diesem Training verändert nur das künstliche Beispiel im Speicher des Browsers. Sie meldet sich nicht bei GitHub an und erzeugt weder Branches noch Pull Requests. Neu laden setzt sie zurück.",
+            "text": "Die Übung verändert ausschließlich das künstliche Beispiel im Training. Deine echten Fachmodelle und Arbeitsentwürfe bleiben unberührt. Die Übung erteilt auch keine notarielle Freigabe. Neu laden setzt sie zurück.",
             "steps": [
               "Wähle unten „Bezeichnung üben“.",
               "Ändere die Beispielbezeichnung, prüfe den Vergleich und bestätige Speichern."
@@ -328,7 +328,7 @@ window.EDITOR8_LEARNING = {
             "focus": "local.schutz",
             "question": "Wo wird diese Übung gespeichert?",
             "choices": [
-              "Im echten Datenrepository",
+              "Im echten Fachmodellbestand",
               "Nur im Browser bis zum Neuladen"
             ],
             "answer": 1,
@@ -337,7 +337,7 @@ window.EDITOR8_LEARNING = {
           {
             "id": "routine-3",
             "title": "Die Pflege endet mit einem nachgewiesenen Ergebnis",
-            "text": "Für Modellpflege zählt der geprüfte Datenstand. Für Software zählt die gesunde Azure-Revision mit passender Release-Kennung. Bei einer Fehlermeldung bewahre den Entwurf und dokumentiere Schritt und Meldung.",
+            "text": "Eine Modelländerung ist nachvollziehbar, wenn Grund, Fachquelle, tatsächliche Änderung und geprüfte Fassung zusammengehören. Kontrolliere nach der Übernahme das Ergebnis im gemeinsamen Modellbestand. Bei einer Fehlermeldung bewahre den Entwurf und notiere Arbeitsschritt und Meldung.",
             "steps": [
               "Nutze das Handbuch für Rollen und Fehlerbehebung.",
               "Prüfe eine kleine konkrete Änderung statt mehrere Themen gleichzeitig."
@@ -410,29 +410,34 @@ window.EDITOR8_LEARNING = {
   },
   "handbook": {
     "version": 1,
-    "title": "editor8 Produkthandbuch",
+    "title": "Handbuch für Ontologiepflege und notarielle Prüfung",
     "chapters": [
       {
         "id": "ueberblick",
         "title": "Produkt und Zweck",
         "paragraphs": [
-          "editor8 ist eine gehostete Arbeitsoberfläche für versionierte Fachvorlagen. Eine Ontologie benennt die Gegenstände eines Fachgebiets, ihre Eigenschaften und ihre Beziehungen so, dass Menschen und Software dieselben Kennungen verwenden können.",
-          "Der Editor pflegt das Fachmodell eines Vorgangs. Die tatsächlichen Antworten einer Person, eine ausgefüllte Akte oder ein erledigter Prüfschritt werden dadurch nicht gespeichert. Im Notardatenprojekt liegen 20 kanonische Vorgangsarten. Weitere Datenziele benötigen den passenden Datenvertrag; der Editor hat keine feste Fallanzahl.",
-          "Software und Fachmodelle liegen in getrennten Repositories. GitHub ist Pflege- und Versionsquelle für Daten. NaC bleibt Quelle für Prozessabläufe. Der Trainingsbereich verwendet ausschließlich künstliche Beispiele."
+          "Dieses Handbuch richtet sich an Ontologiepfleger und Notare. Mit editor8 liest und pflegst du Fachmodelle: Welche Angaben, Dokumenttypen, Entscheidungen, Prüfschritte und Nachweise gehören zu einer Vorgangsart, und wie hängen sie zusammen?",
+          "Eine Ontologie beschreibt die wiederverwendbaren Begriffe und Beziehungen eines Fachgebiets. Du pflegst die Vorlage, etwa die Bedeutung einer benötigten Angabe. Die Antwort einer bestimmten Person, eine ausgefüllte Akte oder ein erledigter Prüfschritt gehören nicht in diese Vorlage.",
+          "Deine Änderungen betreffen den ausgewählten Fachmodellbestand, beispielsweise „Notar-Fachmodelle“. Speichern, Einreichen und Fachprüfung beziehen sich immer auf diese Modelle. Für die Bedienung brauchst du keine Programmierkenntnisse und keinen Zugriff auf den Quellcode des Editors.",
+          "Die Hilfe führt durch Verstehen, Bearbeiten und Prüfen. Training und Übungen verwenden vollständig künstliche Beispiele. Sie erläutern die Bedienung und ersetzen keine notarielle Beurteilung eines tatsächlichen Fachmodells."
         ],
         "steps": [],
         "facts": [
           [
-            "Software",
-            "Oberfläche, Anmeldung, Adapter, Tests, Betrieb und Editor-Release."
+            "Fachmodell",
+            "Vorlage mit Begriffen, Eigenschaften und Beziehungen für eine Vorgangsart."
           ],
           [
-            "Datenrepository",
-            "Fachmodelle, Katalog und Datencommit."
+            "Modellbestand",
+            "Die in der Auswahl bereitgestellten Fachmodelle und gemeinsamen Begriffe, an denen du arbeitest."
           ],
           [
-            "Prozessmodell",
-            "Beschreibt den Ablauf; der Baum im Editor ordnet Bausteine nach Art."
+            "Fachliche Pflege",
+            "Bezeichnungen, Erläuterungen, Bausteine und Beziehungen nachvollziehbar verbessern."
+          ],
+          [
+            "Notarielle Fachprüfung",
+            "Änderungen einer anderen Person auf Bedeutung, Quellen und Beziehungen prüfen und begründet beurteilen."
           ]
         ]
       },
@@ -440,32 +445,33 @@ window.EDITOR8_LEARNING = {
         "id": "einstieg",
         "title": "Einstieg und Orientierung",
         "paragraphs": [
-          "Öffne https://www.ontologie8.de und melde dich mit deinem zugelassenen GitHub-Konto an. Die bisherige Azure-Adresse führt die Anmeldung zuerst zur aktuellen Domain, damit Anmelde-Cookie und Rückkehradresse zusammenpassen. Die Repository-Auswahl zeigt nur erlaubte und für dein Konto zugängliche Datenziele. Ein Eintrag in der Liste erteilt keine GitHub-Rechte.",
-          "Links außen liegen Verstehen, Bearbeiten und Prüfen. Daneben stehen Datenrepository und Baum. In der Mitte liegt der Graph beziehungsweise die Arbeitsansicht. Rechts stehen Details oder Formular. Allgemeine Hilfe steht oben; das Fragezeichen am ausgewählten Baustein öffnet Kontexthilfe.",
-          "Das Menüband wird mit Strg+F1 oder Doppelklick reduziert. Eine Registerkarte öffnet die Befehle vorübergehend. Das Hamburger-Menü schaltet den inneren Datenbaum unabhängig davon. Menüs und Auswahl bleiben erreichbar, während Inhalte innerhalb ihrer Bereiche scrollen."
+          "Öffne https://www.ontologie8.de und melde dich mit deinem zugelassenen GitHub-Konto an. Wähle links den Fachmodellbestand, den du pflegen möchtest. Die Auswahl zeigt die für dich zugänglichen Bestände. Fehlt ein benötigter Bestand, wende dich an dessen fachlich verantwortliche Person.",
+          "Links außen stehen Verstehen, Bearbeiten und Prüfen. Daneben findest du die Auswahl der Fachmodelle und den aufklappbaren Baum. In der Mitte siehst du die Zusammenhänge; rechts erscheinen Details oder Bearbeitungsfelder zum gewählten Baustein.",
+          "Allgemeine Anleitungen stehen oben unter Hilfe. Das Fragezeichen am ausgewählten Baustein erläutert dessen fachlichen Kontext. Unter Informationen findest du Beschreibung, Quellen und frühere Fassungen der Vorgangsart.",
+          "Mit Strg+F1 oder einem Doppelklick auf eine Registerkarte klappst du das Menüband ein oder aus. Die Menü-Schaltfläche oben links blendet den inneren Baum ein oder aus. Menüs und Auswahl bleiben erreichbar, während du innerhalb des Arbeitsbereichs blätterst oder scrollst."
         ],
         "steps": [
-          "Datenrepository auswählen und eine Vorgangsart öffnen.",
-          "Im Baum einen Baustein wählen; Kategorie, Bedeutung und Beziehungen rechts prüfen.",
-          "Informationen öffnen, um Beschreibung, Quellen und Verlauf zu lesen.",
-          "Hilfe → Training für den Grundkurs oder Hilfe → Handbuch für die Referenz öffnen."
+          "Den richtigen Fachmodellbestand auswählen und unter Datei → Öffnen beziehungsweise im Baum eine Vorgangsart öffnen.",
+          "Unter Verstehen einen Baustein auswählen und seine Bedeutung sowie die verbundenen Bausteine lesen.",
+          "Vor einer Änderung klären, was fachlich fehlt oder unklar ist; dafür unter Informationen auch die Quellen lesen.",
+          "Für eine geführte Übung Hilfe → Training öffnen; für einzelne Fragen Hilfe → Handbuch oder Begriffe verwenden."
         ],
         "facts": [
           [
-            "Strg+K / Eingabetaste in Suche",
-            "Bausteine im gesamten Datenkatalog suchen."
+            "Suche oben",
+            "Filtert den Baum. Eingabetaste oder Strg+K sucht Bausteine im gesamten ausgewählten Modellbestand."
           ],
           [
-            "Strg+S",
-            "Speichervorschau öffnen."
+            "Strg+S / Datei → Speichern",
+            "Öffnet den Vergleich deiner Änderungen vor dem Speichern."
           ],
           [
             "Datei → Drucken",
-            "Lesefassung der aktuellen Auswahl drucken."
+            "Druckt eine Lesefassung der aktuellen Auswahl."
           ],
           [
             "Editor-Release",
-            "Softwarecommit in der Fußzeile; der Datencommit ist eine andere Kennung."
+            "Versionskennung der verwendeten App in der Fußzeile; bei einer Fehlermeldung mit angeben."
           ]
         ]
       },
@@ -473,10 +479,10 @@ window.EDITOR8_LEARNING = {
         "id": "modell",
         "title": "Bausteine und Beziehungen",
         "paragraphs": [
-          "Der Baum ist eine gegliederte Übersicht. Er zeigt keine Ausführungsreihenfolge und keine Klassenhierarchie eines allgemeinen OWL-Editors. Derselbe fachliche Graph kann mehrere Kategorien verbinden.",
-          "Fragen im Baum entsprechen Angabenfragen im Datenmodell: Sie beschreiben, welche Angabe benötigt wird. Die Antwort eines Einzelfalls gehört nicht in die Vorlage. Dokumenttypen beschreiben Dokumentarten. Entscheidungen beschreiben Auswahlpunkte. Prüfschritte beschreiben Prüfbedingungen oder Gates. Nachweistypen beschreiben Arten von Belegen.",
-          "Ein Dokument kann in einem Fachmodell zugleich eine Belegfunktion haben. Die richtige Modellierung hängt vom Zweck ab; der Kategoriename allein entscheidet das nicht. Bei Unklarheit zuerst die fachliche Bedeutung klären.",
-          "Lies jede Verbindung als Quelle – Beziehung – Ziel. Zum Beispiel: „Benötigte Schutzausrüstung“ wird durch „Ausrüstungsliste“ belegt. Ein Pfeil definiert eine Aussage im Modell; er führt keinen Vorgang aus und bestätigt keine erledigte Prüfung."
+          "Der Baum ordnet Bausteine nach ihrer fachlichen Art. Er zeigt keine zeitliche Reihenfolge. Der Graph zeigt, wie die Bausteine zusammenhängen; eine Beziehung kann unterschiedliche Kategorien verbinden.",
+          "Fragen beschreiben, welche Angabe benötigt wird. Dokumenttypen beschreiben Arten von Dokumenten. Entscheidungen benennen Auswahlpunkte. Prüfschritte beschreiben zu prüfende Bedingungen. Nachweistypen beschreiben Arten von Belegen. Die tatsächliche Antwort oder das ausgefüllte Dokument gehört nicht in die Vorlage.",
+          "Ein Dokument kann zugleich als Beleg dienen. Entscheidend ist sein fachlicher Zweck im jeweiligen Modell. Wenn die Zuordnung unklar ist, lies die Erläuterung und halte die ungeklärte Bedeutung als Offene Fachfrage fest.",
+          "Lies jede Verbindung als Satz: Ausgangspunkt – Beziehung – Ziel. Im künstlichen Beispiel wird „Benötigte Schutzausrüstung“ durch „Ausrüstungsliste“ belegt. Die Verbindung beschreibt die Vorlage; sie bestätigt keine tatsächlich durchgeführte Prüfung."
         ],
         "steps": [],
         "facts": [
@@ -486,11 +492,11 @@ window.EDITOR8_LEARNING = {
           ],
           [
             "Dokumenttypen",
-            "Welche Art von Dokument wird benötigt? Beispiel: Ausrüstungsliste."
+            "Welche Dokumentart ist vorgesehen? Beispiel: Ausrüstungsliste."
           ],
           [
             "Entscheidungen",
-            "Welche Auswahl wird beschrieben? Beispiel: Leihmaterial auswählen."
+            "Welche Auswahl soll getroffen werden? Beispiel: Leihmaterial auswählen."
           ],
           [
             "Prüfschritte",
@@ -498,27 +504,27 @@ window.EDITOR8_LEARNING = {
           ],
           [
             "Nachweistypen",
-            "Welche Art von Beleg wäre vorgesehen? Beispiel: Prüfvermerk."
+            "Welche Art von Beleg ist vorgesehen? Beispiel: Prüfvermerk."
           ],
           [
             "erfordert",
-            "Quelle benötigt das Ziel als Voraussetzung."
+            "Der Ausgangspunkt benötigt das Ziel als Voraussetzung."
           ],
           [
             "informiert",
-            "Quelle liefert Informationen für das Ziel."
+            "Der Ausgangspunkt liefert Informationen für das Ziel."
           ],
           [
             "belegt durch",
-            "Quelle wird durch das Ziel belegt."
+            "Der Ausgangspunkt wird durch das Ziel belegt."
           ],
           [
             "wartet auf vollständige Angaben / wartet auf Prüfung",
-            "Modellierte Abhängigkeit, keine automatisierte Prüfung."
+            "Beschreibt eine Abhängigkeit in der Vorlage; führt die Prüfung nicht selbst durch."
           ],
           [
             "erfordert Entscheidung / füllt / bestimmt",
-            "Weitere vom Adapter angebotene Beziehungen; Bedeutung und Richtung vor Änderung prüfen."
+            "Beschreibt eine weitere fachliche Verbindung. Prüfe die Bedeutung und Pfeilrichtung vor einer Änderung."
           ]
         ]
       },
@@ -526,30 +532,30 @@ window.EDITOR8_LEARNING = {
         "id": "pflege",
         "title": "Modellpflege Schritt für Schritt",
         "paragraphs": [
-          "Beginne mit einem kleinen Auftrag: Welche Bezeichnung, Erläuterung oder Beziehung ist unklar? Was soll sich fachlich ändern? Suche zuerst vorhandene Bausteine, um Doppelungen zu vermeiden.",
-          "Eine Umbenennung präzisiert einen vorhandenen Gegenstand. Ein neuer Baustein ist begründet, wenn ein eigenständiger Gegenstand fehlt. Kategorie, Kennung, Bedeutung und Beziehungen gehören dann zur Änderung. Vor Löschen die betroffenen Beziehungen und Quellen prüfen.",
-          "Die Übung „Fantasiewerkstatt“ präzisiert „Benötigte Schutzausrüstung“ zu „Benötigte Schutzausrüstung für den Workshop“. Bedeutung und Kennung bleiben erhalten. Das Training zeigt die Änderung ausschließlich im Browser und schreibt keine GitHub-Daten."
+          "Beginne mit einem kleinen fachlichen Auftrag: Welche Bezeichnung, Erläuterung oder Beziehung ist unklar? Was soll sich ändern, und welche Quelle begründet die Änderung? Suche zuerst nach vorhandenen Bausteinen, damit kein doppelter Begriff entsteht.",
+          "Eine Umbenennung präzisiert einen vorhandenen Gegenstand. Ein neuer Baustein ist sinnvoll, wenn ein eigenständiger Gegenstand fehlt. Er braucht eine passende Art, eine verständliche Bezeichnung, eine Erläuterung und die nötigen Beziehungen. Vor dem Löschen prüfst du die verbundenen Bausteine und Quellen.",
+          "Die künstliche Übung „Fantasiewerkstatt“ präzisiert „Benötigte Schutzausrüstung“ zu „Benötigte Schutzausrüstung für den Workshop“. Der Gegenstand, seine Kennung und seine Beziehungen bleiben erhalten. In der Übung änderst du ausschließlich das Beispiel; echte Fachmodelle bleiben unberührt."
         ],
         "steps": [
-          "Vorgangsart und betroffenen Baustein unter Verstehen prüfen.",
+          "Unter Verstehen die Vorgangsart, den betroffenen Baustein, seine Beziehungen und Quellen prüfen.",
           "Links Bearbeiten wählen und Entwurf erstellen oder Bearbeiten am Baustein öffnen.",
-          "Bezeichnung und fachliche Erläuterung gezielt pflegen; ungelöste Bedeutung als Offene Fachfrage dokumentieren.",
-          "Für eine Verbindung Ansicht → Verbindungen öffnen, Quelle, Typ und Ziel wählen und den Satz prüfen.",
-          "Datei → Speichern wählen, alle Unterschiede prüfen und erst dann die Vorschau bestätigen.",
-          "Unter Prüfen → Meine Änderung Grund und Quellenstand erfassen und die gespeicherte Änderung einreichen."
+          "Bezeichnung und Fachliche Erläuterung gezielt ändern; ungelöste Bedeutung als Offene Fachfrage festhalten.",
+          "Für eine Verbindung Ansicht → Verbindungen öffnen, Quelle, Beziehungstyp und Ziel wählen und den entstehenden Satz lesen.",
+          "Datei → Speichern wählen, alle angezeigten Unterschiede prüfen und Speichern bestätigen.",
+          "Unter Prüfen → Meine Änderung Grund und Quellenstand angeben und Zur Fachprüfung einreichen wählen."
         ],
         "facts": [
           [
-            "Keine neue Vorgangsart im Editor",
-            "Die Anlage beziehungsweise Umfangsänderung eines Datenkatalogs erfolgt im Datenprojekt."
+            "Neue Vorgangsart benötigt",
+            "Im Editor kannst du bestehende Vorgangsarten pflegen. Für die Aufnahme einer weiteren Vorgangsart wende dich an die verantwortliche Person für den Modellbestand."
           ],
           [
             "Gemeinsame Begriffe",
-            "Änderungen am Vokabular haben eigene Entwürfe und benötigen die Maintainer-Rolle."
+            "Gelten für mehrere Vorgangsarten. Ihre Pflege benötigt einen eigenen Entwurf und eine zusätzliche fachliche Berechtigung."
           ],
           [
-            "Kennungen",
-            "Stabile Identität des Gegenstands; eine Änderung der Bezeichnung ersetzt keine Kennung."
+            "Kennung",
+            "Bleibende Identität eines Gegenstands. Eine präzisere Bezeichnung erzeugt keinen neuen Gegenstand."
           ]
         ]
       },
@@ -557,8 +563,8 @@ window.EDITOR8_LEARNING = {
         "id": "felder",
         "title": "Feldreferenz",
         "paragraphs": [
-          "Das Formular zeigt die Felder des ausgewählten Bausteins. Pflegen bedeutet, eine fachliche Aussage nachvollziehbar zu beschreiben; nicht jedes Feld muss für jeden Typ ausgefüllt sein.",
-          "Übernommene NaC-Kennungen und der Status einer NaC-Vorlage sind geschützt. Technische Entscheidungswerte bleiben unverändert, solange fachlich geprüfte Anzeigenamen fehlen. Die Anzeige der RDF-Verwendung beschreibt technische Modellbezüge und keine tatsächlichen Aktenzugriffe."
+          "Die Bearbeitungsfelder beschreiben den ausgewählten fachlichen Baustein. Nicht jedes Feld ist für jede Bausteinart erforderlich. Ändere nur die Angaben, die dein Pflegeauftrag begründet.",
+          "Kennungen und der Status einer übernommenen NaC-Vorlage sind geschützt. Bestehende Entscheidungswerte bleiben erhalten, bis eine fachlich abgestimmte Änderung vorliegt. Die angezeigte Verwendung eines Begriffs beschreibt Bezüge zwischen Vorlagen, keine tatsächlichen Zugriffe auf Akten."
         ],
         "steps": [],
         "facts": [
@@ -568,47 +574,47 @@ window.EDITOR8_LEARNING = {
           ],
           [
             "Bausteintyp",
-            "Kategorie des Gegenstands; Änderungen daran brauchen eine fachliche Begründung."
+            "Fachliche Art des Gegenstands, etwa Frage oder Dokumenttyp. Eine Änderung braucht eine fachliche Begründung."
           ],
           [
             "Fachliche Erläuterung",
-            "Bedeutung und Abgrenzung des Bausteins."
+            "Bedeutung und Abgrenzung des Bausteins. Was ist gemeint, und wofür wird er benötigt?"
           ],
           [
             "Offene Fachfrage",
-            "Ungelöste Modellierungsfrage, keine erfundene Antwort."
+            "Ungelöste Frage zur Bedeutung oder Modellierung, die fachlich geklärt werden muss."
           ],
           [
             "Abschnitt der Vorlage",
-            "Bezug zum Abschnitt der fachlichen Vorlage."
+            "Bezug zum passenden Abschnitt der fachlichen Vorlage."
           ],
           [
             "Status der NaC-Vorlage",
-            "Quellstatus; bei übernommenen Bausteinen schreibgeschützt."
+            "Status der übernommenen Quelle; bei übernommenen Bausteinen schreibgeschützt."
           ],
           [
             "Pflegestatus des lokalen Entwurfs",
-            "Status eines lokal ergänzten Bausteins."
+            "Status eines im Modellbestand ergänzten Bausteins; keine notarielle Freigabe."
           ],
           [
             "Verantwortliche Rolle",
-            "Rolle für die betreffende Angabe oder Prüfung."
+            "Fachliche Zuständigkeit für die betreffende Angabe oder Prüfung."
           ],
           [
             "Datenschutzklasse / Kann Personendaten enthalten?",
-            "Klassifikation des Typs; hier keine tatsächlichen Personendaten eintragen."
+            "Einordnung der vorgesehenen Angabe; hier keine tatsächlichen Personendaten eintragen."
           ],
           [
             "Benötigt für / Entscheidungsoptionen",
-            "Eine Angabe pro Zeile; bestehende Maschinenwerte nicht frei übersetzen."
+            "Eine Angabe pro Zeile. Bestehende Auswahlwerte nur nach fachlicher Abstimmung ändern."
           ],
           [
             "Dokumentquelle",
-            "Quellenbezug des Dokumenttyps."
+            "Quellenbezug des Dokumenttyps, etwa das maßgebliche Dokument und dessen Fassung."
           ],
           [
             "Grund und Quellenstand beim Einreichen",
-            "Warum sich das Modell ändert und auf welche fachliche Quelle die Änderung gestützt wird."
+            "Warum sich das Fachmodell ändert und auf welche Quelle samt Fassung oder Datum du dich stützt."
           ]
         ]
       },
@@ -616,101 +622,126 @@ window.EDITOR8_LEARNING = {
         "id": "pruefen",
         "title": "Entwurf, Prüfung und Übernahme",
         "paragraphs": [
-          "Tippen verändert zunächst den Browserzustand. Speichern öffnet die fachliche Vorschau. Bestätigung schreibt in deinen Entwurfszweig im Datenrepository. Einreichen erzeugt einen Pull Request. Diese Schritte erteilen keine notarielle Freigabe.",
-          "Eine andere berechtigte Person prüft die eingereichte Änderung. Fachliche Freigaben sind für eingetragene Notarkonten vorgesehen und beziehen sich auf den geprüften Commit. Änderungen nach der Prüfung benötigen eine Beurteilung des neuen Stands.",
-          "Der vereinbarte Pilot verwendet einen manuellen Merge-Weg: verantwortliche Person prüft fachliche Freigabe auf dem aktuellen Commit und erfolgreiche CI vor Übernahme. Eine technisch erzwungene GitHub-Mergesperre ist eine separate optionale Betriebsentscheidung.",
-          "Eigene gespeicherte Entwürfe lassen sich wieder öffnen oder ablegen. Beim Abmelden mit offenen Eingaben fragt der Editor vor dem Verwerfen. Ungespeicherte Eingaben sind nach Browserverlust nicht dauerhaft gesichert. Eine frühere Fassung erzeugt einen neuen Prüfentwurf nach Vergleich und ersetzt main nicht direkt.",
-          "Gespeichert wird genau die bestätigte Vorschau. Ändern sich Eingaben während deren Vorbereitung, muss Speichern erneut gewählt werden. Während des Schreibens bleiben Schließen und Weiter bearbeiten gesperrt. Bei einem Fehler zeigt die Vorschau den Hinweis und erlaubt einen erneuten Versuch; die Eingaben bleiben ungespeichert erhalten. Eine langsame Antwort beim Öffnen kann keine spätere Auswahl oder neu eingegebene Änderung ersetzen."
+          "Beim Bearbeiten sind deine Eingaben zunächst ungespeichert. Speichern öffnet den Vergleich; Speichern bestätigen sichert die gezeigten Änderungen in deinem Arbeitsentwurf. Einreichen gibt den gespeicherten Entwurf zur Fachprüfung. Die gemeinsam verwendete Vorlage wird dadurch noch nicht ersetzt.",
+          "Unter Fachprüfung prüft eine andere berechtigte Person den Änderungsgrund, die Quellen und die Auswirkungen auf Begriffe und Beziehungen. Eine notarielle Freigabe benötigt die entsprechende fachliche Berechtigung. Du kannst deine eigene Änderung nicht selbst freigeben.",
+          "Eine Freigabe gehört zur tatsächlich geprüften Fassung. Wird die Änderung danach weiter bearbeitet, muss die neue Fassung erneut beurteilt werden. Die verantwortliche Person für den Modellbestand übernimmt die Änderung erst nach der nötigen Fachfreigabe und erfolgreichen Prüfungen. Falls nötig, öffnet sie dafür den Änderungsvorschlag über In GitHub öffnen.",
+          "Gespeicherte Arbeitsentwürfe kannst du später wieder öffnen. Entwurf ablegen beendet die aktuelle Bearbeitung, ohne bereits gespeicherte Änderungen zu löschen. Beim Abmelden fragt der Editor vor dem Verwerfen offener Eingaben. Ungespeicherte Eingaben sind beim Schließen des Browsers nicht dauerhaft gesichert.",
+          "Gespeichert wird genau die bestätigte Vorschau. Änderst du die Eingaben während ihrer Vorbereitung, wähle Speichern erneut. Während des Schreibens wartest du auf die Bestätigung. Bei einem Fehler bleiben die Eingaben erhalten und die Vorschau erlaubt einen erneuten Versuch.",
+          "Unter Informationen kannst du frühere Fassungen ansehen. Die Wiederaufnahme einer früheren Fassung erzeugt nach Vergleich einen neuen Arbeitsentwurf. Auch dieser braucht Begründung und Fachprüfung."
         ],
         "steps": [
-          "Änderungsgrund und fachlichen Quellenstand lesen.",
-          "Begriffe, Quellen und Beziehungen mit dem aktuellen Datencommit vergleichen.",
-          "Als andere berechtigte Person eine begründete Rückfrage oder Freigabe dokumentieren.",
-          "Bei neuem Commit den neuen Stand erneut prüfen.",
-          "Vor manuellem Merge Freigabe, Dateiumfang und CI bestätigen."
+          "Unter Prüfen → Fachprüfung eine eingereichte Änderung öffnen und ihren Anlass sowie Quellenstand lesen.",
+          "Begriffe und Fachfragen, Rechtsquellen und Quellenstand sowie Beziehungen und fachliche Wirkung erst nach der jeweiligen inhaltlichen Prüfung markieren.",
+          "Eine nachvollziehbare Begründung schreiben und Änderung anfordern oder mit entsprechender Berechtigung Fachlich freigeben wählen.",
+          "Bei weiteren Änderungen die neue Fassung erneut prüfen.",
+          "Nach der Übernahme im gemeinsamen Modellbestand kontrollieren, ob die beabsichtigte fachliche Änderung sichtbar ist."
         ],
-        "facts": []
+        "facts": [
+          [
+            "Ungespeicherte Eingaben",
+            "Noch nicht im Arbeitsentwurf gesichert."
+          ],
+          [
+            "Gespeicherter Arbeitsentwurf",
+            "Deine gesicherte Änderung; weiterhin getrennt von der gemeinsam verwendeten Vorlage."
+          ],
+          [
+            "Eingereichte Änderung",
+            "Zur Fachprüfung bereitgestellt; noch keine Freigabe."
+          ],
+          [
+            "Fachlich freigegeben",
+            "Eine dazu berechtigte andere Person hat die bezeichnete Fassung geprüft und freigegeben."
+          ],
+          [
+            "Übernommen",
+            "Die Änderung ist im gemeinsam verwendeten Modellbestand enthalten."
+          ]
+        ]
       },
       {
         "id": "rollen",
-        "title": "Zugriff und Betrieb",
+        "title": "Fachliche Rollen und Zugang",
         "paragraphs": [
-          "Die Anmeldung identifiziert den GitHub-Benutzer. Der Host erlaubt Benutzer über EDITOR_USERS. Das Datenrepository benötigt Read zum Lesen und Write zum Erstellen von Änderungen. Der GitHub-App-Benutzertoken ist auf die gemeinsamen Rechte von App und Benutzer beschränkt.",
-          "Die Reviewer-Rolle erlaubt fachliche Freigaben einer anderen Person; die Maintainer-Rolle erlaubt gemeinsame Begriffe. Rollen erteilen keine GitHub-Rechte. Weitere Datenziele brauchen Registry-Eintrag, App-Installation, Benutzerzugriff und passenden Adapter.",
-          "Der Editor läuft auf Azure. Secrets bleiben im Host. Lokale Entwicklung verlangt einen ausdrücklich separaten EDITOR8_DATA_ROOT. Die öffentliche Software-CI verwendet künstliche Daten; die Integration mit privaten Fachmodellen läuft im privaten Datenrepository.",
-          "Ein Softwarebuild endet erst mit dem erwarteten Azure-Image, aktiver gesunder Revision und passender Release-Kennung. Konfiguration und Betriebsanleitung stehen in docs/editor-hosting.md und docs/data-repositories-and-users.md."
+          "Dein GitHub-Konto dient der Anmeldung und ordnet Änderungen sowie Prüfentscheidungen deiner Person zu. Welche Fachmodelle du lesen oder bearbeiten darfst, wird für den jeweiligen Modellbestand festgelegt. Die Auswahl eines Bestands erteilt keine zusätzlichen Rechte.",
+          "Leseberechtigte verstehen und vergleichen die Vorlagen. Ontologiepfleger bearbeiten sie in Arbeitsentwürfen und reichen begründete Änderungen ein. Zur notariellen Fachprüfung berechtigte Notare können die Änderung einer anderen Person fachlich freigeben. Die Pflege gemeinsamer Begriffe ist eine zusätzliche fachliche Aufgabe.",
+          "Fehlt dir ein Modellbestand oder eine nötige Funktion, wende dich an die dafür verantwortliche Person und nenne den Bestand sowie die gewünschte Tätigkeit. Diese Hilfe erklärt deine fachliche Arbeit im Editor. Zugang und fachliche Berechtigungen werden außerhalb deiner Modelländerung verwaltet."
         ],
         "steps": [],
         "facts": [
           [
-            "Leser",
-            "Zugelassenes GitHub-Konto mit Lesezugriff am Datenziel."
+            "Leseberechtigte",
+            "Fachmodelle ansehen, Zusammenhänge verstehen und Quellen lesen."
           ],
           [
-            "Bearbeitende",
-            "Zusätzlicher GitHub-Schreibzugriff für Entwürfe und PRs."
+            "Ontologiepfleger",
+            "Bausteine und Beziehungen bearbeiten, Entwürfe speichern und zur Fachprüfung einreichen."
           ],
           [
-            "Notarielle Reviewer",
-            "Zusätzliche fachliche Rolle; keine Selbstfreigabe."
+            "Notarielle Fachprüfer",
+            "Änderungen anderer Personen prüfen, Rückfragen dokumentieren und mit der nötigen Berechtigung fachlich freigeben."
           ],
           [
-            "Ontology-Maintainer",
-            "Zusätzliche Rolle für das gemeinsame Vokabular."
+            "Pflege gemeinsamer Begriffe",
+            "Gemeinsam verwendete Begriffe und Beziehungstypen innerhalb des ausgewählten Modellbestands pflegen; zusätzliche Berechtigung erforderlich."
+          ],
+          [
+            "Verantwortliche Person für den Modellbestand",
+            "Ansprechpartner für fachlichen Umfang, Zugang, Pflegezuständigkeiten und Übernahme geprüfter Änderungen."
           ]
         ]
       },
       {
         "id": "fehler",
-        "title": "Fehlerbehebung und Grenzen",
+        "title": "Wenn etwas nicht funktioniert",
         "paragraphs": [
-          "Wenn ein Schritt scheitert, dokumentiere Software-Release, Datenziel, Arbeitsschritt und genaue Fehlermeldung. Keine Tokens, Callback-URLs oder Secrets in Kommentare kopieren. Bewahre gespeicherte Entwürfe, solange die Ursache unklar ist.",
-          "Der Editor bietet derzeit Textvergleich, Fachgraph und strukturierte Felder. Grafischer Vorher/Nachher-Vergleich, Rückfragen direkt am Baustein, kontrollierte deutsche Beziehungssätze und SHACL sind spätere Roadmap-Pakete.",
-          "Der echte angemeldete Schreib-/PR-Weg und die notarielle Zwei-Personen-Abnahme bleiben gesonderte Nachweise. Die Trainingsübung und grüne technische Tests ersetzen diese Abnahmen nicht."
+          "Notiere bei einem Fehler den ausgewählten Fachmodellbestand, die Vorgangsart, deinen Arbeitsschritt und die angezeigte Fehlermeldung. Gib bei einer technischen Störung auch den Editor-Release aus der Fußzeile an. Melde die Störung dem Betreiber; fachliche Unklarheiten gehen an die verantwortliche Person für den Modellbestand.",
+          "Gib keine Anmeldedaten oder vollständigen Rückkehradressen der Anmeldung weiter. Bewahre gespeicherte Entwürfe, solange ein Fehler ungeklärt ist. Nach einem Speicherfehler bleiben Eingaben offen: Warte auf die Meldung, prüfe die Vorschau und versuche die Speicherung erneut.",
+          "Im Training übst du an einem künstlichen Modell. Die Übung verändert keine echten Fachmodelle und erteilt keine notarielle Freigabe. Neu laden setzt die Übung zurück."
         ],
         "steps": [],
         "facts": [
           [
             "Anmeldung nicht abgeschlossen",
-            "Auf der Fehlerseite Erneut anmelden wählen; eine alte Callback-Adresse nicht erneut öffnen. Bei erneutem Fehler nur Fehlermeldung und Diagnose-Kennung melden. Der Betreiber findet damit den fehlgeschlagenen Schritt, ohne Anmeldedaten zu protokollieren."
+            "Auf der Fehlerseite Erneut anmelden wählen. Bei erneutem Fehler nur Meldung und Diagnose-Kennung an den Betreiber geben; keine vollständige Anmeldeadresse weitergeben."
           ],
           [
-            "Datenziel fehlt",
-            "Registry-Eintrag, Benutzerzulassung, GitHub-Zugriff und App-Installation durch Betreiber prüfen lassen."
+            "Fachmodellbestand fehlt",
+            "Zugang bei der verantwortlichen Person für diesen Bestand klären lassen."
           ],
           [
             "Speichern deaktiviert",
-            "Keine ungespeicherte Änderung oder kein passender Entwurf; aktive Vorgangsart und Entwurfszweck prüfen."
+            "Prüfen, ob du eine Änderung eingegeben hast und ein passender Arbeitsentwurf geöffnet ist. Eine laufende Speicherung zunächst abwarten."
           ],
           [
             "Stand hat sich inzwischen geändert",
-            "Nicht wiederholt überschreiben; aktuellen Datenstand neu prüfen und Entwurf vergleichen."
+            "Den aktuellen Modellstand neu lesen und mit deinem Entwurf vergleichen, bevor du weitere Änderungen bestätigst."
           ],
           [
             "Freigabe deaktiviert",
-            "Eigene Änderung, fehlende Reviewer-Rolle, ungeklärter Befund oder nicht freigabefähiger PR."
+            "Prüfen, ob es deine eigene Änderung ist, eine Fachprüfberechtigung fehlt oder eine angezeigte Abweichung noch geklärt werden muss."
           ],
           [
-            "Repository-Wechsel blockiert",
-            "Zuerst offene Eingaben speichern oder verwerfen und den Entwurf ablegen."
+            "Wechsel des Modellbestands blockiert",
+            "Zuerst offene Eingaben speichern oder bewusst verwerfen und den geöffneten Entwurf ablegen."
           ],
           [
-            "Alte Oberfläche",
-            "Editor-Release vergleichen und Browser neu laden; bei abweichender Kennung Betreiber informieren."
+            "Oberfläche wirkt veraltet",
+            "Offene Eingaben zuerst sichern, dann die App neu laden. Bei weiterhin abweichender Anzeige den Betreiber mit Editor-Release und Fehlermeldung informieren."
           ],
           [
             "Training zurückgesetzt",
-            "Übungen sind flüchtig. Neu laden startet das künstliche Beispiel neu."
+            "Übungen werden nur bis zum Neuladen gehalten. Das künstliche Beispiel erneut öffnen."
           ]
         ]
       }
     ]
   },
   "categories": {
-    "required_information": "Angabenfragen",
+    "required_information": "Fragen",
     "documents": "Dokumenttypen",
     "decisions": "Entscheidungen",
-    "gates": "Prüfgates",
+    "gates": "Prüfschritte",
     "evidence": "Nachweistypen"
   }
 };

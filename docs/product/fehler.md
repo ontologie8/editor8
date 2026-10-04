@@ -1,22 +1,22 @@
-# Fehlerbehebung und Grenzen
+# Wenn etwas nicht funktioniert
 
-Wenn ein Schritt scheitert, dokumentiere Software-Release, Datenziel, Arbeitsschritt und genaue Fehlermeldung. Keine Tokens, Callback-URLs oder Secrets in Kommentare kopieren. Bewahre gespeicherte Entwürfe, solange die Ursache unklar ist.
+Notiere bei einem Fehler den ausgewählten Fachmodellbestand, die Vorgangsart, deinen Arbeitsschritt und die angezeigte Fehlermeldung. Gib bei einer technischen Störung auch den Editor-Release aus der Fußzeile an. Melde die Störung dem Betreiber; fachliche Unklarheiten gehen an die verantwortliche Person für den Modellbestand.
 
-Der Editor bietet derzeit Textvergleich, Fachgraph und strukturierte Felder. Grafischer Vorher/Nachher-Vergleich, Rückfragen direkt am Baustein, kontrollierte deutsche Beziehungssätze und SHACL sind spätere Roadmap-Pakete.
+Gib keine Anmeldedaten oder vollständigen Rückkehradressen der Anmeldung weiter. Bewahre gespeicherte Entwürfe, solange ein Fehler ungeklärt ist. Nach einem Speicherfehler bleiben Eingaben offen: Warte auf die Meldung, prüfe die Vorschau und versuche die Speicherung erneut.
 
-Der echte angemeldete Schreib-/PR-Weg und die notarielle Zwei-Personen-Abnahme bleiben gesonderte Nachweise. Die Trainingsübung und grüne technische Tests ersetzen diese Abnahmen nicht.
+Im Training übst du an einem künstlichen Modell. Die Übung verändert keine echten Fachmodelle und erteilt keine notarielle Freigabe. Neu laden setzt die Übung zurück.
 
 ## Referenz
 
 | Begriff oder Meldung | Erläuterung |
 | --- | --- |
-| Anmeldung nicht abgeschlossen | Auf der Fehlerseite Erneut anmelden wählen; eine alte Callback-Adresse nicht erneut öffnen. Bei erneutem Fehler nur Fehlermeldung und Diagnose-Kennung melden. Der Betreiber findet damit den fehlgeschlagenen Schritt, ohne Anmeldedaten zu protokollieren. |
-| Datenziel fehlt | Registry-Eintrag, Benutzerzulassung, GitHub-Zugriff und App-Installation durch Betreiber prüfen lassen. |
-| Speichern deaktiviert | Keine ungespeicherte Änderung oder kein passender Entwurf; aktive Vorgangsart und Entwurfszweck prüfen. |
-| Stand hat sich inzwischen geändert | Nicht wiederholt überschreiben; aktuellen Datenstand neu prüfen und Entwurf vergleichen. |
-| Freigabe deaktiviert | Eigene Änderung, fehlende Reviewer-Rolle, ungeklärter Befund oder nicht freigabefähiger PR. |
-| Repository-Wechsel blockiert | Zuerst offene Eingaben speichern oder verwerfen und den Entwurf ablegen. |
-| Alte Oberfläche | Editor-Release vergleichen und Browser neu laden; bei abweichender Kennung Betreiber informieren. |
-| Training zurückgesetzt | Übungen sind flüchtig. Neu laden startet das künstliche Beispiel neu. |
+| Anmeldung nicht abgeschlossen | Auf der Fehlerseite Erneut anmelden wählen. Bei erneutem Fehler nur Meldung und Diagnose-Kennung an den Betreiber geben; keine vollständige Anmeldeadresse weitergeben. |
+| Fachmodellbestand fehlt | Zugang bei der verantwortlichen Person für diesen Bestand klären lassen. |
+| Speichern deaktiviert | Prüfen, ob du eine Änderung eingegeben hast und ein passender Arbeitsentwurf geöffnet ist. Eine laufende Speicherung zunächst abwarten. |
+| Stand hat sich inzwischen geändert | Den aktuellen Modellstand neu lesen und mit deinem Entwurf vergleichen, bevor du weitere Änderungen bestätigst. |
+| Freigabe deaktiviert | Prüfen, ob es deine eigene Änderung ist, eine Fachprüfberechtigung fehlt oder eine angezeigte Abweichung noch geklärt werden muss. |
+| Wechsel des Modellbestands blockiert | Zuerst offene Eingaben speichern oder bewusst verwerfen und den geöffneten Entwurf ablegen. |
+| Oberfläche wirkt veraltet | Offene Eingaben zuerst sichern, dann die App neu laden. Bei weiterhin abweichender Anzeige den Betreiber mit Editor-Release und Fehlermeldung informieren. |
+| Training zurückgesetzt | Übungen werden nur bis zum Neuladen gehalten. Das künstliche Beispiel erneut öffnen. |
 
 [Zur Übersicht](README.md) · [Training](../../training/README.md)

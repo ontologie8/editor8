@@ -1,20 +1,19 @@
-# Zugriff und Betrieb
+# Fachliche Rollen und Zugang
 
-Die Anmeldung identifiziert den GitHub-Benutzer. Der Host erlaubt Benutzer über EDITOR_USERS. Das Datenrepository benötigt Read zum Lesen und Write zum Erstellen von Änderungen. Der GitHub-App-Benutzertoken ist auf die gemeinsamen Rechte von App und Benutzer beschränkt.
+Dein GitHub-Konto dient der Anmeldung und ordnet Änderungen sowie Prüfentscheidungen deiner Person zu. Welche Fachmodelle du lesen oder bearbeiten darfst, wird für den jeweiligen Modellbestand festgelegt. Die Auswahl eines Bestands erteilt keine zusätzlichen Rechte.
 
-Die Reviewer-Rolle erlaubt fachliche Freigaben einer anderen Person; die Maintainer-Rolle erlaubt gemeinsame Begriffe. Rollen erteilen keine GitHub-Rechte. Weitere Datenziele brauchen Registry-Eintrag, App-Installation, Benutzerzugriff und passenden Adapter.
+Leseberechtigte verstehen und vergleichen die Vorlagen. Ontologiepfleger bearbeiten sie in Arbeitsentwürfen und reichen begründete Änderungen ein. Zur notariellen Fachprüfung berechtigte Notare können die Änderung einer anderen Person fachlich freigeben. Die Pflege gemeinsamer Begriffe ist eine zusätzliche fachliche Aufgabe.
 
-Der Editor läuft auf Azure. Secrets bleiben im Host. Lokale Entwicklung verlangt einen ausdrücklich separaten EDITOR8_DATA_ROOT. Die öffentliche Software-CI verwendet künstliche Daten; die Integration mit privaten Fachmodellen läuft im privaten Datenrepository.
-
-Ein Softwarebuild endet erst mit dem erwarteten Azure-Image, aktiver gesunder Revision und passender Release-Kennung. Konfiguration und Betriebsanleitung stehen in docs/editor-hosting.md und docs/data-repositories-and-users.md.
+Fehlt dir ein Modellbestand oder eine nötige Funktion, wende dich an die dafür verantwortliche Person und nenne den Bestand sowie die gewünschte Tätigkeit. Diese Hilfe erklärt deine fachliche Arbeit im Editor. Zugang und fachliche Berechtigungen werden außerhalb deiner Modelländerung verwaltet.
 
 ## Referenz
 
 | Begriff oder Meldung | Erläuterung |
 | --- | --- |
-| Leser | Zugelassenes GitHub-Konto mit Lesezugriff am Datenziel. |
-| Bearbeitende | Zusätzlicher GitHub-Schreibzugriff für Entwürfe und PRs. |
-| Notarielle Reviewer | Zusätzliche fachliche Rolle; keine Selbstfreigabe. |
-| Ontology-Maintainer | Zusätzliche Rolle für das gemeinsame Vokabular. |
+| Leseberechtigte | Fachmodelle ansehen, Zusammenhänge verstehen und Quellen lesen. |
+| Ontologiepfleger | Bausteine und Beziehungen bearbeiten, Entwürfe speichern und zur Fachprüfung einreichen. |
+| Notarielle Fachprüfer | Änderungen anderer Personen prüfen, Rückfragen dokumentieren und mit der nötigen Berechtigung fachlich freigeben. |
+| Pflege gemeinsamer Begriffe | Gemeinsam verwendete Begriffe und Beziehungstypen innerhalb des ausgewählten Modellbestands pflegen; zusätzliche Berechtigung erforderlich. |
+| Verantwortliche Person für den Modellbestand | Ansprechpartner für fachlichen Umfang, Zugang, Pflegezuständigkeiten und Übernahme geprüfter Änderungen. |
 
 [Zur Übersicht](README.md) · [Training](../../training/README.md)

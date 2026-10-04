@@ -57,11 +57,11 @@
 </svg>
 <span>Prüfen</span></button></nav>
     <aside class="case-sidebar" aria-label="Vorgangsarten">
-      <section id="repository-picker" class="repository-picker" aria-label="Datenquelle" hidden><label class="visually-hidden" for="repository-select">Datenrepository</label><img id="data-brand" src="/assets/brand/n8_32.png" srcset="/assets/brand/n8_32.png 32w, /assets/brand/n8_192.png 192w, /assets/brand/n8_526.png 526w" sizes="24px" width="24" height="24" alt="NaC" hidden><select id="repository-select"></select></section>
+      <section id="repository-picker" class="repository-picker" aria-label="Fachmodelle" hidden><label class="visually-hidden" for="repository-select">Fachmodellbestand</label><img id="data-brand" src="/assets/brand/n8_32.png" srcset="/assets/brand/n8_32.png 32w, /assets/brand/n8_192.png 192w, /assets/brand/n8_526.png 526w" sizes="24px" width="24" height="24" alt="NaC" hidden><select id="repository-select"></select></section>
       <h2 class="navigation-heading" id="navigation-heading">Vorgangsarten <span id="case-count"></span></h2>
       <label class="visually-hidden" for="case-search">Vorgangsart suchen</label><input id="case-search" type="search" placeholder="Vorgangsart suchen …">
       <div id="case-list" class="case-list"></div><nav id="task-navigation" class="task-navigation" aria-label="Aufgabenauswahl" hidden></nav>    <section id="draft-panel" class="draft-panel" aria-label="Meine gespeicherten Entwürfe" hidden>
-      <div><h2>Meine Arbeitsentwürfe</h2><p>Hier findest du eigene GitHub-Zweige ohne Pull Request. Gespeicherte Änderungen bleiben beim Wechsel des Arbeitsbereichs erhalten.</p></div>
+      <div><h2>Meine Arbeitsentwürfe</h2><p>Hier findest du eigene gespeicherte Entwürfe, die noch nicht zur Fachprüfung eingereicht sind. Gespeicherte Änderungen bleiben beim Wechsel des Arbeitsbereichs erhalten.</p></div>
       <div id="draft-list" class="draft-list"></div>
     </section>
     </aside>
@@ -116,13 +116,13 @@
       <div class="section-head"><div><p class="eyebrow">ZUR PRÜFUNG GEBEN</p><h2>Änderung einreichen</h2></div></div>
       <p>Beschreibe kurz den Grund und die verwendeten Quellen. Danach geht dein gespeicherter Entwurf zur notariellen Fachprüfung. Die Freigabe dokumentiert eine andere berechtigte Person.</p>
       <label for="change-reason">Warum ist die Änderung nötig?</label><textarea id="change-reason" rows="3" placeholder="Beschreibe die fachliche Änderung und ihre Wirkung."></textarea>
-      <label for="change-source">Welcher Quellenstand wurde verwendet?</label><input id="change-source" placeholder="z. B. NaC-Commit und Fachquelle">
+      <label for="change-source">Welcher Quellenstand wurde verwendet?</label><input id="change-source" placeholder="Fachquelle mit Fassung oder Datum">
       <button id="submit-review" class="primary" type="button">Zur Fachprüfung einreichen</button>
       <a id="review-link" hidden target="_blank" rel="noopener noreferrer">Prüfentwurf öffnen ↗</a>
     </section>
     <section class="card review-workspace" data-view="fachpruefung" hidden>
       <div class="section-head"><div><p class="eyebrow">FACHLICHE PRÜFUNG</p><h2>Änderungen zur Prüfung</h2></div><button id="refresh-reviews" type="button">Liste aktualisieren</button></div>
-      <p class="context-help">Hier stehen Änderungen an Fällen und gemeinsamen Begriffen aus GitHub. Die Ansicht zeigt fachliche Unterschiede und den angegebenen Quellenstand. Eine Entscheidung wird mit deinem GitHub-Konto dokumentiert.</p>
+      <p class="context-help">Hier prüfst du eingereichte Änderungen an Vorgangsarten und gemeinsamen Begriffen des ausgewählten Modellbestands. Vergleiche Bedeutung, Quellen und Beziehungen. Deine begründete Entscheidung wird deinem angemeldeten Konto zugeordnet.</p>
       <div id="review-list" class="review-list"></div>
       <div id="review-detail" class="review-detail" hidden>
         <div class="section-head"><div><p class="eyebrow">AUSGEWÄHLTE ÄNDERUNG</p><h3 id="review-title"></h3></div><a id="review-pr-link" target="_blank" rel="noopener noreferrer">In GitHub öffnen ↗</a></div>
@@ -155,7 +155,7 @@
             <label for="vocab-parent">Oberklasse</label><select id="vocab-parent"></select>
             <label for="vocab-domain">Gilt für</label><select id="vocab-domain"></select>
             <label for="vocab-range">Zielklasse oder Datentyp</label><select id="vocab-range"></select>
-            <p class="context-help">Kennung und Art bestehender Begriffe sind fest. Neue Begriffe erhalten eine dauerhafte Kennung; eine Freigabe erfolgt im Pull Request.</p>
+            <p class="context-help">Kennung und Art bestehender Begriffe sind fest. Neue Begriffe erhalten eine dauerhafte Kennung. Speichere die Änderung und reiche sie zur Fachprüfung ein.</p>
           </div>
           <section class="vocab-impact" aria-labelledby="vocab-impact-title">
             <div class="section-head"><h4 id="vocab-impact-title">Verwendung im Fallkatalog</h4><button id="vocab-impact-refresh" type="button">Aktualisieren</button></div>
@@ -165,7 +165,7 @@
       </div>
       <div class="vocab-submission"><h3>Gemeinsame Begriffe zur Prüfung geben</h3><p>Speichere die Änderung und beschreibe anschließend den fachlichen Grund und den Quellenstand.</p>
         <label for="vocab-reason">Fachlicher Grund</label><textarea id="vocab-reason" rows="3"></textarea>
-        <label for="vocab-source">Quellenstand</label><input id="vocab-source" placeholder="z. B. NaC-Commit und Fachquelle">
+        <label for="vocab-source">Quellenstand</label><input id="vocab-source" placeholder="Fachquelle mit Fassung oder Datum">
         <button id="vocab-submit" type="button">Zur Fachprüfung einreichen</button><a id="vocab-pr-link" hidden target="_blank" rel="noopener noreferrer">Pull Request öffnen ↗</a>
       </div>
     </section>

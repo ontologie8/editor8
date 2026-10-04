@@ -1,17 +1,20 @@
 # Produkt und Zweck
 
-editor8 ist eine gehostete Arbeitsoberfläche für versionierte Fachvorlagen. Eine Ontologie benennt die Gegenstände eines Fachgebiets, ihre Eigenschaften und ihre Beziehungen so, dass Menschen und Software dieselben Kennungen verwenden können.
+Dieses Handbuch richtet sich an Ontologiepfleger und Notare. Mit editor8 liest und pflegst du Fachmodelle: Welche Angaben, Dokumenttypen, Entscheidungen, Prüfschritte und Nachweise gehören zu einer Vorgangsart, und wie hängen sie zusammen?
 
-Der Editor pflegt das Fachmodell eines Vorgangs. Die tatsächlichen Antworten einer Person, eine ausgefüllte Akte oder ein erledigter Prüfschritt werden dadurch nicht gespeichert. Im Notardatenprojekt liegen 20 kanonische Vorgangsarten. Weitere Datenziele benötigen den passenden Datenvertrag; der Editor hat keine feste Fallanzahl.
+Eine Ontologie beschreibt die wiederverwendbaren Begriffe und Beziehungen eines Fachgebiets. Du pflegst die Vorlage, etwa die Bedeutung einer benötigten Angabe. Die Antwort einer bestimmten Person, eine ausgefüllte Akte oder ein erledigter Prüfschritt gehören nicht in diese Vorlage.
 
-Software und Fachmodelle liegen in getrennten Repositories. GitHub ist Pflege- und Versionsquelle für Daten. NaC bleibt Quelle für Prozessabläufe. Der Trainingsbereich verwendet ausschließlich künstliche Beispiele.
+Deine Änderungen betreffen den ausgewählten Fachmodellbestand, beispielsweise „Notar-Fachmodelle“. Speichern, Einreichen und Fachprüfung beziehen sich immer auf diese Modelle. Für die Bedienung brauchst du keine Programmierkenntnisse und keinen Zugriff auf den Quellcode des Editors.
+
+Die Hilfe führt durch Verstehen, Bearbeiten und Prüfen. Training und Übungen verwenden vollständig künstliche Beispiele. Sie erläutern die Bedienung und ersetzen keine notarielle Beurteilung eines tatsächlichen Fachmodells.
 
 ## Referenz
 
 | Begriff oder Meldung | Erläuterung |
 | --- | --- |
-| Software | Oberfläche, Anmeldung, Adapter, Tests, Betrieb und Editor-Release. |
-| Datenrepository | Fachmodelle, Katalog und Datencommit. |
-| Prozessmodell | Beschreibt den Ablauf; der Baum im Editor ordnet Bausteine nach Art. |
+| Fachmodell | Vorlage mit Begriffen, Eigenschaften und Beziehungen für eine Vorgangsart. |
+| Modellbestand | Die in der Auswahl bereitgestellten Fachmodelle und gemeinsamen Begriffe, an denen du arbeitest. |
+| Fachliche Pflege | Bezeichnungen, Erläuterungen, Bausteine und Beziehungen nachvollziehbar verbessern. |
+| Notarielle Fachprüfung | Änderungen einer anderen Person auf Bedeutung, Quellen und Beziehungen prüfen und begründet beurteilen. |
 
 [Zur Übersicht](README.md) · [Training](../../training/README.md)

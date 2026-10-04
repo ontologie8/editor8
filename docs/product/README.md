@@ -1,4 +1,6 @@
-# editor8 Produkthandbuch
+# Handbuch für Ontologiepflege und notarielle Prüfung
+
+Dieses Handbuch richtet sich an Ontologiepfleger und Notare. Es erklärt die fachliche Arbeit mit den ausgewählten Modellen: Verstehen, Bearbeiten und Prüfen.
 
 - [Produkt und Zweck](ueberblick.md)
 - [Einstieg und Orientierung](einstieg.md)
@@ -6,9 +8,7 @@
 - [Modellpflege Schritt für Schritt](pflege.md)
 - [Feldreferenz](felder.md)
 - [Entwurf, Prüfung und Übernahme](pruefen.md)
-- [Zugriff und Betrieb](rollen.md)
-- [Fehlerbehebung und Grenzen](fehler.md)
+- [Fachliche Rollen und Zugang](rollen.md)
+- [Wenn etwas nicht funktioniert](fehler.md)
 
-Quelle: `handbook.json`. Änderungen an dieser Quelle mit `python scripts/build_learning.py` erzeugen. CI prüft die Synchronität.
-
-Die Browserfassung steht unter Hilfe → Handbuch beziehungsweise `/learning/?mode=handbook`. Der [Grundkurs](../../training/README.md) verwendet dieselben Begriffe und künstliche Beispiele. Inhalt: CC-BY-4.0.
+Im Editor unter **Hilfe → Handbuch** öffnen. Der [Grundkurs](../../training/README.md) erklärt dieselben Aufgaben mit künstlichen Beispielen. Inhalt: CC-BY-4.0.

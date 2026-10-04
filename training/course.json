@@ -6,12 +6,12 @@
     {
       "id": "grundlagen",
       "title": "1. Was pflegen wir?",
-      "goal": "Eine Vorlage von einer konkreten Akte unterscheiden.",
+      "goal": "Als Ontologiepfleger oder Notar eine Fachvorlage von einer konkreten Akte unterscheiden.",
       "slides": [
         {
           "id": "grundlagen-1",
           "title": "Eine Ontologie macht Begriffe und Beziehungen eindeutig",
-          "text": "Das Fachmodell beschreibt, welche Arten von Angaben, Dokumenten, Entscheidungen und Prüfungen zu einem Vorgang gehören. Die Fantasiewerkstatt ist unser vollständig künstliches Lernbeispiel.",
+          "text": "Dieser Kurs richtet sich an Ontologiepfleger und Notare. Du pflegst die Begriffe und Beziehungen eines Fachmodells: Welche Angaben, Dokumenttypen, Entscheidungen und Prüfungen gehören zu einem Vorgang? Die Fantasiewerkstatt ist unser vollständig künstliches Lernbeispiel.",
           "steps": [
             "Lies die fünf Bausteine rechts.",
             "Frage dich: Was soll eine Person mit diesem Modell verstehen können?"
@@ -86,7 +86,7 @@
         {
           "id": "baum-2",
           "title": "Dokumenttyp und Nachweistyp haben unterschiedliche Schwerpunkte",
-          "text": "Ein Dokumenttyp beschreibt eine benötigte Dokumentart, etwa die Ausrüstungsliste. Ein Nachweistyp beschreibt einen Beleg für eine Angabe oder Prüfung, etwa den Prüfvermerk. Welche Rolle ein Artefakt hat, entscheidet das Fachmodell.",
+          "text": "Ein Dokumenttyp beschreibt eine benötigte Dokumentart, etwa die Ausrüstungsliste. Ein Nachweistyp beschreibt einen Beleg für eine Angabe oder Prüfung, etwa den Prüfvermerk. Welche Rolle ein Dokument hat, entscheidet sein Zweck im Fachmodell.",
           "steps": [
             "Prüfe, ob du eine Dokumentart oder die Art eines Belegs beschreibst.",
             "Bei Unklarheit eine offene Fachfrage dokumentieren."
@@ -238,29 +238,29 @@
     {
       "id": "speichern",
       "title": "5. Speichern und prüfen",
-      "goal": "Browser-Eingabe, Entwurf und Freigabe unterscheiden.",
+      "goal": "Ungespeicherte Eingabe, gespeicherten Entwurf und fachliche Freigabe unterscheiden.",
       "slides": [
         {
           "id": "speichern-1",
           "title": "Speichern zeigt zuerst den Vergleich",
-          "text": "Ungespeicherte Eingaben sind zunächst Browserzustand. Datei → Speichern oder Strg+S öffnet die fachliche Vorschau. Erst die Bestätigung schreibt in deinen Datenentwurf. Während der Speicherung kurz warten; bei einem Fehler bleiben die Eingaben offen und müssen erneut gespeichert werden.",
+          "text": "Deine Eingaben sind zunächst ungespeichert. Datei → Speichern oder Strg+S öffnet den Vergleich. Erst Speichern bestätigen sichert die gezeigte Fassung in deinem Arbeitsentwurf. Während der Speicherung kurz warten; bei einem Fehler bleiben die Eingaben offen und können erneut gespeichert werden.",
           "steps": [
             "Vergleiche alte und neue Bezeichnung.",
             "Prüfe, ob weitere unbeabsichtigte Änderungen auftauchen."
           ],
           "focus": "local.schutz",
-          "question": "Wann wird der Datenentwurf aktualisiert?",
+          "question": "Wann wird dein Arbeitsentwurf gespeichert?",
           "choices": [
             "Beim Tippen jedes Buchstabens",
             "Nach Bestätigung der Speichervorschau"
           ],
           "answer": 1,
-          "explanation": "Die Vorschau ist eine Kontrolle vor dem Schreiben in den Entwurfszweig."
+          "explanation": "Die Vorschau zeigt die fachlichen Unterschiede. Erst deine Bestätigung sichert sie im Arbeitsentwurf."
         },
         {
           "id": "speichern-2",
           "title": "Ein gespeicherter Entwurf ist noch keine freigegebene Vorlage",
-          "text": "Unter Prüfen → Meine Änderung begründest du die Änderung und nennst den Quellenstand. Einreichen erzeugt einen Pull Request im Datenrepository. Eine andere Person prüft den aktuellen Commit.",
+          "text": "Unter Prüfen → Meine Änderung begründest du deine Änderung und nennst die verwendete Fachquelle samt Fassung oder Datum. Zur Fachprüfung einreichen gibt den gespeicherten Entwurf an eine andere berechtigte Person zur Prüfung. Die gemeinsam verwendete Vorlage bleibt bis zur Übernahme erhalten.",
           "steps": [
             "Grund: Bezeichnung im künstlichen Workshop präzisiert.",
             "Quelle: künstliche Trainingsbeschreibung, keine Rechtsquelle."
@@ -277,15 +277,15 @@
         {
           "id": "speichern-3",
           "title": "Eine neue Änderung braucht eine Prüfung des neuen Stands",
-          "text": "Freigaben beziehen sich auf einen geprüften Commit. Eine spätere Änderung kann eine erneute Prüfung nötig machen. Der vereinbarte manuelle Merge-Weg bleibt Aufgabe einer berechtigten Person.",
+          "text": "Eine notarielle Fachfreigabe gehört zur tatsächlich geprüften Fassung einer Änderung. Weitere Änderungen müssen erneut beurteilt werden. Die verantwortliche Person für den Modellbestand übernimmt die Änderung nach der nötigen Freigabe und erfolgreichen Prüfungen.",
           "steps": [
             "Prüfe Begriffe, Quellen und Beziehungen.",
-            "Prüfe vor Übernahme den tatsächlichen Commit und die CI."
+            "Prüfe vor der Übernahme, ob Freigabe und Prüfergebnisse zur aktuellen Fassung gehören."
           ],
           "focus": "local.pruefung",
           "question": "Welcher Stand ist für eine Freigabe maßgeblich?",
           "choices": [
-            "Der aktuelle geprüfte Commit",
+            "Die aktuelle geprüfte Fassung",
             "Irgendeine frühere Ansicht"
           ],
           "answer": 0,
@@ -301,24 +301,24 @@
         {
           "id": "routine-1",
           "title": "Ein kleiner Pflegeauftrag ist leichter zu prüfen",
-          "text": "Beschreibe Anlass, betroffene Vorgangsart und erwartete Änderung vor dem Bearbeiten. Halte Fachquellen und Software-Release auseinander. Ein Entwurf sollte einen klaren fachlichen Zweck haben.",
+          "text": "Beschreibe Anlass, betroffene Vorgangsart und erwartete Änderung vor dem Bearbeiten. Arbeite am ausgewählten Fachmodellbestand. Ein Entwurf sollte einen klaren fachlichen Zweck haben, etwa eine unklare Bezeichnung zu präzisieren.",
           "steps": [
             "Notiere die fragliche Bezeichnung oder Verbindung.",
             "Nenne den erwarteten Unterschied in einem Satz."
           ],
           "focus": "local.schutz",
-          "question": "Welche Kennung beschreibt die Software?",
+          "question": "Was macht einen Pflegeauftrag nachvollziehbar?",
           "choices": [
-            "Editor-Release",
-            "Die Bezeichnung eines Bausteins"
+            "Anlass und erwartete fachliche Änderung",
+            "Nur ein anderer Name ohne Begründung"
           ],
           "answer": 0,
-          "explanation": "Editor-Release bezeichnet die Software. Der Datencommit bezeichnet den Fachmodellstand."
+          "explanation": "Ein klarer Pflegeauftrag erklärt, was fachlich unklar ist und welchen Unterschied die Änderung bewirken soll."
         },
         {
           "id": "routine-2",
           "title": "Beispiele erklären Funktionen ohne echte Daten zu ändern",
-          "text": "Die Übung in diesem Training verändert nur das künstliche Beispiel im Speicher des Browsers. Sie meldet sich nicht bei GitHub an und erzeugt weder Branches noch Pull Requests. Neu laden setzt sie zurück.",
+          "text": "Die Übung verändert ausschließlich das künstliche Beispiel im Training. Deine echten Fachmodelle und Arbeitsentwürfe bleiben unberührt. Die Übung erteilt auch keine notarielle Freigabe. Neu laden setzt sie zurück.",
           "steps": [
             "Wähle unten „Bezeichnung üben“.",
             "Ändere die Beispielbezeichnung, prüfe den Vergleich und bestätige Speichern."
@@ -326,7 +326,7 @@
           "focus": "local.schutz",
           "question": "Wo wird diese Übung gespeichert?",
           "choices": [
-            "Im echten Datenrepository",
+            "Im echten Fachmodellbestand",
             "Nur im Browser bis zum Neuladen"
           ],
           "answer": 1,
@@ -335,7 +335,7 @@
         {
           "id": "routine-3",
           "title": "Die Pflege endet mit einem nachgewiesenen Ergebnis",
-          "text": "Für Modellpflege zählt der geprüfte Datenstand. Für Software zählt die gesunde Azure-Revision mit passender Release-Kennung. Bei einer Fehlermeldung bewahre den Entwurf und dokumentiere Schritt und Meldung.",
+          "text": "Eine Modelländerung ist nachvollziehbar, wenn Grund, Fachquelle, tatsächliche Änderung und geprüfte Fassung zusammengehören. Kontrolliere nach der Übernahme das Ergebnis im gemeinsamen Modellbestand. Bei einer Fehlermeldung bewahre den Entwurf und notiere Arbeitsschritt und Meldung.",
           "steps": [
             "Nutze das Handbuch für Rollen und Fehlerbehebung.",
             "Prüfe eine kleine konkrete Änderung statt mehrere Themen gleichzeitig."

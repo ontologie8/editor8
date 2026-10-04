@@ -465,7 +465,7 @@ function renderVocabularyDetail(){
   renderVocabularyImpact();
 }
 async function editVocabulary(newTerm=false){
-  if(!state.ontologyMaintainer)throw new Error("Vokabularpflege ist nur für eingetragene Ontologie-Maintainer möglich.");
+  if(!state.ontologyMaintainer)throw new Error("Die Pflege gemeinsamer Begriffe benötigt eine zusätzliche fachliche Berechtigung für diesen Modellbestand.");
   const selected=state.vocabSelected;
   if(state.branch==="main")await beginBranch("vocabulary");
   if(state.purpose!=="vocabulary")throw new Error("Bitte die laufende Falländerung zuerst zur Prüfung einreichen.");
@@ -1194,7 +1194,7 @@ function showHelp(topic='start'){
   office.menu='help';office.helpTopic=topic;renderOffice();const root=$("help-content");root.replaceChildren();
   root.parentElement.classList.toggle('learning-workspace',['training','handbook'].includes(topic));
   if(['training','handbook'].includes(topic)){
-    const frame=document.createElement('iframe');frame.id='learning-frame';frame.title=topic==='training'?'Training: Ontologien verstehen und pflegen':'editor8 Produkthandbuch';frame.src='/learning/?embedded=1&mode='+topic;frame.addEventListener('load',()=>{if($("learning-frame")!==frame)return;renderOffice();frame.contentDocument.addEventListener('learning-change',()=>renderOffice());});root.append(frame);return;
+    const frame=document.createElement('iframe');frame.id='learning-frame';frame.title=topic==='training'?'Training: Ontologien verstehen und pflegen':'Handbuch für Ontologiepflege und notarielle Prüfung';frame.src='/learning/?embedded=1&mode='+topic;frame.addEventListener('load',()=>{if($("learning-frame")!==frame)return;renderOffice();frame.contentDocument.addEventListener('learning-change',()=>renderOffice());});root.append(frame);return;
   }
   renderOffice();
   root.append(element('h2',topic==='example'?'Beispiel':topic==='terms'?'Begriffe':'Kurzanleitung'));
@@ -1204,15 +1204,17 @@ function showHelp(topic='start'){
     ['Bearbeiten','Erstelle einen Arbeitsentwurf, ändere die Bezeichnung und wähle Speichern. Prüfe die angezeigten Unterschiede, bevor du das Speichern bestätigst.'],
     ['Prüfen','Beschreibe Grund und Quellenstand. Reiche die gespeicherte Änderung ein. Eine andere berechtigte Person prüft sie; eine notarielle Freigabe braucht das entsprechende Konto.']
   ]:topic==='terms'?[
-    ['Vorgangsart','Eine Fachvorlage aus dem gewählten Datenrepository. Sie enthält Bausteine und Verbindungen; keine konkrete Akte wird dadurch angelegt.'],
+    ['Modellbestand','Die ausgewählten Fachmodelle, etwa „Notar-Fachmodelle“. Deine Entwürfe und Prüfentscheidungen gehören zu diesem Bestand.'],
+    ['Vorgangsart','Eine wiederverwendbare Fachvorlage mit Bausteinen und Beziehungen. Sie beschreibt, was benötigt wird; eine konkrete Akte wird dadurch nicht angelegt.'],
     ['Baustein','Eine Frage, ein Dokumenttyp, eine Entscheidung, ein Prüfschritt oder ein Nachweistyp im Fachmodell.'],
-    ['Arbeitsentwurf','Dein eigener GitHub-Zweig im Datenrepository. Speichern aktualisiert diesen Entwurf.'],
+    ['Arbeitsentwurf','Deine eigene Fassung einer Modelländerung. Speichern sichert sie getrennt von der gemeinsam verwendeten Vorlage. Danach kannst du sie zur Fachprüfung einreichen.'],
     ['Fachprüfung','Prüfung einer eingereichten Änderung einschließlich fachlicher Wirkung und Quellenstand. Speichern allein erteilt keine Freigabe.']
   ]:[
-    ['Öffnen und Suchen','Wähle das Datenrepository und den Vorgang im Baum. Das Suchfeld oben filtert die aktuelle Auswahl. Mit Eingabetaste oder Strg+K durchsuchst du Bausteine im gesamten Katalog.'],
+    ['Deine Aufgabe','Als Ontologiepfleger oder Notar pflegst und prüfst du Fachmodelle: Begriffe, Angaben, Dokumenttypen und ihre Beziehungen. Training und Handbuch erklären diese fachliche Arbeit mit künstlichen Beispielen.'],
+    ['Öffnen und Suchen','Wähle links den Fachmodellbestand und die Vorgangsart im Baum. Das Suchfeld oben filtert die aktuelle Auswahl. Mit Eingabetaste oder Strg+K durchsuchst du Bausteine im gesamten ausgewählten Bestand.'],
     ['Verstehen','Wähle einen Baustein im Baum oder Graphen. Rechts erscheinen die Details. Das Fragezeichen öffnet Hilfe zur aktuellen Auswahl. Informationen zeigt die Quellen und den Änderungsverlauf.'],
     ['Bearbeiten und Speichern','Wähle links Bearbeiten. Erstelle einen Entwurf oder wähle beim Baustein Bearbeiten. Speichern zeigt zuerst einen Vergleich. Erst deine Bestätigung schreibt die Änderung in den Datenentwurf.'],
-    ['Prüfen','Unter Meine Änderung reichst du den gespeicherten Entwurf mit Grund und Quellenstand ein. Unter Fachprüfung findest du eingereichte Änderungen. Die Freigaberechte werden vom Server geprüft.'],
+    ['Prüfen','Unter Meine Änderung reichst du den gespeicherten Entwurf mit Grund und Quellenstand ein. Unter Fachprüfung beurteilst du Änderungen anderer Personen. Fachlich freigeben benötigt die entsprechende notarielle Berechtigung.'],
     ['Ansicht und Drucken','Unter Ansicht wechselst du zwischen Zusammenhängen, Bausteinen, Verbindungen und gemeinsamen Begriffen. Datei → Drucken erstellt eine Lesefassung der aktuellen Auswahl.'],
     ['Menüband','Strg+F1 oder Doppelklick reduziert das Menüband. Ein Klick auf eine Registerkarte öffnet die Befehle vorübergehend. Der Schalter rechts hält sie dauerhaft sichtbar. Die Baum-Navigation wird unabhängig über das Menü-Symbol links gesteuert.']
   ];blocks.forEach(([title,text])=>root.append(element('h3',title),element('p',text)));
@@ -1223,7 +1225,7 @@ function showHelp(topic='start'){
 function selectionHelp(){
   const root=$("selection-help-content");root.replaceChildren();const node=state.current?.nodes.find(item=>item.id===state.selected);
   if(state.view==='vokabular'){
-    const term=selectedTerm();$("selection-help-title").textContent=term?'Hilfe zu '+term.label:'Hilfe zu gemeinsamen Begriffen';root.append(element('p','Gemeinsame Begriffe gelten für mehrere Vorgangsarten. Ihre Änderung braucht einen eigenen Vokabularentwurf und die entsprechende Pflegeberechtigung.'));
+    const term=selectedTerm();$("selection-help-title").textContent=term?'Hilfe zu '+term.label:'Hilfe zu gemeinsamen Begriffen';root.append(element('p','Gemeinsame Begriffe gelten für mehrere Vorgangsarten des ausgewählten Modellbestands. Prüfe ihre Bedeutung und Verwendung, bevor du sie in einem eigenen Entwurf änderst. Die Pflege benötigt eine zusätzliche fachliche Berechtigung; anschließend folgt die Fachprüfung.'));
   }else{$("selection-help-title").textContent=node?'Hilfe zu '+displayNodeLabel(node):'Hilfe zur Auswahl';root.append(element('p',node?(groups.find(item=>item[0]===node.category)?.[1]||'Baustein')+' im Vorgang „'+state.current.title+'“.':'Wähle zuerst einen Baustein im Baum oder im Graphen.'));if(node){root.append(element('p',node.detail||node.question||'Zu diesem Baustein liegt keine weitere Erläuterung im Datenmodell vor.'));root.append(element('p','Links Bearbeiten wählen, um die Inhalte in einem Arbeitsentwurf zu ändern. Verbindungen zeigt die Beziehungen zu anderen Bausteinen.'));}}
   $("selection-help-dialog").showModal();
 }

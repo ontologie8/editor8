@@ -1,6 +1,8 @@
 # Training: Ontologien verstehen und pflegen
 
-Im Editor **Hilfe → Training** öffnen. Ohne Anmeldung ist derselbe Kurs unter `/learning/` erreichbar. Sechs Lektionen enthalten insgesamt 18 Folien, Lernfragen mit Erläuterungen und ein bedienbares künstliches Modell. **Weiter**, **Zurück** und die Pfeiltasten wechseln die Folie. **Abspielen** wechselt alle 15 Sekunden; Anhalten erlaubt beliebig viel Lesezeit. **Drucken** enthält sämtliche Folien einschließlich Erklärungen.
+Dieser Grundkurs richtet sich an **Ontologiepfleger und Notare**. Er erklärt, wie du Fachmodelle verstehst, gezielt bearbeitest und Änderungen fachlich prüfst. Programmierkenntnisse sind nicht erforderlich.
+
+Im Editor **Hilfe → Training** öffnen. Sechs Lektionen enthalten insgesamt 18 Folien, Lernfragen mit Erläuterungen und ein bedienbares künstliches Modell. **Weiter**, **Zurück** und die Pfeiltasten wechseln die Folie. **Abspielen** wechselt alle 15 Sekunden; Anhalten erlaubt beliebig viel Lesezeit. **Drucken** enthält sämtliche Folien einschließlich Erklärungen.
 
 ## Lernfolge
 
@@ -13,17 +15,13 @@ Im Editor **Hilfe → Training** öffnen. Ohne Anmeldung ist derselbe Kurs unter
 
 ## Übung
 
-**Bezeichnung üben** öffnet ein Feld für die Frage „Benötigte Schutzausrüstung“. Eine neue Bezeichnung eingeben, **Speichern** wählen, den Vergleich lesen und **Speichern bestätigen** wählen. Erst die Bestätigung ändert das künstliche Modell im Browser. Neu laden setzt es zurück. Diese Übung verwendet weder GitHub noch echte Fachmodelle und simuliert keine notarielle Freigabe.
+**Bezeichnung üben** öffnet ein Feld für die Frage „Benötigte Schutzausrüstung“. Eine neue Bezeichnung eingeben, **Speichern** wählen, den Vergleich lesen und **Speichern bestätigen** wählen. Erst die Bestätigung ändert das künstliche Modell im Training. Neu laden setzt es zurück. Deine echten Fachmodelle und Arbeitsentwürfe bleiben unberührt. Die Übung erteilt keine notarielle Freigabe.
 
-Die vorliegende Fassung besteht aus Browserfolien, nicht aus einer Videodatei. Für eine spätere Aufnahme lassen sich die Folien mit der Übung vorführen. Empfohlenes Sprechmuster: Problem zeigen, eine Handlung vorführen, Ergebnis erklären, Lernfrage beantworten; Aufnahme pro Lektion statt eines langen Films.
+Die Folien lassen sich selbstständig oder als geführte Vorführung verwenden. **Anhalten** gibt dir Zeit zum Lesen, Ausprobieren und Beantworten der Lernfrage. Die vorliegende Fassung enthält Browserfolien und eine Übung; eine Videodatei ist noch nicht enthalten.
 
-## Quellen und Pflege
+## Nachlesen
 
-Die [Recherche](../docs/research/2026-10-03-ontology-training.md) erklärt, welche Lehrmuster von Palantir und Protégé übernommen und auf unsere tatsächlichen Funktionen angepasst wurden. Inhalte sind eigenständig formuliert; keine fremden Produktbilder oder Videos werden kopiert.
-
-- Kursquelle: [course.json](course.json); lesbare Folienfassung: [course.md](course.md).
-- Künstliches Modell: [workshop.json](examples/workshop.json).
-- Klassische Produktdokumentation: [Produkthandbuch](../docs/product/README.md).
-- Nach einer Quellenänderung `python scripts/build_learning.py` ausführen. Mit `--check` prüft CI, dass Browser, Folien und Handbuch denselben Stand enthalten. Die Browserprüfung testet Navigation, Lernfragen und die Speicherübung.
+- [Lesbare Folienfassung](course.md) mit Lernfragen und Erklärungen.
+- [Handbuch für Ontologiepflege und notarielle Prüfung](../docs/product/README.md) mit Bedienfolge, Feldern, Rollen und Hilfe bei Fehlern.
 
 Inhalt: CC-BY-4.0; Browsercode: AGPL-3.0-or-later.

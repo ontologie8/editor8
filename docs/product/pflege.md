@@ -1,26 +1,26 @@
 # Modellpflege Schritt für Schritt
 
-Beginne mit einem kleinen Auftrag: Welche Bezeichnung, Erläuterung oder Beziehung ist unklar? Was soll sich fachlich ändern? Suche zuerst vorhandene Bausteine, um Doppelungen zu vermeiden.
+Beginne mit einem kleinen fachlichen Auftrag: Welche Bezeichnung, Erläuterung oder Beziehung ist unklar? Was soll sich ändern, und welche Quelle begründet die Änderung? Suche zuerst nach vorhandenen Bausteinen, damit kein doppelter Begriff entsteht.
 
-Eine Umbenennung präzisiert einen vorhandenen Gegenstand. Ein neuer Baustein ist begründet, wenn ein eigenständiger Gegenstand fehlt. Kategorie, Kennung, Bedeutung und Beziehungen gehören dann zur Änderung. Vor Löschen die betroffenen Beziehungen und Quellen prüfen.
+Eine Umbenennung präzisiert einen vorhandenen Gegenstand. Ein neuer Baustein ist sinnvoll, wenn ein eigenständiger Gegenstand fehlt. Er braucht eine passende Art, eine verständliche Bezeichnung, eine Erläuterung und die nötigen Beziehungen. Vor dem Löschen prüfst du die verbundenen Bausteine und Quellen.
 
-Die Übung „Fantasiewerkstatt“ präzisiert „Benötigte Schutzausrüstung“ zu „Benötigte Schutzausrüstung für den Workshop“. Bedeutung und Kennung bleiben erhalten. Das Training zeigt die Änderung ausschließlich im Browser und schreibt keine GitHub-Daten.
+Die künstliche Übung „Fantasiewerkstatt“ präzisiert „Benötigte Schutzausrüstung“ zu „Benötigte Schutzausrüstung für den Workshop“. Der Gegenstand, seine Kennung und seine Beziehungen bleiben erhalten. In der Übung änderst du ausschließlich das Beispiel; echte Fachmodelle bleiben unberührt.
 
 ## Vorgehen
 
-1. Vorgangsart und betroffenen Baustein unter Verstehen prüfen.
+1. Unter Verstehen die Vorgangsart, den betroffenen Baustein, seine Beziehungen und Quellen prüfen.
 2. Links Bearbeiten wählen und Entwurf erstellen oder Bearbeiten am Baustein öffnen.
-3. Bezeichnung und fachliche Erläuterung gezielt pflegen; ungelöste Bedeutung als Offene Fachfrage dokumentieren.
-4. Für eine Verbindung Ansicht → Verbindungen öffnen, Quelle, Typ und Ziel wählen und den Satz prüfen.
-5. Datei → Speichern wählen, alle Unterschiede prüfen und erst dann die Vorschau bestätigen.
-6. Unter Prüfen → Meine Änderung Grund und Quellenstand erfassen und die gespeicherte Änderung einreichen.
+3. Bezeichnung und Fachliche Erläuterung gezielt ändern; ungelöste Bedeutung als Offene Fachfrage festhalten.
+4. Für eine Verbindung Ansicht → Verbindungen öffnen, Quelle, Beziehungstyp und Ziel wählen und den entstehenden Satz lesen.
+5. Datei → Speichern wählen, alle angezeigten Unterschiede prüfen und Speichern bestätigen.
+6. Unter Prüfen → Meine Änderung Grund und Quellenstand angeben und Zur Fachprüfung einreichen wählen.
 
 ## Referenz
 
 | Begriff oder Meldung | Erläuterung |
 | --- | --- |
-| Keine neue Vorgangsart im Editor | Die Anlage beziehungsweise Umfangsänderung eines Datenkatalogs erfolgt im Datenprojekt. |
-| Gemeinsame Begriffe | Änderungen am Vokabular haben eigene Entwürfe und benötigen die Maintainer-Rolle. |
-| Kennungen | Stabile Identität des Gegenstands; eine Änderung der Bezeichnung ersetzt keine Kennung. |
+| Neue Vorgangsart benötigt | Im Editor kannst du bestehende Vorgangsarten pflegen. Für die Aufnahme einer weiteren Vorgangsart wende dich an die verantwortliche Person für den Modellbestand. |
+| Gemeinsame Begriffe | Gelten für mehrere Vorgangsarten. Ihre Pflege benötigt einen eigenen Entwurf und eine zusätzliche fachliche Berechtigung. |
+| Kennung | Bleibende Identität eines Gegenstands. Eine präzisere Bezeichnung erzeugt keinen neuen Gegenstand. |
 
 [Zur Übersicht](README.md) · [Training](../../training/README.md)

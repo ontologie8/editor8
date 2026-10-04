@@ -1,21 +1,33 @@
 # Entwurf, Prüfung und Übernahme
 
-Tippen verändert zunächst den Browserzustand. Speichern öffnet die fachliche Vorschau. Bestätigung schreibt in deinen Entwurfszweig im Datenrepository. Einreichen erzeugt einen Pull Request. Diese Schritte erteilen keine notarielle Freigabe.
+Beim Bearbeiten sind deine Eingaben zunächst ungespeichert. Speichern öffnet den Vergleich; Speichern bestätigen sichert die gezeigten Änderungen in deinem Arbeitsentwurf. Einreichen gibt den gespeicherten Entwurf zur Fachprüfung. Die gemeinsam verwendete Vorlage wird dadurch noch nicht ersetzt.
 
-Eine andere berechtigte Person prüft die eingereichte Änderung. Fachliche Freigaben sind für eingetragene Notarkonten vorgesehen und beziehen sich auf den geprüften Commit. Änderungen nach der Prüfung benötigen eine Beurteilung des neuen Stands.
+Unter Fachprüfung prüft eine andere berechtigte Person den Änderungsgrund, die Quellen und die Auswirkungen auf Begriffe und Beziehungen. Eine notarielle Freigabe benötigt die entsprechende fachliche Berechtigung. Du kannst deine eigene Änderung nicht selbst freigeben.
 
-Der vereinbarte Pilot verwendet einen manuellen Merge-Weg: verantwortliche Person prüft fachliche Freigabe auf dem aktuellen Commit und erfolgreiche CI vor Übernahme. Eine technisch erzwungene GitHub-Mergesperre ist eine separate optionale Betriebsentscheidung.
+Eine Freigabe gehört zur tatsächlich geprüften Fassung. Wird die Änderung danach weiter bearbeitet, muss die neue Fassung erneut beurteilt werden. Die verantwortliche Person für den Modellbestand übernimmt die Änderung erst nach der nötigen Fachfreigabe und erfolgreichen Prüfungen. Falls nötig, öffnet sie dafür den Änderungsvorschlag über In GitHub öffnen.
 
-Eigene gespeicherte Entwürfe lassen sich wieder öffnen oder ablegen. Beim Abmelden mit offenen Eingaben fragt der Editor vor dem Verwerfen. Ungespeicherte Eingaben sind nach Browserverlust nicht dauerhaft gesichert. Eine frühere Fassung erzeugt einen neuen Prüfentwurf nach Vergleich und ersetzt main nicht direkt.
+Gespeicherte Arbeitsentwürfe kannst du später wieder öffnen. Entwurf ablegen beendet die aktuelle Bearbeitung, ohne bereits gespeicherte Änderungen zu löschen. Beim Abmelden fragt der Editor vor dem Verwerfen offener Eingaben. Ungespeicherte Eingaben sind beim Schließen des Browsers nicht dauerhaft gesichert.
 
-Gespeichert wird genau die bestätigte Vorschau. Ändern sich Eingaben während deren Vorbereitung, muss Speichern erneut gewählt werden. Während des Schreibens bleiben Schließen und Weiter bearbeiten gesperrt. Bei einem Fehler zeigt die Vorschau den Hinweis und erlaubt einen erneuten Versuch; die Eingaben bleiben ungespeichert erhalten. Eine langsame Antwort beim Öffnen kann keine spätere Auswahl oder neu eingegebene Änderung ersetzen.
+Gespeichert wird genau die bestätigte Vorschau. Änderst du die Eingaben während ihrer Vorbereitung, wähle Speichern erneut. Während des Schreibens wartest du auf die Bestätigung. Bei einem Fehler bleiben die Eingaben erhalten und die Vorschau erlaubt einen erneuten Versuch.
+
+Unter Informationen kannst du frühere Fassungen ansehen. Die Wiederaufnahme einer früheren Fassung erzeugt nach Vergleich einen neuen Arbeitsentwurf. Auch dieser braucht Begründung und Fachprüfung.
 
 ## Vorgehen
 
-1. Änderungsgrund und fachlichen Quellenstand lesen.
-2. Begriffe, Quellen und Beziehungen mit dem aktuellen Datencommit vergleichen.
-3. Als andere berechtigte Person eine begründete Rückfrage oder Freigabe dokumentieren.
-4. Bei neuem Commit den neuen Stand erneut prüfen.
-5. Vor manuellem Merge Freigabe, Dateiumfang und CI bestätigen.
+1. Unter Prüfen → Fachprüfung eine eingereichte Änderung öffnen und ihren Anlass sowie Quellenstand lesen.
+2. Begriffe und Fachfragen, Rechtsquellen und Quellenstand sowie Beziehungen und fachliche Wirkung erst nach der jeweiligen inhaltlichen Prüfung markieren.
+3. Eine nachvollziehbare Begründung schreiben und Änderung anfordern oder mit entsprechender Berechtigung Fachlich freigeben wählen.
+4. Bei weiteren Änderungen die neue Fassung erneut prüfen.
+5. Nach der Übernahme im gemeinsamen Modellbestand kontrollieren, ob die beabsichtigte fachliche Änderung sichtbar ist.
+
+## Referenz
+
+| Begriff oder Meldung | Erläuterung |
+| --- | --- |
+| Ungespeicherte Eingaben | Noch nicht im Arbeitsentwurf gesichert. |
+| Gespeicherter Arbeitsentwurf | Deine gesicherte Änderung; weiterhin getrennt von der gemeinsam verwendeten Vorlage. |
+| Eingereichte Änderung | Zur Fachprüfung bereitgestellt; noch keine Freigabe. |
+| Fachlich freigegeben | Eine dazu berechtigte andere Person hat die bezeichnete Fassung geprüft und freigegeben. |
+| Übernommen | Die Änderung ist im gemeinsam verwendeten Modellbestand enthalten. |
 
 [Zur Übersicht](README.md) · [Training](../../training/README.md)

@@ -344,9 +344,9 @@ class CloudHandler(BaseHTTPRequestHandler):
                 self._login()
             elif path.path == "/callback":
                 self._callback(parse_qs(path.query))
-            elif path.path in ("/", "/index.html", "/app.js", "/style.css"):
+            elif path.path in ("/", "/index.html", "/app.js", "/interaction.js", "/style.css"):
                 filename = "index.html" if path.path == "/" else path.path.lstrip("/")
-                kind = {"index.html": "text/html", "app.js": "text/javascript", "style.css": "text/css"}
+                kind = {"index.html": "text/html", "app.js": "text/javascript", "interaction.js": "text/javascript", "style.css": "text/css"}
                 self._send(200, (ASSETS / filename).read_bytes(), kind[filename])
             elif path.path in BRAND_ASSETS:
                 self._send(200, (ASSETS / BRAND_ASSETS[path.path]).read_bytes(), "image/png")

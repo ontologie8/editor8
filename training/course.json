@@ -72,7 +72,8 @@
           "text": "Fragen, Dokumenttypen, Entscheidungen, Prüfschritte und Nachweistypen sind Kategorien. Ihre Position im Baum legt keine zeitliche Reihenfolge fest. Der Graph zeigt die fachlichen Beziehungen.",
           "steps": [
             "Wähle einen Baustein rechts durch Anklicken.",
-            "Lies seine Kategorie und Erläuterung."
+            "Lies seine Kategorie und Erläuterung.",
+            "Im Editor: Halte den Mauszeiger über einen Baustein für einen kurzen Hinweis; Rechtsklick oder Umschalt+F10 zeigt dessen Befehle."
           ],
           "focus": "local.liste",
           "question": "Wo steht die Ausrüstungsliste?",
@@ -188,7 +189,8 @@
           "text": "Unser künstlicher Anlass: Die Frage soll ausdrücklich Schutzausrüstung für den Workshop betreffen. Vorher: „Benötigte Schutzausrüstung“. Nachher: „Benötigte Schutzausrüstung für den Workshop“.",
           "steps": [
             "Öffne Bearbeiten und wähle den vorhandenen Baustein.",
-            "Wähle Entwurf erstellen oder Bearbeiten am Baustein."
+            "Wähle Entwurf erstellen oder Bearbeiten am Baustein.",
+            "Im Editor kannst du den gewünschten Baustein auch mit Rechtsklick → Bearbeiten öffnen. Ein Hinweis erklärt nicht verfügbare Befehle."
           ],
           "focus": "local.schutz",
           "question": "Brauchen wir dafür einen zweiten Baustein?",
@@ -205,7 +207,8 @@
           "text": "Bezeichnung ist der kurze sichtbare Name. Fachliche Erläuterung erklärt seine Bedeutung. Offene Fachfrage hält eine ungelöste Frage fest. Der Status einer übernommenen NaC-Vorlage ist im Formular schreibgeschützt.",
           "steps": [
             "Ändere nur die begründeten Felder.",
-            "Dokumentiere Unsicherheit als offene Frage statt eine Antwort zu erfinden."
+            "Dokumentiere Unsicherheit als offene Frage statt eine Antwort zu erfinden.",
+            "Beim Bearbeiten bleiben Ausschneiden, Kopieren und Einfügen in den Textfeldern verfügbar."
           ],
           "focus": "local.schutz",
           "question": "Wo gehört eine ungelöste Bedeutungsfrage hin?",

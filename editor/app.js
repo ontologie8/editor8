@@ -24,6 +24,7 @@ let state = { token: "", branch: "", purpose: "case", activeCase: "", hosted: fa
 const saveFlow = {pending: "", preview: null};
 let caseLoadSequence = 0;
 let viewSequence = 0;
+let nodeEditPending = false;
 
 function element(tag, text, className) {
   const el = document.createElement(tag);
@@ -92,10 +93,11 @@ function refreshBranch() {
   $("edge-create").hidden=!caseEditable();
   for(const id of ["add-node","add-edge","submit-review"]) $(id).disabled=!caseEditable();
   $("edit-overview").disabled=state.branch!=="main" && !caseEditable();
-  $("edit-node").disabled=state.branch!=="main" && !caseEditable();
+  $("edit-node").disabled=nodeEditPending || !!saveFlow.pending || (state.branch!=="main" && !caseEditable());
   $("vocab-add").hidden=!state.ontologyMaintainer || (state.branch!=="main" && state.purpose!=="vocabulary");
   $("vocab-submit").disabled=state.branch==="main" || state.purpose!=="vocabulary";
   renderOffice();
+  document.dispatchEvent(new Event("editor-state-change"));
 }
 function renderCaseList() {
   const root=$("case-list");root.replaceChildren();
@@ -109,13 +111,15 @@ function renderCaseList() {
     count++;
     const branch=element("details",undefined,"tree-case");branch.open=current&&!office.closedCases.has(item.slug);
     const summary=element("summary");const button=element("button",item.title,"case-item"+(current?" active":""));button.type="button";button.setAttribute("aria-current",current?"page":"false");
+    button.dataset.contextCase=item.slug;
+    button.setAttribute("aria-haspopup","menu");
     button.addEventListener("click",event=>{event.preventDefault();loadCase(item.slug).catch(error=>notice(error.message,"error"));});summary.append(button);branch.append(summary);
     branch.addEventListener("toggle",()=>{if(branch.open)office.closedCases.delete(item.slug);else office.closedCases.add(item.slug);});
     if(current){groups.forEach(([key,title])=>{
       const matches=(query&&!item.title.toLocaleLowerCase("de").includes(query)?matching:nodes).filter(node=>node.category===key).sort((a,b)=>a.label.localeCompare(b.label,"de"));if(!matches.length)return;
       const category=element("details",undefined,"tree-category");const categoryKey=item.slug+":"+key;category.open=!office.closedGroups.has(categoryKey);category.append(element("summary",title+" · "+matches.length));
       category.addEventListener("toggle",()=>{if(category.open)office.closedGroups.delete(categoryKey);else office.closedGroups.add(categoryKey);});
-      matches.forEach(node=>{const leaf=element("button",displayNodeLabel(node),"tree-node"+(state.selected===node.id?" active":""));leaf.type="button";leaf.setAttribute("aria-pressed",String(state.selected===node.id));leaf.addEventListener("click",()=>{if(office.area==='edit')selectNode(node.id);else{setView('fall');focusGraphNode(node.id);}renderCaseList();});category.append(leaf);});branch.append(category);
+      matches.forEach(node=>{const leaf=element("button",displayNodeLabel(node),"tree-node"+(state.selected===node.id?" active":""));leaf.type="button";nodeContext(leaf,node);leaf.setAttribute("aria-pressed",String(state.selected===node.id));leaf.addEventListener("click",()=>{if(office.area==='edit')selectNode(node.id);else{setView('fall');focusGraphNode(node.id);}renderCaseList();});category.append(leaf);});branch.append(category);
     });}
     root.append(branch);
   });
@@ -424,6 +428,8 @@ function renderVocabulary(updateForm=true){
     root.append(element("h4",headings[kind]));
     matches.forEach(item=>{
       const button=element("button",item.label,"vocab-item"+(item.id===state.vocabSelected?" active":""));button.type="button";
+      button.dataset.contextTerm=item.id;
+      button.setAttribute("aria-haspopup","menu");
       button.append(element("small",item.id));button.addEventListener("click",()=>{state.vocabSelected=item.id;state.vocabEditing=false;state.vocabNew=false;renderVocabulary();});root.append(button);
     });
   }
@@ -562,6 +568,26 @@ function renderAll() {
   renderRelationContext();
   fillNodeSelects();
 }
+function nodeContext(control,node) {
+  if(!node)return;
+  control.dataset.contextNode=node.id;
+  control.dataset.contextCase=state.current.slug;
+  control.setAttribute("aria-haspopup","menu");
+}
+async function beginNodeEdit(id=state.selected, graph=office.graphEdit) {
+  if(nodeEditPending || saveFlow.pending)return;
+  const slug=state.current?.slug;
+  if(!state.current?.nodes.some(node=>node.id===id))return;
+  if(state.dirty && state.view==="vokabular")throw new Error("Bitte zuerst die offenen Änderungen an gemeinsamen Begriffen speichern.");
+  nodeEditPending=true;refreshBranch();
+  try {
+    if(state.branch==="main")await beginBranch();
+    if(state.current?.slug!==slug || !caseEditable())throw new Error("Dieser Entwurf gehört zu einem anderen Fall. Lege ihn zuerst ab.");
+    office.graphEdit=graph;
+    selectNode(id);state.nodeEditing=true;renderNodeForm();renderOffice();
+    $("node-form").querySelector("input:not([readonly]):not([disabled])")?.focus({preventScroll:true});
+  } finally {nodeEditPending=false;refreshBranch();}
+}
 function renderRelationContext() {
   const root=$("relation-context");root.replaceChildren();
   const node=state.current.nodes.find(item=>item.id===state.selected);
@@ -585,6 +611,7 @@ function renderRelationContext() {
     row.append(element("span",outgoing ? "Geht von diesem Baustein aus" : "Führt zu diesem Baustein","relation-direction"));
     row.append(element("strong",relations[edge.type] || edge.type));
     const button=element("button",nodeLabel(other),"relation-target");button.type="button";
+    nodeContext(button,state.current.nodes.find(item=>item.id===other));
     button.addEventListener("click",()=>{state.selected=other;renderAll();$("inspector-title").focus({preventScroll:true});});
     row.append(button);links.append(row);
   });
@@ -676,6 +703,7 @@ function renderGraph() {
     const chosen=node.id===state.selected;
     const connectedToSelection=!selected || chosen || state.current.edges.some(edge=>(edge.from===selected.id && edge.to===node.id)||(edge.to===selected.id && edge.from===node.id));
     const group=svg("g",{class:"graph-node"+(chosen?" selected":"")+(linked.has(node.id)?"":" disconnected")+(connectedToSelection?"":" dimmed"),tabindex:"0",role:"button","aria-label":displayNodeLabel(node)+"; "+category[1]+(linked.has(node.id)?"":"; bisher ohne Verbindung")});
+    nodeContext(group,node);
     group.append(svg("rect",{x:position.x,y:position.y,width:nodeWidth,height:56,rx:4,fill:category[2],stroke:category[3]}));
     const caption=svg("text",{x:position.x+10,y:position.y+22});
     const limit=focused?26:20;
@@ -694,7 +722,6 @@ function renderGraph() {
       caption.append(tspan);
     });
     group.append(caption);
-    const title=svg("title");title.textContent=node.label;group.append(title);
     group.addEventListener("click",()=>focusGraphNode(node.id));
     group.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();focusGraphNode(node.id);}});
     canvas.append(group);
@@ -708,7 +735,7 @@ function renderGraphOrphans(orphans) {
   const list=$("graph-orphans-list");list.replaceChildren();
   orphans.forEach(node=>{
     const button=element("button",displayNodeLabel(node),"graph-orphan");button.type="button";
-    button.title=groups.find(group=>group[0]===node.category)?.[1] || "Baustein";
+    nodeContext(button,node);
     button.addEventListener("click",()=>focusGraphNode(node.id));list.append(button);
   });
 }
@@ -726,6 +753,7 @@ function renderGraphList() {
     nodes.forEach(node=>{
       const connections=state.current.edges.filter(edge=>edge.from===node.id || edge.to===node.id).length;
       const button=element("button",undefined,"graph-list-node"+(node.id===state.selected?" selected":""));button.type="button";
+      nodeContext(button,node);
       button.append(element("span",displayNodeLabel(node)),element("small",connections+" "+(connections===1?"Verbindung":"Verbindungen")+" · Details ansehen →"));
       button.addEventListener("click",()=>focusGraphNode(node.id));section.append(button);
     });root.append(section);
@@ -745,6 +773,7 @@ function renderNodes() {
     list.forEach(node => {
       const button = element("button",displayNodeLabel(node),"node-row" + (state.selected === node.id ? " active" : ""));
       button.type = "button";
+      nodeContext(button,node);
       button.addEventListener("click",() => selectNode(node.id));
       box.append(button);
     });
@@ -1077,13 +1106,8 @@ async function init() {
     });
     $("edit-node").addEventListener("click",async()=>{
       try{
-        const selected=state.selected;
-        if(!state.nodeEditing && state.branch==="main") await beginBranch();
-        if(!caseEditable())throw new Error("Dieser Entwurf gehört zu einem anderen Fall. Lege ihn zuerst ab.");
-        state.selected=selected;
-        state.nodeEditing=!state.nodeEditing;
-        setView(office.graphEdit?"fall":"bausteine");
-        renderNodes();renderNodeForm();renderGraph();
+        if(!state.nodeEditing)await beginNodeEdit();
+        else{state.nodeEditing=false;renderNodeForm();}
       }catch(error){notice(error.message,"error");}
     });
     $("add-node").addEventListener("click",()=>{
@@ -1093,7 +1117,7 @@ async function init() {
     });
     $("delete-node").addEventListener("click",()=>{
       const node=state.current.nodes.find(item=>item.id===state.selected);
-      if (!node || !node.id.startsWith("local.") || !window.confirm(`„${node.label}“ und seine Beziehungen entfernen?`)) return;
+      if (saveFlow.pending || !caseEditable() || !node || !node.id.startsWith("local.") || !window.confirm(`„${node.label}“ und seine Beziehungen entfernen?`)) return;
       state.current.nodes=state.current.nodes.filter(item=>item.id!==node.id);
       state.current.edges=state.current.edges.filter(edge=>edge.from!==node.id && edge.to!==node.id);
       state.selected=null;state.nodeEditing=false;dirty();renderAll();
@@ -1216,7 +1240,8 @@ function showHelp(topic='start'){
     ['Bearbeiten und Speichern','Wähle links Bearbeiten. Erstelle einen Entwurf oder wähle beim Baustein Bearbeiten. Speichern zeigt zuerst einen Vergleich. Erst deine Bestätigung schreibt die Änderung in den Datenentwurf.'],
     ['Prüfen','Unter Meine Änderung reichst du den gespeicherten Entwurf mit Grund und Quellenstand ein. Unter Fachprüfung beurteilst du Änderungen anderer Personen. Fachlich freigeben benötigt die entsprechende notarielle Berechtigung.'],
     ['Ansicht und Drucken','Unter Ansicht wechselst du zwischen Zusammenhängen, Bausteinen, Verbindungen und gemeinsamen Begriffen. Datei → Drucken erstellt eine Lesefassung der aktuellen Auswahl.'],
-    ['Menüband','Strg+F1 oder Doppelklick reduziert das Menüband. Ein Klick auf eine Registerkarte öffnet die Befehle vorübergehend. Der Schalter rechts hält sie dauerhaft sichtbar. Die Baum-Navigation wird unabhängig über das Menü-Symbol links gesteuert.']
+    ['Menüband','Strg+F1 oder Doppelklick reduziert das Menüband. Ein Klick auf eine Registerkarte öffnet die Befehle vorübergehend. Der Schalter rechts hält sie dauerhaft sichtbar. Die Baum-Navigation wird unabhängig über das Menü-Symbol links gesteuert.'],
+    ['Hinweise und Kontextmenü','Halte den Mauszeiger kurz über einen Befehl, ein Feld oder einen Baustein, um einen Hinweis zu lesen. Rechtsklick auf einen Baustein öffnet Öffnen, Bearbeiten, Verbindungen und Hilfe zur Auswahl. Mit Umschalt+F10 öffnest du das Menü auch per Tastatur; Escape schließt es.']
   ];blocks.forEach(([title,text])=>root.append(element('h3',title),element('p',text)));
   root.append(element('h3','Herkunft und Lizenz'),element('p','Based on NaC: Notariat as Code by funktion8 / ofunk. Code: AGPL-3.0-or-later; Dokumentation: CC-BY-4.0.'));
   const attribution=element('p');const source=element('a','NaC-Originalprojekt');source.href='https://github.com/notariat8/NaC';const license=element('a','Lizenz und Markenhinweise');license.href='https://github.com/ontologie8/editor8/blob/main/LICENSES/README.md';attribution.append(source,document.createTextNode(' · '),license);root.append(attribution);

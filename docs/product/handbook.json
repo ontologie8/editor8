@@ -38,7 +38,9 @@
         "Öffne https://www.ontologie8.de und melde dich mit deinem zugelassenen GitHub-Konto an. Wähle links den Fachmodellbestand, den du pflegen möchtest. Die Auswahl zeigt die für dich zugänglichen Bestände. Fehlt ein benötigter Bestand, wende dich an dessen fachlich verantwortliche Person.",
         "Links außen stehen Verstehen, Bearbeiten und Prüfen. Daneben findest du die Auswahl der Fachmodelle und den aufklappbaren Baum. In der Mitte siehst du die Zusammenhänge; rechts erscheinen Details oder Bearbeitungsfelder zum gewählten Baustein.",
         "Allgemeine Anleitungen stehen oben unter Hilfe. Das Fragezeichen am ausgewählten Baustein erläutert dessen fachlichen Kontext. Unter Informationen findest du Beschreibung, Quellen und frühere Fassungen der Vorgangsart.",
-        "Mit Strg+F1 oder einem Doppelklick auf eine Registerkarte klappst du das Menüband ein oder aus. Die Menü-Schaltfläche oben links blendet den inneren Baum ein oder aus. Menüs und Auswahl bleiben erreichbar, während du innerhalb des Arbeitsbereichs blätterst oder scrollst."
+        "Mit Strg+F1 oder einem Doppelklick auf eine Registerkarte klappst du das Menüband ein oder aus. Die Menü-Schaltfläche oben links blendet den inneren Baum ein oder aus. Menüs und Auswahl bleiben erreichbar, während du innerhalb des Arbeitsbereichs blätterst oder scrollst.",
+        "Halte den Mauszeiger kurz über einen Befehl, ein Feld oder einen Baustein: Ein Hinweis erklärt dessen Aufgabe. Bei Tastaturfokus erscheint der Hinweis ebenfalls. Deaktivierte Befehle erläutern, was zuerst erforderlich ist. Escape schließt den Hinweis; die ausführliche Hilfe zur Auswahl bleibt über das Fragezeichen erreichbar.",
+        "Rechtsklick auf einen Baustein im Baum oder Graphen öffnet dessen Befehle: Öffnen, Bearbeiten, Verbindungen und Hilfe zur Auswahl. Das Menü gehört immer zum angeklickten Baustein. Auf einer Vorgangsart findest du Öffnen, Informationen und Drucken; auf einem gemeinsamen Begriff Öffnen, Bearbeiten und Hilfe zur Auswahl. Das Öffnen des Menüs verändert das Modell nicht."
       ],
       "steps": [
         "Den richtigen Fachmodellbestand auswählen und unter Datei → Öffnen beziehungsweise im Baum eine Vorgangsart öffnen.",
@@ -58,6 +60,10 @@
         [
           "Datei → Drucken",
           "Druckt eine Lesefassung der aktuellen Auswahl."
+        ],
+        [
+          "Umschalt+F10 / Kontextmenü-Taste",
+          "Öffnet die Befehle zum fokussierten Objekt. Pfeiltasten, Pos1 und Ende wählen einen Befehl; Eingabetaste führt ihn aus. Escape schließt das Menü und kehrt zum Objekt zurück. Tab setzt die normale Tastaturbedienung fort."
         ],
         [
           "Editor-Release",
@@ -124,7 +130,9 @@
       "paragraphs": [
         "Beginne mit einem kleinen fachlichen Auftrag: Welche Bezeichnung, Erläuterung oder Beziehung ist unklar? Was soll sich ändern, und welche Quelle begründet die Änderung? Suche zuerst nach vorhandenen Bausteinen, damit kein doppelter Begriff entsteht.",
         "Eine Umbenennung präzisiert einen vorhandenen Gegenstand. Ein neuer Baustein ist sinnvoll, wenn ein eigenständiger Gegenstand fehlt. Er braucht eine passende Art, eine verständliche Bezeichnung, eine Erläuterung und die nötigen Beziehungen. Vor dem Löschen prüfst du die verbundenen Bausteine und Quellen.",
-        "Die künstliche Übung „Fantasiewerkstatt“ präzisiert „Benötigte Schutzausrüstung“ zu „Benötigte Schutzausrüstung für den Workshop“. Der Gegenstand, seine Kennung und seine Beziehungen bleiben erhalten. In der Übung änderst du ausschließlich das Beispiel; echte Fachmodelle bleiben unberührt."
+        "Die künstliche Übung „Fantasiewerkstatt“ präzisiert „Benötigte Schutzausrüstung“ zu „Benötigte Schutzausrüstung für den Workshop“. Der Gegenstand, seine Kennung und seine Beziehungen bleiben erhalten. In der Übung änderst du ausschließlich das Beispiel; echte Fachmodelle bleiben unberührt.",
+        "Du kannst Bearbeiten auch per Rechtsklick auf den gewünschten Baustein wählen. Der Editor beginnt bei Bedarf einen Arbeitsentwurf und öffnet genau diesen Baustein. Speichern zeigt weiterhin zuerst den Vergleich; erst deine Bestätigung sichert die Änderung. Entfernen ist nur für zusätzlich angelegte Bausteine verfügbar und fragt vorher nach. Ein Baustein aus der Vorlage wird dadurch nicht gelöscht.",
+        "Beim Bearbeiten von Text bleiben Ausschneiden, Kopieren und Einfügen über die rechte Maustaste verfügbar. Ungespeicherte Eingaben bleiben beim Wechsel der Bausteinauswahl im Entwurf erhalten. Für den Wechsel zu einer anderen Vorgangsart prüfe zuerst den Speicherstatus."
       ],
       "steps": [
         "Unter Verstehen die Vorgangsart, den betroffenen Baustein, seine Beziehungen und Quellen prüfen.",

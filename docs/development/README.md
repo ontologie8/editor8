@@ -24,6 +24,7 @@ Bei geänderten Befehlen, Feldern, Rollen oder Speicherabläufen im selben Ände
 - Trainingsquelle: [course.json](../../training/course.json).
 - Rein künstliches Übungsmodell: [workshop.json](../../training/examples/workshop.json).
 - Kurzanleitung, Begriffe und Kontexthilfe: [app.js](../../editor/app.js).
+- Hinweise und Kontextmenüs: [interaction.js](../../editor/interaction.js). Die Interaktionsschicht ruft die bestehenden Entwurfs-, Speicher- und Hilfeabläufe auf. Zielobjekt, laufende Speicherung und fachliche Berechtigungen beim Ausführen erneut prüfen; Eingabefelder behalten ihre Textbefehle. Interne Scrollvorgänge von Textfeldern beim Fokuswechsel dürfen ein gerade geöffnetes Objektmenü nicht schließen.
 - Anordnung und Zielgruppe: [DESIGN.md](../../DESIGN.md).
 
 ```powershell

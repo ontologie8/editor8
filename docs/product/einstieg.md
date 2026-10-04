@@ -8,6 +8,10 @@ Allgemeine Anleitungen stehen oben unter Hilfe. Das Fragezeichen am ausgewählte
 
 Mit Strg+F1 oder einem Doppelklick auf eine Registerkarte klappst du das Menüband ein oder aus. Die Menü-Schaltfläche oben links blendet den inneren Baum ein oder aus. Menüs und Auswahl bleiben erreichbar, während du innerhalb des Arbeitsbereichs blätterst oder scrollst.
 
+Halte den Mauszeiger kurz über einen Befehl, ein Feld oder einen Baustein: Ein Hinweis erklärt dessen Aufgabe. Bei Tastaturfokus erscheint der Hinweis ebenfalls. Deaktivierte Befehle erläutern, was zuerst erforderlich ist. Escape schließt den Hinweis; die ausführliche Hilfe zur Auswahl bleibt über das Fragezeichen erreichbar.
+
+Rechtsklick auf einen Baustein im Baum oder Graphen öffnet dessen Befehle: Öffnen, Bearbeiten, Verbindungen und Hilfe zur Auswahl. Das Menü gehört immer zum angeklickten Baustein. Auf einer Vorgangsart findest du Öffnen, Informationen und Drucken; auf einem gemeinsamen Begriff Öffnen, Bearbeiten und Hilfe zur Auswahl. Das Öffnen des Menüs verändert das Modell nicht.
+
 ## Vorgehen
 
 1. Den richtigen Fachmodellbestand auswählen und unter Datei → Öffnen beziehungsweise im Baum eine Vorgangsart öffnen.
@@ -22,6 +26,7 @@ Mit Strg+F1 oder einem Doppelklick auf eine Registerkarte klappst du das Menüba
 | Suche oben | Filtert den Baum. Eingabetaste oder Strg+K sucht Bausteine im gesamten ausgewählten Modellbestand. |
 | Strg+S / Datei → Speichern | Öffnet den Vergleich deiner Änderungen vor dem Speichern. |
 | Datei → Drucken | Druckt eine Lesefassung der aktuellen Auswahl. |
+| Umschalt+F10 / Kontextmenü-Taste | Öffnet die Befehle zum fokussierten Objekt. Pfeiltasten, Pos1 und Ende wählen einen Befehl; Eingabetaste führt ihn aus. Escape schließt das Menü und kehrt zum Objekt zurück. Tab setzt die normale Tastaturbedienung fort. |
 | Editor-Release | Versionskennung der verwendeten App in der Fußzeile; bei einer Fehlermeldung mit angeben. |
 
 [Zur Übersicht](README.md) · [Training](../../training/README.md)

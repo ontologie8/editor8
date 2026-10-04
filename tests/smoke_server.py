@@ -2,7 +2,8 @@
 """Serve the real editor API with an in-memory GitHub substitute for browser tests.
 
 No request made by this server reaches GitHub or writes into the repository.
-The case models and catalog are loaded from the maintained Turtle files.
+Case models, vocabulary and catalog are artificial Turtle examples generated
+in a temporary directory.
 """
 
 from __future__ import annotations
@@ -28,6 +29,8 @@ import cloud_editor
 from case_editor import preview_change
 from case_editor_model import load_case, prepare_change, slugs
 from case_index import build_case_index
+from vocabulary_editor import model as vocabulary_model
+from vocabulary_impact import impact_index
 
 
 MAIN_REF = "a" * 40
@@ -64,6 +67,19 @@ class BrowserStore:
         catalog = (ROOT / "catalog/nac-usecases.ttl").read_text(encoding="utf-8")
         cases = {slug: (ROOT / "cases" / slug / "ontology.ttl").read_text(encoding="utf-8") for slug in slugs()}
         return build_case_index(catalog, cases, main_ref)
+
+    def load_vocabulary(self, branch: str) -> dict:
+        assert branch == "main"
+        result = vocabulary_model((ROOT / "ontology/core.ttl").read_text(encoding="utf-8"))
+        result["expected_ref"] = MAIN_REF
+        return result
+
+    def vocabulary_impact(self, main_ref: str) -> dict:
+        assert main_ref == MAIN_REF
+        core = (ROOT / "ontology/core.ttl").read_text(encoding="utf-8")
+        catalog = (ROOT / "catalog/nac-usecases.ttl").read_text(encoding="utf-8")
+        cases = {slug: (ROOT / "cases" / slug / "ontology.ttl").read_text(encoding="utf-8") for slug in slugs()}
+        return impact_index(core, catalog, cases, main_ref)
 
     def create_branch(self, branch: str) -> str:
         with self.lock:

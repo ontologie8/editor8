@@ -4,6 +4,8 @@
 
 Eigene Domain: [HTTPS für www.ontologie8.de](custom-domain.md) dokumentiert DNS, das ausgestellte Azure-Zertifikat, den vom Betreiber bestätigten GitHub-Redirect-Eintrag und die durchgeführte Änderung des Anmeldeursprungs.
 
+Aktuelle Nutzerzulassung: [Nutzer und Notare zulassen](editor-user-onboarding.md) erklärt App-Autorisierung, Datenrechte, Editor-Zulassung und fachliche Rollen getrennt. Die App wurde am 06.10.2026 öffentlich registriert, damit externe Repository-Mitarbeiter sie autorisieren können. Die nachfolgenden Pilotangaben zur privaten App und damaligen Nutzerzahl sind historisch.
+
 Status: technischer Pilot auf Azure Container Apps bereitgestellt; GitHub-Anmeldung und Fallzugriff wurden nachgewiesen. Ein echter Schreib-/PR-Vorgang und die notarielle Fachprüfung stehen noch aus.
 
 Der gehostete Dienst läuft aus diesem Repository als Container. Er liefert Frontend und API unter **einer HTTPS-Webadresse**. GitHub bleibt der dauerhafte Speicher für die 20 Fallontologien; der Dienst verwendet eine GitHub App zur Anmeldung der zwei bis drei Bearbeitenden. Er benötigt keine eigene Datenbank. Die lokale Editor-Version (`scripts/case_editor.py`) bleibt für Entwicklung und Offline-Tests verfügbar.

@@ -135,6 +135,31 @@ class AuthenticationTests(unittest.TestCase):
         self.assertEqual(failure.args[2], 'github-user')
         self.assertNotIn('synthetic-token', str(log.call_args_list))
 
+    def test_onboarded_notary_can_login_without_granting_maintainer_or_unknown_user_access(self):
+        self.server.config['EDITOR_USERS'] = 'tester,new-notary'
+        self.server.repositories[0]['notary_reviewers'] = ['new-notary']
+        for username in ('not-listed', 'new-notary'):
+            with self.subTest(username=username):
+                state = self.login()
+                def provider(url, token):
+                    return {'login': username} if url.endswith('/user') else {'full_name': 'example/data'}
+                with patch('cloud_editor.urlopen', return_value=BytesIO(b'{"access_token":"synthetic-token"}')), patch('cloud_editor.github_json', side_effect=provider):
+                    status, _, body = self.callback(state)
+                if username == 'not-listed':
+                    self.assertEqual(status, 401)
+                    self.assertIn('nicht als Editor freigeschaltet', body)
+                    self.assertEqual(self.server.sessions, {})
+                else:
+                    self.assertEqual(status, 302)
+                    sid = next(iter(self.server.sessions))
+                    status, _, body = self.request('/api/status', {'Cookie': 'nac_session=' + sid})
+                    self.assertEqual(status, 200)
+                    session = json.loads(body)
+                    self.assertEqual(session['user'], 'new-notary')
+                    self.assertTrue(session['notary_reviewer'])
+                    self.assertFalse(session['ontology_maintainer'])
+                    self.assertNotIn('synthetic-token', body)
+
     def test_repo_access_failure_and_success_follow_the_real_session_contract(self):
         for accessible in (False, True):
             with self.subTest(accessible=accessible):

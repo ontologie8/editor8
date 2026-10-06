@@ -1,0 +1,43 @@
+# Benutzerverwaltung ohne Softwareauslieferung
+
+Stand: 06.10.2026. Status: recherchiertes Zielbild zur Entscheidung; noch keine Umstellung des produktiven Identitätsanbieters. Nutzeranforderung: neue Nutzer und geänderte Rollen dürfen weder einen Image-Build noch eine neue Container-Revision benötigen.
+
+## Aktueller Befund
+
+GitHub identifiziert den Nutzer. `EDITOR_USERS` schränkt die Anmeldung zusätzlich ein; die Azure-Einstellung wird beim Start gelesen. Ihre Änderung erzeugt eine Container-Revision mit demselben Image, keinen Image-Build. Weil die Sitzungen nur im Prozess liegen, können sie bei einer neuen Revision enden. Microsoft beschreibt die revisionsgebundene Änderung von [Umgebungsvariablen](https://learn.microsoft.com/en-us/azure/container-apps/environment-variables).
+
+Die fachlichen Listen `notary_reviewers` und `ontology_maintainers` stehen derzeit in `config/data-repositories.json`. Der Dockerbuild kopiert diese Datei in das Image. Änderungen dieser Listen benötigen daher eine Softwareauslieferung. GitHub-Datenrechte werden bereits mit dem Benutzertoken geprüft. Die zusätzlichen statischen Listen sind eine Pilotlösung und kein geeignetes Ziel für die laufende Benutzerverwaltung.
+
+## Aufgaben trennen
+
+- **Identität:** Wer meldet sich an? Stabile Anbieterkennung verwenden, beispielsweise GitHub-Benutzer-ID oder Entra-Mandant und Objekt-ID. Anzeigenamen sind keine unveränderlichen Identitäten.
+- **Zugang und fachliche Rollen:** Wer darf den Editor nutzen, einen bestimmten Bestand bearbeiten, fachlich prüfen oder gemeinsame Begriffe pflegen? Rollen und Bestandszuordnung außerhalb des Images verwalten. Schreibzugriff allein begründet keine Notarrolle.
+- **Datenzugriff:** GitHub bleibt die versionierte Datenquelle. Datenrechte bleiben wirksam und werden durch eine Anmeldung bei Entra nicht automatisch erteilt.
+- **Betrieb:** Ein neues Software-Release ändert Software. Das Einladen, Sperren oder Umstufen einer Person ist Benutzerverwaltung.
+
+## Zwei umsetzbare Wege
+
+| Weg | Benutzerverwaltung | Folge für den Editor |
+| --- | --- | --- |
+| GitHub weiter nutzen | Anmeldung und Datenrechte über GitHub; fachliche Gruppen über GitHub-Teams, wenn die Personen Organisationsmitglieder sind. Externe Repository-Mitarbeiter können nicht in Teams aufgenommen werden; sie benötigen eine gesonderte zentrale Rollenzuordnung. | Bestehenden GitHub-OAuth-Weg erhalten, statische Personenlisten durch zur Laufzeit ausgewertete Berechtigungen ersetzen. Vor einer Aufnahme in die Organisation deren Basisrechte prüfen. |
+| Entra ID nutzen | Zugang und fachliche Rollen über die Unternehmensanwendung; externe Notare als B2B-Gäste oder bei einem späteren Kundenprodukt über einen dafür vorgesehenen External-ID-Mandanten. | OpenID-Connect-Anmeldung und Rollenprüfung ergänzen. GitHub-Datenzugriff und die Zuordnung von Änderungsautor und Fachprüfer ausdrücklich weiterführen. |
+
+GitHub dokumentiert die [Teamgrenze für externe Mitarbeiter](https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/managing-outside-collaborators/adding-outside-collaborators-to-repositories-in-your-organization). Ein GitHub-App-Benutzertoken erhält nur die Schnittmenge aus [App- und Benutzerrechten](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-user-access-token-for-a-github-app).
+
+Entra unterstützt [B2B-Gäste](https://learn.microsoft.com/en-us/entra/external-id/add-users-administrator) und [Anwendungsrollen in Anmeldetokens](https://learn.microsoft.com/en-us/entra/identity-platform/howto-add-app-roles-in-apps). Stabile Tätigkeitsrollen werden einmal definiert; konkrete Nutzerzuweisungen werden zentral gepflegt. Bestandsbezogene Berechtigungen brauchen zusätzlich eine eindeutige Zuordnung. Rollen sind beim nächsten Token beziehungsweise der nächsten Berechtigungsprüfung wirksam; ein Entzug muss für bestehende Sitzungen ausdrücklich umgesetzt und geprüft werden.
+
+## Empfehlung und Migration
+
+Für einen Fachanwenderkreis mit externen Notaren ist Entra ID als zentrale Benutzer- und Rollenverwaltung das empfohlene Ziel. GitHub bleibt dabei die Datenquelle. Ein reiner GitHub-Weg ist eine kleinere Alternative, wenn alle Nutzer dauerhaft GitHub-Konten verwenden sollen und die fachliche Rollenverwaltung verbindlich geklärt ist.
+
+1. Identitätsanbieter, verantwortlichen Mandanten und Bestandsgrenzen entscheiden. Bei Entra den vorhandenen geeigneten Mandanten, die erforderlichen Verwaltungsrechte und die anwendbaren Lizenzen prüfen; aus Azure-Hosting allein folgt keine Entra-Verwaltungsberechtigung.
+2. Die Rollen Leser, Ontologiepfleger, notarieller Fachprüfer und Pflege gemeinsamer Begriffe zentral definieren. Repository- oder Bestandszuordnung getrennt abbilden. Keine automatischen Notarrechte aus GitHub `Write` ableiten.
+3. Zunächst Entra-Zugang mit einem ausdrücklich verknüpften GitHub-Konto kombinieren. Damit bleiben die bestehenden Benutzerrechte für GitHub-Schreibvorgänge erhalten. Konten nur nach nachgewiesener Anmeldung bei beiden Anbietern verknüpfen, nicht anhand gleicher E-Mail-Adressen.
+4. Wenn Fachanwender später kein GitHub-Konto benötigen sollen, GitHub-Zugriffe über die eng begrenzte App-Installation ausführen. Das ist ein eigener Umbau: Autorenzuordnung, Prüfidentität, Verbot der eigenen Fachfreigabe und nachvollziehbare Reviews müssen auch bei einem gemeinsamen technischen GitHub-Absender erhalten bleiben.
+5. Statische Personenlisten aus Azure und dem Image entfernen, sobald die zentrale Berechtigungsprüfung aktiv und geprüft ist. Berechtigungen bei Anmeldung und geschützten Aktionen prüfen; Änderungen mit begrenzter Zwischenspeicherung übernehmen. Ausfall oder unklare Zuordnung dürfen keine zusätzlichen Rechte eröffnen.
+
+## Abnahme
+
+Eine neue künstliche Testperson wird zentral eingeladen und erhält einen Bestand sowie eine Rolle. Sie kann sich ohne neuen Build und ohne neue Azure-Revision anmelden. Eine Rollenänderung und ein Entzug wirken innerhalb des dokumentierten Zeitfensters auch auf bestehende Sitzungen. Unberechtigte Bestände bleiben gesperrt. Dieselbe natürliche Person darf unter unterschiedlichen Konten keine eigene Änderung fachlich freigeben. Erst anschließend den Weg mit einem tatsächlich eingeladenen Fachanwender bestätigen.
+
+Die Zulassung von `jjwarzecha` mit der bisherigen Konfiguration behebt den aktuellen Zugang; sie ist kein Nachweis dieser noch ausstehenden IAM-Migration.

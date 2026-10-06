@@ -9,6 +9,10 @@ test.beforeEach(async ({context,request})=>{
   if(session.branch!=='main'){
     const left=await context.request.post('/api/drafts/leave',{headers:{Origin:'http://127.0.0.1:18767','X-Editor-Token':session.token},data:{}});expect(left.status()).toBe(200);
   }
+  const sources=await (await context.request.get('/api/repositories')).json();
+  if(sources.selected!=='notariat8/ontology'){
+    const selected=await context.request.post('/api/repositories/select',{headers:{Origin:'http://127.0.0.1:18767','X-Editor-Token':session.token},data:{repository:'notariat8/ontology'}});expect(selected.status()).toBe(200);
+  }
 });
 
 test('all training slides, learning questions and handbook chapters are usable at the scaled desktop size', async ({page}) => {
@@ -335,10 +339,10 @@ test('recovery keeps concurrent unrelated changes and refuses a conflicting fiel
 test('recovery never offers another account or another model repository inputs',async ({page})=>{
   await editArtificialLabel(page,'Nur für das eigene Konto');
   await page.evaluate(()=>{state.dirty=false;const key=Object.keys(sessionStorage).find(key=>key.startsWith('editor8:inputs:v1:'));const record=JSON.parse(sessionStorage.getItem(key));record.user='anderes-konto';sessionStorage.setItem(key,JSON.stringify(record));});
-  page.on('dialog',dialog=>dialog.accept());await page.reload();await expect(page.locator('#case-title')).toBeVisible();await expect(page.locator('#input-recovery')).toBeHidden();
-  expect(await page.evaluate(()=>Object.keys(sessionStorage).some(key=>key.startsWith('editor8:inputs:v1:')))).toBe(false);
-  await page.evaluate(()=>sessionStorage.setItem('editor8:inputs:v1:browser-tester:example/second-dataset',JSON.stringify({version:1,user:'browser-tester',repository:'example/second-dataset',updated:Date.now(),model:{nodes:[{label:'Nicht der aktuelle Bestand'}]}})));
-  await page.reload();await expect(page.locator('#input-recovery')).toBeHidden();expect(await page.locator('body').innerText()).not.toContain('Nicht der aktuelle Bestand');
+  page.on('dialog',dialog=>dialog.accept());await page.reload();await expect(page.locator('#case-title')).toHaveText('Künstlicher Fall demo-eins');
+  await expect.poll(()=>page.evaluate(()=>Object.keys(sessionStorage).some(key=>key.startsWith('editor8:inputs:v1:')))).toBe(false);await expect(page.locator('#input-recovery')).toBeHidden();
+  await page.evaluate(()=>{const repository=document.getElementById('repository-name').textContent==='example/second-dataset'?'notariat8/ontology':'example/second-dataset';sessionStorage.setItem('editor8:inputs:v1:browser-tester:'+repository,JSON.stringify({version:1,user:'browser-tester',repository,updated:Date.now(),model:{nodes:[{label:'Nicht der aktuelle Bestand'}]}}));});
+  await page.reload();await expect(page.locator('#case-title')).toHaveText('Künstlicher Fall demo-eins');await expect(page.locator('#input-recovery')).toBeHidden();expect(await page.locator('body').innerText()).not.toContain('Nicht der aktuelle Bestand');
 });
 
 test('unavailable browser storage keeps inputs open and offers an in-memory export',async ({page})=>{

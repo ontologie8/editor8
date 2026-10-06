@@ -304,8 +304,10 @@ class GitHubStore:
         head = self.ref(branch)
         if head != data.get("expected_ref"):
             raise ValueError("Der Arbeitszweig wurde inzwischen geändert. Vokabular neu laden.")
-        _, changes, changed = prepare_vocabulary_change(self.read_file("ontology/core.ttl", head), data)
-        return {"changed": changed, "changes": changes}
+        from graph_comparison import vocabulary_comparison
+        original = self.read_file("ontology/core.ttl", head)
+        updated, changes, changed = prepare_vocabulary_change(original, data)
+        return {"changed": changed, "changes": changes, "comparison": vocabulary_comparison(original, updated)}
 
     def save_vocabulary(self, branch: str, data: dict) -> dict:
         if not branch.startswith("codex/ontology-vocabulary-") or not BRANCH.fullmatch(branch):
@@ -397,13 +399,17 @@ class GitHubStore:
         after_text = self.read_file(path, head)
         changes = []
         problem = ""
+        graph_comparison = None
         try:
+            from graph_comparison import case_comparison, vocabulary_comparison
             if slug == "vocabulary":
+                graph_comparison = vocabulary_comparison(before_text, after_text)
                 old_model, new_model = vocabulary_model(before_text), vocabulary_model(after_text)
                 reconstructed, changes, _ = prepare_vocabulary_change(before_text, {**new_model, "revision": old_model["revision"]})
                 if to_isomorphic(Graph().parse(data=reconstructed, format="turtle")) != to_isomorphic(Graph().parse(data=after_text, format="turtle")):
                     problem = "Zusätzliche RDF-Änderungen sind in dieser Ansicht nicht vollständig erklärt. Bitte in GitHub prüfen."
             else:
+                graph_comparison = case_comparison(slug, before_text, after_text)
                 before = Graph().parse(data=before_text, format="turtle")
                 after = Graph().parse(data=after_text, format="turtle")
                 old_model, new_model = _graph_to_model(slug, before), _graph_to_model(slug, after)
@@ -425,7 +431,7 @@ class GitHubStore:
             "number": number, "title": pr["title"], "case": slug,
             "author": pr["user"]["login"], "draft": pr["draft"],
             "url": pr["html_url"], "body": pr.get("body") or "",
-            "head_sha": head, "changes": changes, "problem": problem,
+            "head_sha": head, "changes": changes, "problem": problem, "comparison": graph_comparison,
         }
 
     def submit_case_review(self, number: int, head_sha: str, event: str, body: str, reviewer: str, notaries: set[str], checks: dict | None = None) -> str:

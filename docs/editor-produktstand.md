@@ -1,6 +1,6 @@
 # Produktstand von editor8
 
-Stand: 04.10.2026. Dieses Repository enthält die Software. Die Oberfläche bearbeitet fachliche Vorlagen aus einem getrennten, ausdrücklich konfigurierten Datenrepository. Der aktuelle NaC-Adapter wird gegen die 20 kanonischen Vorgangsarten von `notariat8/ontology` geprüft; die Fallanzahl ist im Editor nicht fest codiert. Reale Aktenwerte gehören nicht in diese Projekte.
+Stand: 06.10.2026. Dieses Repository enthält die Software. Die Oberfläche bearbeitet fachliche Vorlagen aus einem getrennten, ausdrücklich konfigurierten Datenrepository. Der aktuelle NaC-Adapter wird gegen die 20 kanonischen Vorgangsarten von `notariat8/ontology` geprüft; die Fallanzahl ist im Editor nicht fest codiert. Reale Aktenwerte gehören nicht in diese Projekte.
 
 Herkunft: Die frühere Produktbeschreibung wurde aus dem ontology-Editorzweig übernommen. Historische Nachweise bleiben von der Auslieferung der getrennten Software unterschieden.
 
@@ -13,10 +13,11 @@ Herkunft: Die frühere Produktbeschreibung wurde aus dem ontology-Editorzweig ü
 | Einen Fall verstehen | Fachgraph, direkte Beziehungen, Zugang zu unverknüpften Bausteinen, Gesamtansicht und Auswahl des Umfelds. Beschreibung, Quellen und NaC-Prozessablauf über Informationen. |
 | Finden und erklären | Suche im Fall und im Datenkatalog; allgemeine Hilfe und künstliche Beispiele oben, kontextbezogene Hilfe am Baustein. |
 | Direkt am Objekt arbeiten | Kurze Hinweise bei Hover und Tastaturfokus, einschließlich Erklärung deaktivierter Befehle. Rechtsklick beziehungsweise Umschalt+F10 öffnet objektbezogene Befehle für Bausteine, Vorgangsarten und gemeinsame Begriffe; bestehende Entwurfs-, Speicher- und Berechtigungsgrenzen gelten weiter. |
-| Fachliche Inhalte pflegen | Strukturierte Felder für Fragen, Dokumenttypen, Entscheidungen, Prüfschritte, Nachweistypen und Beziehungen. Beim Bearbeiten bleibt der Graph sichtbar; vor dem Speichern fachlicher Textvergleich mit Bestätigung. Turtle bleibt Pflegequelle. |
+| Fachliche Inhalte pflegen | Strukturierte Felder für Fragen, Dokumenttypen, Entscheidungen, Prüfschritte, Nachweistypen und Beziehungen. Beim Bearbeiten bleibt der Graph sichtbar; vor dem Speichern Text- und Graphvergleich mit Bestätigung. Turtle bleibt Pflegequelle. |
 | Gemeinsame Begriffe pflegen | Klassen und Eigenschaften sowie Anzeige ihrer technischen RDF-Verwendung im Datenkatalog. |
 | Änderungen prüfen | Entwurfsbranches und PRs, Quellenstand, Begründung, Prüfkorb, begründete Änderungswünsche und Freigaben auf einem geprüften Commit durch ein anderes eingetragenes Notarkonto. |
-| Arbeit fortsetzen | Eigene gespeicherte Fall-/Vokabularzweige wieder öffnen oder ablegen; ungespeicherte Browser-Eingaben sind keine dauerhafte Speicherung. |
+| Arbeit fortsetzen | Eigene gespeicherte Fall-/Vokabularzweige wieder öffnen oder ablegen. Offene Modelleingaben und Begründungen im aktuellen Browserfenster nach Neuladen oder erneuter Anmeldung wiederherstellen; unabhängige Änderungen erhalten, widersprüchliche Felder anhalten. Dateiexport bei Problemen; Zwischensicherung ersetzt Speichern nicht. |
+| Änderung grafisch verstehen | Vorher/Nachher aus tatsächlich vorgeschlagenen RDF-Differenzen für Fallmodelle und gemeinsame Begriffe. Gleiche Positionen, stabile Kennungen, Wörter und Farben sowie direkter Feldvergleich. Der Prüfkorb verwendet denselben Vergleich. |
 | Frühere Fassung prüfen | Fallbezogene GitHub-Historie; Wiederherstellungsvorschlag erzeugt nach Differenzvorschau einen neuen Prüfentwurf. |
 | Drucken und Release vergleichen | Lesefassung unter Datei → Drucken. Editor-Release in der Fußzeile verlinkt den eingebetteten Softwarecommit; voller SHA unter `/api/release`. |
 
@@ -26,16 +27,16 @@ Herkunft: Die frühere Produktbeschreibung wurde aus dem ontology-Editorzweig ü
 
 Die Office-Auslieferung aus [PR #4](https://github.com/ontologie8/editor8/pull/4), Commit `eceae59c0b62a258a5b496e88a9e17eff56a1122`, wurde als aktive gesunde Azure-Revision mit passender Release-Kennung und übereinstimmenden HTML-/CSS-/JavaScript-Hashes geprüft. Spätere Releases benötigen denselben eigenen Nachweis. Der Host ist in [Betrieb](editor-hosting.md) beschrieben.
 
-Die Software-CI führt 22 Python-Tests, die JavaScript-Syntaxprüfung, 21 [synthetische Browserprüfungen](../tests/smoke.browser.spec.mjs) und Containerprüfungen aus. Die sieben Interaktionsprüfungen ergänzen Hover/Fokus, Kontextauswahl, Tastatur, Bildschirmränder, Textbearbeitung, Speichervergleich, Entfernen mit Bestätigung, fremde Entwürfe und Begriffsrechte. Die getrennte Datenintegration umfasst 48 Python- und fünf [Browserprüfungen](../tests/integration/editor.browser.spec.mjs), einschließlich semantischem Durchlauf aller 20 gepflegten Fälle. Der regelmäßige private Workflow und reproduzierbare Revisionspaare stehen unter [Datenintegration in CI](editor-integration-ci.md).
+Die Software-CI führt 26 Python-Tests, die JavaScript-Syntaxprüfung, 31 [synthetische Browserprüfungen](../tests/smoke.browser.spec.mjs) und Containerprüfungen aus. Die Prüfungen umfassen Hover/Fokus, Kontextmenüs, Tastatur, Bildschirmränder, Entwurfsgrenzen, RDF-Differenzen, Wiederaufnahme nach Sitzungsende, Feldkonflikte, nicht verfügbaren Browserspeicher und gespeicherte Änderungen mit verlorener Antwort. Die getrennte Datenintegration umfasst 48 Python- und fünf [Browserprüfungen](../tests/integration/editor.browser.spec.mjs), einschließlich semantischem Durchlauf aller 20 gepflegten Fälle. Am 06.10.2026 wurden sie gegen Datencommit `d0b69e48d90b2ae42f81406833c094f74d9fdf77` ausgeführt. Der regelmäßige private Workflow und reproduzierbare Revisionspaare stehen unter [Datenintegration in CI](editor-integration-ci.md).
 
 Die UI wurde bei 1536 × 864 CSS-Pixeln und Geräteskalierung 2,5 sichtbar geprüft; zusätzliche Größenprüfungen umfassen reduzierte Browserhöhe und Desktopgrößen bis 4K. Technische Tests verwenden einen lokalen GitHub-Ersatz und erteilen keine notarielle Fachfreigabe.
 
 ## Verbleibende Abnahmen und Ausbau
 
 1. Einen tatsächlich angemeldeten Schreib-/PR-Durchlauf auf Azure mit konkreter fachlich sinnvoller Korrektur nachweisen. Login und Lesen waren nachgewiesen; synthetisches Speichern ersetzt diesen Live-Nachweis nicht.
-2. `hheise-ch` ist als notarieller Reviewer konfiguriert. Die tatsächliche Prüfung einer fremden Änderung, Freigabe auf dem aktuellen Commit und der manuelle Merge-Weg müssen noch gemeinsam nachgewiesen werden. [Issue #7](https://github.com/notariat8/ontology/issues/7) ist optionale technische Erzwingung.
+2. `hheise-ch` ist als notarieller Reviewer konfiguriert. Die reale Zwei-Personen-Abnahme ist auf ausdrücklichen Nutzerwunsch vom 06.10.2026 zurückgestellt, da derzeit nur der Nutzer selbst mitarbeitet. Nachfrage am 01.12.2026; diese Abnahme blockiert die Softwareentwicklung nicht. Zwei Konten derselben Person ersetzen keine zweite Person. [Issue #7](https://github.com/notariat8/ontology/issues/7) ist optionale technische Erzwingung.
 3. Vollständige Bedienprüfung für Fokus, Tastatur, Fehler, leere Ansichten und ungespeicherte Eingaben sowie die Aufteilung der umfangreichen `app.js` abschließen.
-4. Anschließend grafischen Vorher/Nachher-Vergleich, Rückfragen am Baustein und kontrollierte deutsche Beziehungseingabe ausbauen. Fachliche Anzeigenamen fehlen teilweise; [Issue #8](https://github.com/notariat8/ontology/issues/8) liegt im Datenprojekt.
+4. Große grafische Änderungsvergleiche fachlich abnehmen; Rückfragen am Baustein und kontrollierte deutsche Beziehungseingabe ausbauen. Fachliche Anzeigenamen fehlen teilweise; [Issue #8](https://github.com/notariat8/ontology/issues/8) liegt im Datenprojekt.
 5. SHACL erst nach Entscheidung über Regelkatalog und Shapes-Vertrag ergänzen; Regeln gehören ins Datenrepository.
 
 Die [Roadmap](editor-roadmap.md) trennt erledigte Umsetzung und verbleibende Abnahme. RDF-Verwendung ist keine Messung tatsächlicher Akten- oder Anwendungsnutzung; die App ist keine allgemeine Foundry-/OWL-Plattform. NaC bleibt Quelle der Prozessabläufe.

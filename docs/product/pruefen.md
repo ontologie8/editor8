@@ -12,6 +12,8 @@ Gespeichert wird genau die bestätigte Vorschau. Änderst du die Eingaben währe
 
 Unter Informationen kannst du frühere Fassungen ansehen. Die Wiederaufnahme einer früheren Fassung erzeugt nach Vergleich einen neuen Arbeitsentwurf. Auch dieser braucht Begründung und Fachprüfung.
 
+Der Vergleich zeigt Vorher und Nachher nebeneinander: Hinzugefügt, Entfernt und Geändert sind durch Wörter und Farben markiert. Unveränderte direkte Nachbarn helfen bei der Orientierung. Wähle einen Baustein mit Maus oder Tastatur für den Vergleich seiner Angaben. Beschreibung oder Quellen können sich auch ohne Bausteinänderung ändern; lies deshalb ebenfalls den Textvergleich. Der Graph zeigt tatsächliche Modelländerungen und ersetzt keine Beurteilung ihrer fachlichen Folgen.
+
 ## Vorgehen
 
 1. Unter Prüfen → Fachprüfung eine eingereichte Änderung öffnen und ihren Anlass sowie Quellenstand lesen.

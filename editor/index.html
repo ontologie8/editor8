@@ -9,6 +9,8 @@
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/brand/e8_192.png">
   <link rel="apple-touch-icon" sizes="192x192" href="/assets/brand/e8_192.png">
   <link rel="stylesheet" href="/style.css">
+  <script src="/recovery.js" defer></script>
+  <script src="/comparison.js" defer></script>
   <script src="/app.js" defer></script>
   <script src="/interaction.js" defer></script>
 </head>
@@ -130,6 +132,7 @@
         <p id="review-meta" class="review-meta"></p>
         <h4>Begründung und Quellenstand</h4><div id="review-body" class="review-body"></div>
         <h4>Fachliche Änderungen</h4><ul id="review-changes" class="review-changes"></ul>
+        <div id="review-comparison" class="graph-comparison" hidden></div>
         <p id="review-problem" class="review-problem" hidden></p>
         <fieldset id="review-checklist" class="review-checklist"><legend>Vor einer fachlichen Freigabe prüfen</legend>
           <label><input id="review-terms" type="checkbox"> Begriffe und Fachfragen</label>
@@ -177,9 +180,17 @@
   <dialog id="change-preview" aria-labelledby="preview-title">
     <div class="preview-head"><div><p class="eyebrow">VOR DEM SPEICHERN</p><h2 id="preview-title">Änderung prüfen</h2></div><button id="close-preview" type="button" aria-label="Vorschau schließen">Schließen</button></div>
     <p id="preview-description">Prüfe die fachlichen Änderungen vor dem Speichern. Danach kannst du sie zur notariellen Fachprüfung einreichen.</p>
+    <div id="preview-comparison" class="graph-comparison" hidden></div>
     <ul id="preview-list"></ul>
     <p id="preview-status" role="status" hidden></p>
     <div class="preview-actions"><button id="cancel-preview" type="button">Weiter bearbeiten</button><button id="confirm-save" class="primary" type="button">Speichern</button></div>
+  </dialog>
+  <dialog id="input-recovery" aria-labelledby="recovery-title">
+    <div class="preview-head"><h2 id="recovery-title">Offene Eingaben wiederherstellen</h2></div>
+    <p id="recovery-message"></p><p id="recovery-status" role="status"></p>
+    <p class="context-help">Die Zwischensicherung gilt für dieses Browserfenster und dein angemeldetes Konto. Sie ersetzt Speichern nicht. Beim Abmelden oder Verwerfen wird sie gelöscht; beim Schließen des Browserfensters kann sie verloren gehen.</p>
+    <a id="recovery-login" href="/login" target="_blank" rel="noopener noreferrer">Erneut anmelden</a>
+    <div class="preview-actions"><button id="export-inputs" type="button">Eingaben sichern</button><button id="discard-inputs" type="button">Verwerfen</button><button id="reconnect-inputs" type="button" hidden>Anmeldung prüfen und fortsetzen</button><button id="restore-inputs" class="primary" type="button">Wiederherstellen</button></div>
   </dialog>
   <dialog id="case-node-search" aria-labelledby="case-node-search-title">
     <div class="preview-head"><h2 id="case-node-search-title">Baustein finden</h2><button id="case-node-search-close" type="button" aria-label="Suche schließen">✕</button></div>

@@ -25,6 +25,20 @@ const saveFlow = {pending: "", preview: null};
 let caseLoadSequence = 0;
 let viewSequence = 0;
 let nodeEditPending = false;
+const recovery=window.EditorRecovery.create({state:()=>state,repository:()=>$("repository-name").textContent||"local",api,notice,refresh:refreshBranch,
+  discard:()=>{state.dirty=false;window.location.reload();},
+  saved:()=>{state.dirty=false;refreshBranch();},
+  extras:()=>state.purpose==="vocabulary"?{vocabReason:$("vocab-reason").value,vocabSource:$("vocab-source").value}:{reason:$("change-reason").value,source:$("change-source").value},
+  adopt:async(model,entry)=>{
+    if(entry.purpose==="vocabulary"){
+      state.vocabulary=model;state.vocabSelected=entry.selected;state.vocabEditing=true;state.vocabNew=!entry.base.terms.some(term=>term.id===entry.selected);setView("vokabular");renderVocabulary();
+    }else{
+      state.current=model;state.selected=entry.selected;state.nodeEditing=true;$("case-title").textContent=model.title;$("case-select").value=model.slug;$("summary").value=model.summary;$("sources").value=model.sources.join("\n");setView("bausteine");renderAll();renderNodeForm();
+    }
+    for(const [key,id]of Object.entries({reason:"change-reason",source:"change-source",vocabReason:"vocab-reason",vocabSource:"vocab-source"}))$(id).value=entry.extras?.[key]||"";
+    dirty();
+  }
+});
 
 function element(tag, text, className) {
   const el = document.createElement(tag);
@@ -54,7 +68,7 @@ async function api(path, body) {
   try{result=await response.json();}
   catch{throw new Error("Der Editor hat keine gültige Antwort geliefert. Bitte erneut versuchen.");}
   if (response.status === 401) {
-    window.location.assign("/login");
+    recovery.expired();
     throw new Error("Anmeldung erforderlich");
   }
   if (!response.ok) throw new Error(result.error || "Anfrage fehlgeschlagen");
@@ -64,6 +78,7 @@ function dirty() {
   caseLoadSequence++;
   if(state.current)$("case-select").value=state.current.slug;
   state.dirty = true;
+  recovery.capture();
   refreshBranch();
   renderCaseList();
   notice("Änderungen sind noch nicht gespeichert.");
@@ -298,6 +313,7 @@ async function loadReview(number) {
   if(!body.childNodes.length)body.append(element("p","Keine Begründung im Pull Request angegeben."));
   const list=$("review-changes");list.replaceChildren();
   detail.changes.forEach(change=>list.append(element("li",change)));
+  window.EditorComparison.render($("review-comparison"),detail.comparison,relations);
   if(!detail.changes.length)list.append(element("li","Keine erklärbare fachliche Änderung vorhanden."));
   $("review-problem").hidden=!detail.problem;$("review-problem").textContent=detail.problem;
   $("request-changes").disabled=!detail.can_review;
@@ -355,9 +371,11 @@ async function resumeDraft(draft) {
 }
 async function leaveDraft() {
   if(saveFlow.pending)throw new Error("Bitte den laufenden Speichervorgang abwarten.");
-  if(state.dirty && !window.confirm("Ungespeicherte Eingaben verwerfen? Bereits auf GitHub gespeicherte Änderungen bleiben erhalten."))return;
+  if(recovery.hasInputs && !window.confirm("Ungespeicherte Eingaben verwerfen? Bereits auf GitHub gespeicherte Änderungen bleiben erhalten."))return;
   const slug=state.current.slug;
   await api("/api/drafts/leave",{});
+  recovery.clear();
+  for(const id of ["change-reason","change-source","vocab-reason","vocab-source"])$(id).value="";
   state.branch="main";state.purpose="case";state.activeCase="";state.dirty=false;
   state.vocabulary=null;
   await loadCase(slug);
@@ -368,7 +386,7 @@ const vocabularyKinds={class:"Begriffsklasse",object_property:"Verbindung",datat
 function selectedTerm(){return state.vocabulary?.terms.find(item=>item.id===state.vocabSelected);}
 async function loadVocabulary(force=false){
   if(state.dirty && force)throw new Error("Bitte offene Änderungen zuerst speichern.");
-  if(!state.vocabulary || force){state.vocabulary=await api("/api/vocabulary");state.vocabSelected=state.vocabulary.terms[0]?.id || null;state.vocabEditing=false;state.vocabNew=false;}
+  if(!state.vocabulary || force){state.vocabulary=await api("/api/vocabulary");recovery.setBase(state.vocabulary,"vocabulary");state.vocabSelected=state.vocabulary.terms[0]?.id || null;state.vocabEditing=false;state.vocabNew=false;}
   renderVocabulary();
   if((force || !state.vocabularyImpact) && !state.impactLoading)loadVocabularyImpact().catch(error=>{state.impactError=error.message;state.impactLoading=false;renderVocabularyImpact();});
   if(state.view==="vokabular")notice("Gemeinsame Begriffe geladen. Wähle einen Begriff, um seine fachliche Bedeutung zu lesen.","quiet");
@@ -487,6 +505,7 @@ async function submitVocabulary(){
   try{
     if(state.dirty)throw new Error("Bitte zuerst die Änderung speichern.");
     const result=await api("/api/vocabulary/review",{reason:$("vocab-reason").value,source:$("vocab-source").value});
+    recovery.clear();$("vocab-reason").value="";$("vocab-source").value="";
     $("vocab-pr-link").href=result.url;$("vocab-pr-link").hidden=false;
     state.branch=result.branch;state.purpose=result.purpose;state.vocabulary=null;await loadVocabulary(true);refreshBranch();
     notice("Vokabularänderung zur notariellen Fachprüfung eingereicht.","success");
@@ -518,7 +537,7 @@ function setView(view) {
 }
 async function loadCase(slug, view="fall", navigation=viewSequence) {
   if(saveFlow.pending){$("case-select").value=state.current.slug;notice("Bitte den laufenden Speichervorgang abwarten.");return;}
-  if (state.dirty && !window.confirm("Ungespeicherte Änderungen verwerfen und anderen Fall öffnen?")) {
+  if (recovery.hasInputs && !window.confirm("Ungespeicherte Eingaben verwerfen und anderen Fall öffnen?")) {
     $("case-select").value = state.current.slug;
     return;
   }
@@ -527,7 +546,9 @@ async function loadCase(slug, view="fall", navigation=viewSequence) {
   try{model=await api("/api/cases/" + encodeURIComponent(slug));}
   catch(error){if(sequence!==caseLoadSequence)return;if(state.current)$("case-select").value=state.current.slug;throw error;}
   if(sequence!==caseLoadSequence)return;
+  if(recovery.hasInputs){recovery.clear();$("change-reason").value="";$("change-source").value="";}
   state.current = model;
+  recovery.setBase(model,"case");
   state.selected = null;
   state.graphFocused=false;
   state.graphMode="linked";
@@ -937,7 +958,7 @@ function previewIsCurrent(preview) {
   return state.branch===preview.branch && (preview.vocabulary ? state.vocabulary : state.current)===preview.subject && JSON.stringify(preview.subject)===JSON.stringify(preview.snapshot);
 }
 async function save() {
-  if(saveFlow.pending || $("change-preview").open)return;
+  if(saveFlow.pending || $("change-preview").open || $("input-recovery").open)return;
   try {
     if (state.branch === "main") throw new Error("Bitte zuerst unter Bearbeiten einen Entwurf erstellen.");
     if(state.view!=="vokabular" && !caseEditable())throw new Error("Dieser Entwurf gehört zu einem anderen Fall. Lege ihn zuerst ab.");
@@ -954,6 +975,7 @@ async function save() {
     $("preview-description").textContent="Prüfe die fachlichen Änderungen vor dem Speichern. Danach kannst du sie zur notariellen Fachprüfung einreichen.";
     const list=$("preview-list");list.replaceChildren();
     result.changes.forEach(change=>list.append(element("li",change)));
+    window.EditorComparison.render($("preview-comparison"),result.comparison,relations);
     if(!result.changed) list.append(element("li","Keine fachliche Änderung erkannt."));
     $("confirm-save").disabled=!result.changed;
     $("change-preview").showModal();
@@ -974,6 +996,8 @@ async function confirmSave() {
     subject.revision=result.revision;
     if(result.expected_ref) subject.expected_ref=result.expected_ref;
     if(unchanged)state.dirty=false;
+    recovery.setBase({...preview.snapshot,revision:result.revision,expected_ref:result.expected_ref||preview.snapshot.expected_ref},vocabulary?"vocabulary":"case");
+    if(unchanged)recovery.clear();recovery.capture();
     if(result.changed && !vocabulary){
       state.caseIndex=null;state.caseIndexPromise=null;
       if($("case-index-query").value.trim().length>=2)loadCaseIndex().catch(()=>{});
@@ -986,8 +1010,8 @@ async function confirmSave() {
 }
 async function logout() {
   if(saveFlow.pending){notice("Bitte den laufenden Speichervorgang abwarten.");return;}
-  if(state.dirty && !window.confirm("Ungespeicherte Änderungen verwerfen und abmelden? Bereits gespeicherte Entwürfe bleiben erhalten."))return;
-  try{await api("/api/logout",{});state.dirty=false;window.location.assign("/login");}
+  if(recovery.hasInputs && !window.confirm("Ungespeicherte Eingaben verwerfen und abmelden? Bereits gespeicherte Entwürfe bleiben erhalten."))return;
+  try{await api("/api/logout",{});recovery.clearAccount();for(const id of ["change-reason","change-source","vocab-reason","vocab-source"])$(id).value="";state.dirty=false;window.location.assign("/login");}
   catch(error){notice(error.message,"error");}
 }
 async function submitReview() {
@@ -996,6 +1020,7 @@ async function submitReview() {
     const result=await api("/api/cases/" + state.current.slug + "/review",{
       reason:$("change-reason").value,source:$("change-source").value
     });
+    recovery.clear();$("change-reason").value="";$("change-source").value="";
     $("review-link").href=result.url;
     $("review-link").hidden=false;
     if(result.branch){
@@ -1153,10 +1178,11 @@ async function init() {
     for(const id of ["close-preview","cancel-preview"]) $(id).addEventListener("click",closeSavePreview);
     $("change-preview").addEventListener("cancel",event=>{if(saveFlow.pending==="save")event.preventDefault();});
     $("change-preview").addEventListener("close",()=>{if(!saveFlow.pending && !$("change-preview").open)saveFlow.preview=null;});
-    window.addEventListener("beforeunload",event=>{if(state.dirty){event.preventDefault();event.returnValue="";}});
+window.addEventListener("beforeunload",event=>{recovery.capture();if(recovery.hasInputs&&!recovery.redirecting){event.preventDefault();event.returnValue="";}});
     const firstView=["fall","bausteine","verbindungen","pruefung","vokabular"].includes(initialView) || (initialView==="fachpruefung" && state.user) ? initialView : "fall";
     await loadCase(cases.some(item=>item.slug===requestedCase) ? requestedCase : cases[0].slug,firstView,initialNavigation);
     if(state.user)loadDrafts().catch(error=>notice(error.message,"error"));
+    recovery.offer();
   } catch(error){notice(error.message,"error");}
 }
 async function loadRelease() {

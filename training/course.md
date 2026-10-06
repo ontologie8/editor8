@@ -159,7 +159,7 @@ Ungespeicherte Eingabe, gespeicherten Entwurf und fachliche Freigabe unterscheid
 
 ### Speichern zeigt zuerst den Vergleich
 
-Deine Eingaben sind zunächst ungespeichert. Datei → Speichern oder Strg+S öffnet den Vergleich. Erst Speichern bestätigen sichert die gezeigte Fassung in deinem Arbeitsentwurf. Während der Speicherung kurz warten; bei einem Fehler bleiben die Eingaben offen und können erneut gespeichert werden.
+Deine Eingaben sind zunächst ungespeichert. Datei → Speichern oder Strg+S öffnet den Vergleich. Erst Speichern bestätigen sichert die gezeigte Fassung in deinem Arbeitsentwurf. Während der Speicherung kurz warten; bei einem Fehler bleiben die Eingaben offen und können erneut gespeichert werden. Im echten Editor zeigt Vorher / Nachher hinzugefügte, entfernte und geänderte Bausteine und Beziehungen sowie unveränderte direkte Nachbarn. Wähle einen Baustein für den Vergleich seiner Angaben. Die künstliche Übung unten übt denselben Vergleich vor der Bestätigung.
 
 - Vergleiche alte und neue Bezeichnung.
 - Prüfe, ob weitere unbeabsichtigte Änderungen auftauchen.
@@ -218,7 +218,7 @@ Die Übung verändert ausschließlich das künstliche Beispiel im Training. Dein
 
 ### Die Pflege endet mit einem nachgewiesenen Ergebnis
 
-Eine Modelländerung ist nachvollziehbar, wenn Grund, Fachquelle, tatsächliche Änderung und geprüfte Fassung zusammengehören. Kontrolliere nach der Übernahme das Ergebnis im gemeinsamen Modellbestand. Bei einer Fehlermeldung bewahre den Entwurf und notiere Arbeitsschritt und Meldung.
+Eine Modelländerung ist nachvollziehbar, wenn Grund, Fachquelle, tatsächliche Änderung und geprüfte Fassung zusammengehören. Kontrolliere nach der Übernahme das Ergebnis im gemeinsamen Modellbestand. Bei einer Fehlermeldung bewahre den Entwurf und notiere Arbeitsschritt und Meldung. Nach einer Unterbrechung bietet der echte Editor im selben Browserfenster Wiederherstellen an. Melde dich mit demselben Konto an und wähle denselben Modellbestand. Bei widersprüchlichen Änderungen wird nichts überschrieben; sichere die Eingaben und kläre den Konflikt. Wiederherstellen ersetzt Speichern nicht.
 
 - Nutze das Handbuch für Rollen und Fehlerbehebung.
 - Prüfe eine kleine konkrete Änderung statt mehrere Themen gleichzeitig.

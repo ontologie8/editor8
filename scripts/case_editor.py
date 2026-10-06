@@ -230,9 +230,11 @@ def describe_changes(current: dict, proposed: dict) -> list[str]:
 def preview_change(slug: str, data: dict, root: Path | None = None) -> dict:
     """Describe an edit in domain terms after the same validation used by save."""
     current = load_case(slug, root)
-    _, _, semantic_change = prepare_change(slug, data, data.get("revision", ""), root)
+    ttl, _, semantic_change = prepare_change(slug, data, data.get("revision", ""), root)
     proposed = validate_model(slug, data, root)
-    return {"changed": semantic_change, "changes": describe_changes(current, proposed) if semantic_change else [], "case": current["title"]}
+    from graph_comparison import case_comparison
+    comparison = case_comparison(slug, case_path(slug, root).read_text(encoding="utf-8"), ttl)
+    return {"changed": semantic_change, "changes": describe_changes(current, proposed) if semantic_change else [], "case": current["title"], "comparison": comparison}
 
 
 def submit_review(slug: str, data: dict) -> dict:
@@ -337,9 +339,9 @@ class EditorHandler(BaseHTTPRequestHandler):
                 self._json(200, impact_index(read("ontology/core.ttl"), read("catalog/nac-usecases.ttl"), {slug: read(f"cases/{slug}/ontology.ttl") for slug in slugs()}, "lokaler Arbeitsstand"))
             elif path == "/api/vocabulary/turtle":
                 self._json(200, {"turtle": (ROOT / "ontology/core.ttl").read_text(encoding="utf-8")})
-            elif path in ("/", "/index.html", "/app.js", "/interaction.js", "/style.css"):
+            elif path in ("/", "/index.html", "/app.js", "/interaction.js", "/recovery.js", "/comparison.js", "/style.css"):
                 filename = "index.html" if path == "/" else path.lstrip("/")
-                types = {"index.html": "text/html", "app.js": "text/javascript", "interaction.js": "text/javascript", "style.css": "text/css"}
+                types = {"index.html": "text/html", "app.js": "text/javascript", "interaction.js": "text/javascript", "recovery.js": "text/javascript", "comparison.js": "text/javascript", "style.css": "text/css"}
                 self._send(200, (ASSETS / filename).read_bytes(), types[filename] + "; charset=utf-8")
             elif path in BRAND_ASSETS:
                 self._send(200, (ASSETS / BRAND_ASSETS[path]).read_bytes(), "image/png")
@@ -369,8 +371,10 @@ class EditorHandler(BaseHTTPRequestHandler):
                 purpose = data.get("purpose", "case")
                 self._json(200, {"branch": start_branch(purpose), "purpose": purpose})
             elif self.path == "/api/vocabulary/preview":
-                _, changes, changed = prepare_vocabulary_change((ROOT / "ontology/core.ttl").read_text(encoding="utf-8"), data)
-                self._json(200, {"changed": changed, "changes": changes})
+                from graph_comparison import vocabulary_comparison
+                original = (ROOT / "ontology/core.ttl").read_text(encoding="utf-8")
+                updated, changes, changed = prepare_vocabulary_change(original, data)
+                self._json(200, {"changed": changed, "changes": changes, "comparison": vocabulary_comparison(original, updated)})
             elif self.path == "/api/vocabulary/save":
                 self._json(200, write_vocabulary_change(data))
             elif self.path == "/api/vocabulary/review":

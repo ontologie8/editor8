@@ -181,6 +181,7 @@ test('release links to the delivered commit and data targets can be switched', a
   await expect(page.locator('#data-brand')).toBeHidden();
   await expect(page.locator('#case-list .case-item')).toHaveCount(2);
   await page.setViewportSize({width:500, height:800});
+  await expect(page.locator('#session-user')).toHaveText('browser-tester');await expect(page.locator('#session-user')).toBeVisible();
   await expect(page.locator('#release-link')).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
@@ -290,4 +291,121 @@ test('slow case responses cannot replace a newer selection or newly edited input
   page.on('dialog',dialog=>dialog.accept());await page.locator('#case-list').getByRole('button',{name:'Künstlicher Fall demo-zwei',exact:true}).click();await expect.poll(()=>nextRequested).toBe(true);
   await label.fill('Eingabe während des Ladens');releaseNext();await expect.poll(()=>nextDelivered).toBe(true);await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
   await expect(page.locator('#case-title')).toHaveText('Künstlicher Fall demo-eins');await expect(label).toHaveValue('Eingabe während des Ladens');await expect(page.locator('#save-current')).toBeEnabled();
+});
+
+test('reload recovers unsaved model inputs and their reason without writing them',async ({page})=>{
+  const label=await editArtificialLabel(page,'Wiederhergestellte künstliche Bezeichnung');
+  await page.locator('[data-area=review]').click();await page.locator('#change-reason').fill('Künstlicher Grund bleibt nach dem Neuladen erhalten.');
+  const cache=await page.evaluate(()=>Object.entries(sessionStorage).find(([key])=>key.startsWith('editor8:inputs:v1:')));
+  expect(cache).toBeTruthy();expect(JSON.parse(cache[1])).not.toHaveProperty('token');expect(JSON.parse(cache[1])).not.toHaveProperty('csrf');
+  let writes=0;page.on('request',request=>{if(request.url().endsWith('/save'))writes++;});
+  page.on('dialog',dialog=>dialog.accept());await page.reload();await expect(page.locator('#input-recovery')).toBeVisible();
+  await page.locator('#restore-inputs').click();await expect(page.locator('#input-recovery')).toBeHidden();
+  await expect(page.locator('#node-form label').filter({hasText:/^Bezeichnung$/}).locator('input')).toHaveValue('Wiederhergestellte künstliche Bezeichnung');
+  await expect(page.locator('#change-reason')).toHaveValue('Künstlicher Grund bleibt nach dem Neuladen erhalten.');expect(writes).toBe(0);
+  await page.keyboard.press('Control+s');await expect(page.locator('#preview-comparison')).toBeVisible();
+  await expect(page.locator('#preview-comparison .diff-changed[role=button]')).toHaveCount(2);
+  await page.locator('#confirm-save').click();await expect(page.locator('#notice')).toContainText('Fallvorlage gespeichert');
+  expect(await page.evaluate(()=>JSON.parse(sessionStorage.getItem(Object.keys(sessionStorage).find(key=>key.startsWith('editor8:inputs:v1:')))).base.nodes.find(node=>node.id==='demo0').label)).toBe('Wiederhergestellte künstliche Bezeichnung');
+});
+
+test('expired session preserves inputs through login and resumes the owned draft',async ({page,context})=>{
+  await editArtificialLabel(page,'Eingabe vor dem Sitzungsende');
+  const session=await (await context.request.get('/api/status')).json();
+  await context.request.post('/api/drafts/leave',{headers:{Origin:'http://127.0.0.1:18767','X-Editor-Token':session.token},data:{}});
+  await page.route('**/api/cases/demo-eins/preview',async route=>{await page.unroute('**/api/cases/demo-eins/preview');await route.fulfill({status:401,json:{error:'Synthetisch abgelaufene Sitzung'}});});
+  await page.route('**/login',route=>route.fulfill({status:200,contentType:'text/html',body:'<p>Erneut angemeldet – synthetischer Anbieter</p>'}));
+  await page.keyboard.press('Control+s');await expect(page).toHaveURL(/\/login$/);
+  await page.goto('/');await expect(page.locator('#input-recovery')).toBeVisible();await page.locator('#restore-inputs').click();
+  await expect(page.locator('#node-form label').filter({hasText:/^Bezeichnung$/}).locator('input')).toHaveValue('Eingabe vor dem Sitzungsende');await expect(page.locator('#branch')).toHaveText('Mein Entwurf');
+});
+
+test('recovery keeps concurrent unrelated changes and refuses a conflicting field',async ({page})=>{
+  await editArtificialLabel(page,'Eigene künstliche Bezeichnung');page.on('dialog',dialog=>dialog.accept());
+  await page.route('**/api/cases/demo-eins',async route=>{const response=await route.fetch();const model=await response.json();model.nodes.find(node=>node.id==='demo1').detail='Parallel geänderte Erläuterung';await route.fulfill({response,json:model});});
+  await page.reload();await page.locator('#restore-inputs').click();await expect(page.locator('#input-recovery')).toBeHidden();
+  expect(await page.evaluate(()=>state.current.nodes.find(node=>node.id==='demo1').detail)).toBe('Parallel geänderte Erläuterung');
+  await page.unroute('**/api/cases/demo-eins');
+  await page.route('**/api/cases/demo-eins',async route=>{const response=await route.fetch();const model=await response.json();model.nodes.find(node=>node.id==='demo0').label='Konkurrierende Bezeichnung';await route.fulfill({response,json:model});});
+  await page.reload();await page.locator('#restore-inputs').click();await expect(page.locator('#input-recovery')).toBeVisible();
+  await expect(page.locator('#recovery-status')).toContainText('nichts überschrieben');
+  const download=page.waitForEvent('download');await page.locator('#export-inputs').click();const file=await download;expect(file.suggestedFilename()).toBe('editor8-eingaben.json');
+});
+
+test('recovery never offers another account or another model repository inputs',async ({page})=>{
+  await editArtificialLabel(page,'Nur für das eigene Konto');
+  await page.evaluate(()=>{state.dirty=false;const key=Object.keys(sessionStorage).find(key=>key.startsWith('editor8:inputs:v1:'));const record=JSON.parse(sessionStorage.getItem(key));record.user='anderes-konto';sessionStorage.setItem(key,JSON.stringify(record));});
+  page.on('dialog',dialog=>dialog.accept());await page.reload();await expect(page.locator('#case-title')).toBeVisible();await expect(page.locator('#input-recovery')).toBeHidden();
+  expect(await page.evaluate(()=>Object.keys(sessionStorage).some(key=>key.startsWith('editor8:inputs:v1:')))).toBe(false);
+  await page.evaluate(()=>sessionStorage.setItem('editor8:inputs:v1:browser-tester:example/second-dataset',JSON.stringify({version:1,user:'browser-tester',repository:'example/second-dataset',updated:Date.now(),model:{nodes:[{label:'Nicht der aktuelle Bestand'}]}})));
+  await page.reload();await expect(page.locator('#input-recovery')).toBeHidden();expect(await page.locator('body').innerText()).not.toContain('Nicht der aktuelle Bestand');
+});
+
+test('unavailable browser storage keeps inputs open and offers an in-memory export',async ({page})=>{
+  await page.addInitScript(()=>{Storage.prototype.setItem=function(){throw new DOMException('synthetic unavailable storage','QuotaExceededError');};});
+  await editArtificialLabel(page,'Ohne Browserspeicher erhalten');
+  await page.route('**/api/cases/demo-eins/preview',route=>route.fulfill({status:401,json:{error:'Synthetisch abgelaufene Sitzung'}}));
+  await page.keyboard.press('Control+s');await expect(page).not.toHaveURL(/\/login$/);await expect(page.locator('#input-recovery')).toBeVisible();
+  await expect(page.locator('#reconnect-inputs')).toBeVisible();
+  const downloading=page.waitForEvent('download');await page.locator('#export-inputs').click();const downloaded=await downloading;expect(downloaded.suggestedFilename()).toBe('editor8-eingaben.json');
+  const stream=await downloaded.createReadStream();const buffers=[];for await(const chunk of stream)buffers.push(chunk);const entry=JSON.parse(Buffer.concat(buffers).toString());
+  expect(entry.model.nodes.some(node=>node.label==='Ohne Browserspeicher erhalten')).toBe(true);expect(entry).not.toHaveProperty('token');
+  await page.unroute('**/api/cases/demo-eins/preview');
+  const session=await (await page.request.get('/api/status')).json();await page.request.post('/api/drafts/leave',{headers:{Origin:'http://127.0.0.1:18767','X-Editor-Token':session.token},data:{}});
+  await page.locator('#reconnect-inputs').click();await expect(page.locator('#input-recovery')).toBeHidden();
+  await expect(page.locator('#node-form label').filter({hasText:/^Bezeichnung$/}).locator('input')).toHaveValue('Ohne Browserspeicher erhalten');await expect(page.locator('#save-current')).toBeEnabled();
+});
+
+test.describe('scaled graph comparison',()=>{
+test.use({deviceScaleFactor:2.5});
+test('graph comparison is keyboard usable and fits the effective scaled desktop',async ({page})=>{
+  await page.setViewportSize({width:1536,height:760});await editArtificialLabel(page,'Grafisch geprüfte künstliche Bezeichnung');
+  await page.keyboard.press('Control+s');const comparison=page.locator('#preview-comparison');await expect(comparison).toBeVisible();
+  const after=comparison.locator('.comparison-pane').last().getByRole('button',{name:'Geändert: Grafisch geprüfte künstliche Bezeichnung'});await after.focus();await page.keyboard.press('Enter');
+  await expect(comparison.locator('.comparison-detail')).toContainText('Bezeichnung');await expect(comparison.locator('.comparison-detail')).toContainText('Grafisch geprüfte');
+  const rect=await page.locator('#change-preview').boundingBox();expect(rect.x).toBeGreaterThanOrEqual(0);expect(rect.y+rect.height).toBeLessThanOrEqual(760);
+  expect(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight)).toBe(true);
+  await page.screenshot({path:'test-results/graph-comparison-desktop.png',fullPage:true});
+  await page.setViewportSize({width:390,height:844});await page.screenshot({path:'test-results/graph-comparison-mobile.png',fullPage:true});
+});
+});
+
+test('shared-term recovery merges separate fields and flags conflicting definitions',async ({page})=>{
+  await page.goto('/');await expect(page.locator('#case-count')).toHaveText('2');
+  const result=await page.evaluate(()=>{
+    const base={terms:[{id:'Demo',label:'Künstlicher Begriff',comment:'Bisherige Bedeutung',kind:'class'}],revision:'old'};
+    const local=structuredClone(base);local.terms[0].label='Eigene Bezeichnung';
+    const latest=structuredClone(base);latest.terms[0].comment='Unabhängige neue Bedeutung';latest.revision='current';latest.expected_ref='current-ref';
+    const merged=EditorRecovery.merge(base,local,latest,'vocabulary');
+    local.terms[0].comment='Widersprüchliche eigene Bedeutung';
+    return {merged,conflict:EditorRecovery.merge(base,local,latest,'vocabulary')};
+  });
+  expect(result.merged.conflicts).toEqual([]);expect(result.merged.model.terms[0]).toMatchObject({label:'Eigene Bezeichnung',comment:'Unabhängige neue Bedeutung'});expect(result.merged.model.expected_ref).toBe('current-ref');expect(result.conflict.conflicts).toHaveLength(1);
+});
+
+test('a committed save with a lost response is recovered without repeating its change',async ({page})=>{
+  await editArtificialLabel(page,'Gespeichert trotz verlorener Antwort');
+  await page.keyboard.press('Control+s');await page.route('**/api/cases/demo-eins/save',async route=>{await route.fetch();await route.fulfill({status:503,json:{error:'Antwort synthetisch verloren'}});});
+  await page.locator('#confirm-save').click();await expect(page.locator('#preview-status')).toContainText('verloren');await page.locator('#cancel-preview').click();
+  page.on('dialog',dialog=>dialog.accept());await page.reload();await page.locator('#restore-inputs').click();await expect(page.locator('#input-recovery')).toBeHidden();
+  await expect(page.locator('#notice')).toContainText('bereits gespeichert');await expect(page.locator('#save-current')).toBeDisabled();
+  expect(await page.evaluate(()=>Object.keys(sessionStorage).some(key=>key.startsWith('editor8:inputs:v1:')))).toBe(false);
+});
+
+test('reviewed changes show the same RDF-derived graph as the save preview',async ({page})=>{
+  await editArtificialLabel(page,'Künstliche Änderung zur Prüfung');await page.keyboard.press('Control+s');
+  const comparison=await page.evaluate(()=>fetch('/api/cases/demo-eins/preview',{method:'POST',headers:{'Content-Type':'application/json','X-Editor-Token':state.token},body:JSON.stringify(state.current)}).then(response=>response.json()));
+  await page.locator('#cancel-preview').click();
+  await page.route('**/api/reviews',route=>route.fulfill({json:[{number:99,case:'demo-eins',author:'künstlicher-autor',draft:false}]}));
+  await page.route('**/api/reviews/99',route=>route.fulfill({json:{number:99,title:'Künstliche Fachprüfung',case:'demo-eins',author:'künstlicher-autor',draft:false,url:'https://example.org/review/99',body:'Künstlicher Prüfgrund',changes:comparison.changes,comparison:comparison.comparison,can_review:true,can_approve:false,problem:''}}));
+  await page.evaluate(()=>setView('fachpruefung'));await page.locator('#review-list .review-item').click();await expect(page.locator('#review-comparison')).toBeVisible();await expect(page.locator('#review-comparison .diff-changed[role=button]')).toHaveCount(2);await expect(page.locator('#approve-review')).toBeDisabled();
+});
+
+test('review notes survive reload after the model is saved and are cleared on logout',async ({page})=>{
+  await editArtificialLabel(page,'Künstlicher gespeicherter Stand');await page.keyboard.press('Control+s');await page.locator('#confirm-save').click();await expect(page.locator('#save-current')).toBeDisabled();
+  await page.locator('[data-area=review]').click();await page.locator('#change-reason').fill('Noch nicht eingereichte Begründung');
+  page.on('dialog',dialog=>dialog.accept());await page.reload();await page.locator('#restore-inputs').click();await expect(page.locator('#input-recovery')).toBeHidden();
+  await expect(page.locator('#change-reason')).toHaveValue('Noch nicht eingereichte Begründung');await expect(page.locator('#save-current')).toBeDisabled();
+  await page.route('**/api/logout',route=>route.fulfill({json:{ok:true}}));await page.route('**/login',route=>route.fulfill({contentType:'text/html',body:'<h1>Neue Anmeldung</h1>'}));
+  await page.locator('#logout').click();await expect(page.getByRole('heading',{name:'Neue Anmeldung'})).toBeVisible();expect(await page.evaluate(()=>Object.keys(sessionStorage).some(key=>key.startsWith('editor8:inputs:v1:')))).toBe(false);
 });

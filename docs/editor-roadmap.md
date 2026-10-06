@@ -1,6 +1,6 @@
 # Roadmap für editor8
 
-Stand: 04.10.2026. editor8 pflegt Software, Oberfläche, Anmeldung, Datenadapter und Betrieb. Fachmodelle liegen im ausdrücklich gewählten Datenrepository. Die 20 kanonischen Vorgangsarten gehören zu `notariat8/ontology`; der Editor übernimmt die Fallanzahl aus dem jeweiligen Katalog.
+Stand: 06.10.2026. editor8 pflegt Software, Oberfläche, Anmeldung, Datenadapter und Betrieb. Fachmodelle liegen im ausdrücklich gewählten Datenrepository. Die 20 kanonischen Vorgangsarten gehören zu `notariat8/ontology`; der Editor übernimmt die Fallanzahl aus dem jeweiligen Katalog.
 
 Herkunft: Die ursprüngliche Planung wurde aus dem ontology-Editorzweig übernommen. Historische Nachweise dieses Zweigs sind keine Deploymentbestätigung für editor8. Der heutige Stand und verbleibende Abnahmen sind hier getrennt aufgeführt.
 
@@ -20,9 +20,9 @@ GitHub bleibt die versionierte Datenquelle. Turtle ist Pflegequelle, Mermaid wir
 
 | Paket | Bereits umgesetzt | Verbleibende Arbeit |
 | --- | --- | --- |
-| **P0 – Produktweg absichern** | Wiederholbare Software-/Browser-CI, getrennte Datenintegration, Azure-Auslieferung mit Release- und Assetprüfung | Echte angemeldete fachlich sinnvolle Änderung über Azure bis zum Daten-PR; erwartete Dateien und Commit nachweisen; Prüfung und Freigabe durch ein zweites Konto |
-| **P1 – Bedienqualität und Wartbarkeit** | Freigegebene Office-Struktur, kompakte Desktopmaße, erneuerte CSS-Regeln, fachliche Hilfe, Hover-/Fokushinweise und objektbezogene Kontextmenüs; Interaktionsschicht in `interaction.js`; geprüfte Tastatur- und Entwurfsgrenzen | Übrige `app.js` in klare Zustände und Ansichten ordnen; Fehler und leere Ansichten vollständig prüfen; abschließende Bedienabnahme |
-| **P2 – Änderungsfolgen sichtbar machen** | Textliche Änderungsvorschau und technische Begriffsverwendung | Grafischer Vorher/Nachher-Vergleich aus tatsächlichen RDF-Differenzen |
+| **P0 – Produktweg absichern** | Wiederholbare Software-/Browser-CI, getrennte Datenintegration, Azure-Auslieferung mit Release- und Assetprüfung | Echte angemeldete fachlich sinnvolle Änderung über Azure bis zum Daten-PR; Zwei-Personen-Abnahme auf Nutzerwunsch bis zur Nachfrage am 01.12.2026 zurückgestellt |
+| **P1 – Bedienqualität und Wartbarkeit** | Office-Struktur, kompakte Desktopmaße, fachliche Hilfe, Hover-/Fokushinweise und Kontextmenüs; eigene Interaktions- und Wiederaufnahmeschicht; offene Modelleingaben und Begründungen nach Neuladen oder erneuter Anmeldung prüfen und wieder aufnehmen | Übrige `app.js` in klare Zustände und Ansichten ordnen; weitere Fehler und leere Ansichten prüfen; abschließende Bedienabnahme |
+| **P2 – Änderungsfolgen sichtbar machen** | Text und grafischer Vorher/Nachher-Vergleich aus tatsächlichen RDF-Differenzen für Fallmodelle und gemeinsame Begriffe, einschließlich direktem Umfeld und Prüfkorb | Darstellung großer Änderungsumfänge und fachliche Verständlichkeit gemeinsam abnehmen; technische Verwendung bleibt von tatsächlicher Aktennutzung getrennt |
 | **P3 – Rückfragen am Gegenstand** | Prüfkorb, begründete Änderungswünsche und commitgebundene Freigabe | Direkt zum betroffenen Baustein oder zur Beziehung springen; Rückfragen mit stabilen Kennungen und geprüftem Stand verbinden |
 | **P4 – Geführte deutsche Formulierungen** | Strukturierte Felder und Beziehungsauswahl | Kontrollierte Sätze aus vorhandenen Bausteinen und zulässigen Beziehungen; fachlich freigegebene Anzeigenamen |
 | **P5 – SHACL pflegen** | Als spätere Prüfschicht geplant | Regelkatalog und Shapes-Vertrag entscheiden; Regeln im Datenrepository versionieren und Befunde im Editor erklären |
@@ -33,6 +33,8 @@ Der Live-Nachweis braucht eine konkrete, fachlich sinnvolle Korrektur. Eine Pers
 
 `hheise-ch` ist im Datenziel als notarieller Reviewer eingetragen. Die reale Prüfung einer Änderung einer anderen Person, die Freigabe auf dem aktuellen Commit und der anschließende manuelle Merge-Weg bleiben nachzuweisen. Die Registrierung ist keine bereits durchgeführte Abnahme. [Issue #7](https://github.com/notariat8/ontology/issues/7) bleibt eine optionale technische Erzwingung des Freigabeschritts.
 
+**Nutzerentscheidung vom 06.10.2026:** Aktuell arbeitet nur der Nutzer selbst mit. Die reale Zwei-Personen-Abnahme ist deshalb zurückgestellt und blockiert die beauftragte Softwareentwicklung nicht. Am 01.12.2026 wird einmal nach einer zweiten tatsächlichen Person gefragt. Zwei Konten derselben Person ersetzen diese Abnahme nicht; fachliche Freigaberegeln bleiben bestehen.
+
 ### P1: Zustände und Bedienung
 
 Der Speicherablauf hat einen eigenen Zustand für Vorschau und laufende Anfrage. Wiederholtes Speichern erzeugt keine parallelen Anfragen; bestätigt wird die zuvor geprüfte Fassung. Fehler bleiben im Vorschaufenster sichtbar, offene Eingaben erhalten. Abmelden fragt vor dem Verwerfen. Langsame Fallantworten dürfen eine spätere Auswahl oder neue Eingaben nicht ersetzen. Synthetische Browserprüfungen decken diese Verzögerungs-, Fehler- und Abbruchwege ab. Die vollständige Aufteilung von `app.js` und die abschließende Bedienabnahme bleiben offen.
@@ -41,7 +43,7 @@ Alle Vorgangsarten des angegebenen Datenkatalogs müssen funktional gleich bleib
 
 ### P2: Graphvergleich
 
-Hinzugefügte, entfernte und geänderte Bausteine und Beziehungen sowie tatsächlich betroffene Nachbarn und Fälle markieren. Text und Graph müssen dieselbe Änderung erklären. Tests führen die Darstellung auf die tatsächlichen RDF-Tripel zurück; daraus keine unbelegte fachliche Wirkung oder Aktennutzung ableiten.
+Umgesetzt ist der Vergleich tatsächlicher RDF-Differenzen zwischen gespeicherter und vorgeschlagener Fassung. Fallmodelle und gemeinsame Begriffe zeigen hinzugefügte, entfernte und geänderte Bausteine sowie hinzugefügte oder entfernte Beziehungen mit dem direkten Umfeld. Beide Ansichten verwenden gleiche Positionen und stabile Kennungen. Wörter, Farben und Feldvergleich erklären dieselbe Änderung wie die Textvorschau. Der Prüfkorb nutzt denselben Vergleich. Tests führen die Darstellung auf tatsächliche RDF-Tripel zurück; daraus folgt keine unbelegte fachliche Wirkung oder Aktennutzung.
 
 ### P3: Rückfragen und Bezug zum geprüften Stand
 
@@ -57,6 +59,6 @@ Zuerst Strukturregeln und getrennt davon fachliche Regeln festlegen. Shapes im D
 
 ## Nächstes Arbeitspaket
 
-P0/P1 abschließen: regelmäßige Datenintegration nachweisen, echten Schreib-/PR-/Prüfweg mit sinnvoller Korrektur durchführen und die verbleibenden Bedienzustände prüfen. Danach P2 als nächsten funktionalen Ausbau angehen. Die historischen Token-Schätzungen der ursprünglichen Roadmap sind keine aktuelle Restaufwandsschätzung.
+P1 weiter bearbeiten: übrige Ansichten und Fehlerzustände ordnen, große Änderungsvergleiche und die fachliche Bedienung abnehmen. Den echten Schreib-/PR-Weg mit einer sinnvollen Korrektur separat nachweisen; die zurückgestellte Zwei-Personen-Abnahme nicht als Softwareblocker behandeln. Danach P3 mit Rückfragen am Gegenstand konkretisieren. Die [Literatureinordnung](research/2026-10-06-editor-scope-semantic-books.md) begrenzt den Produktumfang auf fachliche Modellpflege. Historische Token-Schätzungen sind keine aktuelle Restaufwandsschätzung.
 
 Vor umfangreichen Investitionen in P2–P5 bleibt ein begrenzter Interoperabilitätstest mit Protégé/WebProtégé und gegebenenfalls Fluent Editor sinnvoll: Import, kleine Änderung, Export und Vergleich von RDF-Tripeln, Kennungen, Quellen und Dateigrenzen. Eine Fremdinstallation darf P0/P1 nicht aufhalten. Ein allgemeiner OWL-Reasoner, freie OWL-Axiome und eine zweite dauerhafte Ontologiedatenbank sind ohne belegten Bedarf nicht vorgesehen.

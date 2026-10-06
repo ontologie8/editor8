@@ -248,7 +248,7 @@ window.EDITOR8_LEARNING = {
           {
             "id": "speichern-1",
             "title": "Speichern zeigt zuerst den Vergleich",
-            "text": "Deine Eingaben sind zunächst ungespeichert. Datei → Speichern oder Strg+S öffnet den Vergleich. Erst Speichern bestätigen sichert die gezeigte Fassung in deinem Arbeitsentwurf. Während der Speicherung kurz warten; bei einem Fehler bleiben die Eingaben offen und können erneut gespeichert werden.",
+            "text": "Deine Eingaben sind zunächst ungespeichert. Datei → Speichern oder Strg+S öffnet den Vergleich. Erst Speichern bestätigen sichert die gezeigte Fassung in deinem Arbeitsentwurf. Während der Speicherung kurz warten; bei einem Fehler bleiben die Eingaben offen und können erneut gespeichert werden. Im echten Editor zeigt Vorher / Nachher hinzugefügte, entfernte und geänderte Bausteine und Beziehungen sowie unveränderte direkte Nachbarn. Wähle einen Baustein für den Vergleich seiner Angaben. Die künstliche Übung unten übt denselben Vergleich vor der Bestätigung.",
             "steps": [
               "Vergleiche alte und neue Bezeichnung.",
               "Prüfe, ob weitere unbeabsichtigte Änderungen auftauchen."
@@ -340,7 +340,7 @@ window.EDITOR8_LEARNING = {
           {
             "id": "routine-3",
             "title": "Die Pflege endet mit einem nachgewiesenen Ergebnis",
-            "text": "Eine Modelländerung ist nachvollziehbar, wenn Grund, Fachquelle, tatsächliche Änderung und geprüfte Fassung zusammengehören. Kontrolliere nach der Übernahme das Ergebnis im gemeinsamen Modellbestand. Bei einer Fehlermeldung bewahre den Entwurf und notiere Arbeitsschritt und Meldung.",
+            "text": "Eine Modelländerung ist nachvollziehbar, wenn Grund, Fachquelle, tatsächliche Änderung und geprüfte Fassung zusammengehören. Kontrolliere nach der Übernahme das Ergebnis im gemeinsamen Modellbestand. Bei einer Fehlermeldung bewahre den Entwurf und notiere Arbeitsschritt und Meldung. Nach einer Unterbrechung bietet der echte Editor im selben Browserfenster Wiederherstellen an. Melde dich mit demselben Konto an und wähle denselben Modellbestand. Bei widersprüchlichen Änderungen wird nichts überschrieben; sichere die Eingaben und kläre den Konflikt. Wiederherstellen ersetzt Speichern nicht.",
             "steps": [
               "Nutze das Handbuch für Rollen und Fehlerbehebung.",
               "Prüfe eine kleine konkrete Änderung statt mehrere Themen gleichzeitig."
@@ -638,7 +638,8 @@ window.EDITOR8_LEARNING = {
           "Eine Freigabe gehört zur tatsächlich geprüften Fassung. Wird die Änderung danach weiter bearbeitet, muss die neue Fassung erneut beurteilt werden. Die verantwortliche Person für den Modellbestand übernimmt die Änderung erst nach der nötigen Fachfreigabe und erfolgreichen Prüfungen. Falls nötig, öffnet sie dafür den Änderungsvorschlag über In GitHub öffnen.",
           "Gespeicherte Arbeitsentwürfe kannst du später wieder öffnen. Entwurf ablegen beendet die aktuelle Bearbeitung, ohne bereits gespeicherte Änderungen zu löschen. Beim Abmelden fragt der Editor vor dem Verwerfen offener Eingaben. Ungespeicherte Eingaben sind beim Schließen des Browsers nicht dauerhaft gesichert.",
           "Gespeichert wird genau die bestätigte Vorschau. Änderst du die Eingaben während ihrer Vorbereitung, wähle Speichern erneut. Während des Schreibens wartest du auf die Bestätigung. Bei einem Fehler bleiben die Eingaben erhalten und die Vorschau erlaubt einen erneuten Versuch.",
-          "Unter Informationen kannst du frühere Fassungen ansehen. Die Wiederaufnahme einer früheren Fassung erzeugt nach Vergleich einen neuen Arbeitsentwurf. Auch dieser braucht Begründung und Fachprüfung."
+          "Unter Informationen kannst du frühere Fassungen ansehen. Die Wiederaufnahme einer früheren Fassung erzeugt nach Vergleich einen neuen Arbeitsentwurf. Auch dieser braucht Begründung und Fachprüfung.",
+          "Der Vergleich zeigt Vorher und Nachher nebeneinander: Hinzugefügt, Entfernt und Geändert sind durch Wörter und Farben markiert. Unveränderte direkte Nachbarn helfen bei der Orientierung. Wähle einen Baustein mit Maus oder Tastatur für den Vergleich seiner Angaben. Beschreibung oder Quellen können sich auch ohne Bausteinänderung ändern; lies deshalb ebenfalls den Textvergleich. Der Graph zeigt tatsächliche Modelländerungen und ersetzt keine Beurteilung ihrer fachlichen Folgen."
         ],
         "steps": [
           "Unter Prüfen → Fachprüfung eine eingereichte Änderung öffnen und ihren Anlass sowie Quellenstand lesen.",
@@ -708,7 +709,8 @@ window.EDITOR8_LEARNING = {
         "paragraphs": [
           "Notiere bei einem Fehler den ausgewählten Fachmodellbestand, die Vorgangsart, deinen Arbeitsschritt und die angezeigte Fehlermeldung. Gib bei einer technischen Störung auch den Editor-Release aus der Fußzeile an. Melde die Störung dem Betreiber; fachliche Unklarheiten gehen an die verantwortliche Person für den Modellbestand.",
           "Gib keine Anmeldedaten oder vollständigen Rückkehradressen der Anmeldung weiter. Bewahre gespeicherte Entwürfe, solange ein Fehler ungeklärt ist. Nach einem Speicherfehler bleiben Eingaben offen: Warte auf die Meldung, prüfe die Vorschau und versuche die Speicherung erneut.",
-          "Im Training übst du an einem künstlichen Modell. Die Übung verändert keine echten Fachmodelle und erteilt keine notarielle Freigabe. Neu laden setzt die Übung zurück."
+          "Im Training übst du an einem künstlichen Modell. Die Übung verändert keine echten Fachmodelle und erteilt keine notarielle Freigabe. Neu laden setzt die Übung zurück.",
+          "Offene Eingaben werden vorübergehend im selben Browserfenster gesichert. Nach Neuladen oder erneuter Anmeldung wähle Wiederherstellen. Melde dich mit demselben Konto an und wähle denselben Modellbestand. Der Editor prüft deinen Entwurf und den inzwischen gespeicherten Stand. Unabhängige Änderungen bleiben erhalten; bei widersprüchlichen Änderungen wird nichts überschrieben. Mit Eingaben sichern kannst du deine offenen Angaben als Datei aufbewahren und den Konflikt klären. Erst Speichern sichert die geprüfte Änderung dauerhaft. Abmelden oder Verwerfen löscht die Zwischensicherung; beim Schließen des Browserfensters kann sie verloren gehen."
         ],
         "steps": [],
         "facts": [
@@ -743,6 +745,10 @@ window.EDITOR8_LEARNING = {
           [
             "Training zurückgesetzt",
             "Übungen werden nur bis zum Neuladen gehalten. Das künstliche Beispiel erneut öffnen."
+          ],
+          [
+            "Zwischensicherung nicht verfügbar",
+            "Dieses Arbeitsfenster geöffnet halten. Erneut anmelden öffnet ein zweites Fenster. Danach Anmeldung prüfen und fortsetzen wählen. Eingaben sichern bewahrt die offenen Angaben als Datei auf."
           ]
         ]
       }

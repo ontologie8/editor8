@@ -9,9 +9,12 @@ in a temporary directory.
 from __future__ import annotations
 
 from copy import deepcopy
+from contextlib import contextmanager
 import hashlib
 from pathlib import Path
 import sys
+import shutil
+from tempfile import TemporaryDirectory
 from threading import RLock
 import time
 
@@ -60,7 +63,9 @@ class BrowserStore:
         return (ROOT / path).read_text(encoding="utf-8")
 
     def list_drafts(self, username: str) -> list[dict]:
-        return []
+        with self.lock:
+            return [{"branch": branch, "purpose": "case", "case": record["model"]["slug"] if record["model"] else ""}
+                    for branch, record in self.branches.items() if branch.startswith("codex/ontology-editor-" + username + "-")]
 
     def case_index(self, main_ref: str) -> dict:
         assert main_ref == MAIN_REF
@@ -101,12 +106,24 @@ class BrowserStore:
     def preview(self, slug: str, branch: str, data: dict) -> dict:
         if branch == "main" or self.ref(branch) != data.get("expected_ref"):
             raise ValueError("Arbeitszweig ist nicht aktuell")
-        return preview_change(slug, data)
+        with self.model_root(branch) as root:
+            return preview_change(slug, data, root)
+
+    @contextmanager
+    def model_root(self, branch):
+        with TemporaryDirectory(prefix="editor8-browser-snapshot-") as temp:
+            root = Path(temp)
+            shutil.copytree(ROOT, root, dirs_exist_ok=True)
+            record = self.branches.get(branch, {})
+            if record.get("ttl"):
+                (root / "cases" / record["model"]["slug"] / "ontology.ttl").write_bytes(record["ttl"].encode("utf-8"))
+            yield root
 
     def save(self, slug: str, branch: str, data: dict) -> dict:
         if branch == "main" or self.ref(branch) != data.get("expected_ref"):
             raise ValueError("Arbeitszweig ist nicht aktuell")
-        ttl, page, changed = prepare_change(slug, data, data.get("revision", ""))
+        with self.model_root(branch) as root:
+            ttl, page, changed = prepare_change(slug, data, data.get("revision", ""), root)
         if not changed:
             return {"changed": False, "revision": data["revision"], "expected_ref": self.ref(branch)}
         Graph().parse(data=ttl, format="turtle")
@@ -116,6 +133,7 @@ class BrowserStore:
             record["files"] = {f"cases/{slug}/ontology.ttl", f"cases/{slug}/README.md"}
             record["sha"] = hashlib.sha1(ttl.encode("utf-8")).hexdigest()
             record["model"] = deepcopy(data)
+            record["ttl"] = ttl
             record["model"]["revision"] = hashlib.sha256(ttl.encode("utf-8")).hexdigest()
             return {"changed": True, "revision": record["model"]["revision"], "expected_ref": record["sha"]}
 

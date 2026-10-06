@@ -13,6 +13,7 @@ Offene Eingaben werden vorübergehend im selben Browserfenster gesichert. Nach N
 | Begriff oder Meldung | Erläuterung |
 | --- | --- |
 | Anmeldung nicht abgeschlossen | Auf der Fehlerseite Erneut anmelden wählen. Bei erneutem Fehler nur Meldung und Diagnose-Kennung an den Betreiber geben; keine vollständige Anmeldeadresse weitergeben. |
+| GitHub zeigt 404 beim Anmelden | Öffne https://www.ontologie8.de/login erneut und prüfe, ob du bei GitHub mit deinem freigegebenen Konto angemeldet bist. Bleibt die 404 auf GitHub, muss der Betreiber die Freigabe der GitHub-Anwendung für dein Konto prüfen. Zugang zu einem Fachmodellbestand allein reicht dafür nicht. |
 | Fachmodellbestand fehlt | Zugang bei der verantwortlichen Person für diesen Bestand klären lassen. |
 | Speichern deaktiviert | Prüfen, ob du eine Änderung eingegeben hast und ein passender Arbeitsentwurf geöffnet ist. Eine laufende Speicherung zunächst abwarten. |
 | Stand hat sich inzwischen geändert | Den aktuellen Modellstand neu lesen und mit deinem Entwurf vergleichen, bevor du weitere Änderungen bestätigst. |

@@ -342,7 +342,7 @@ window.EDITOR8_LEARNING = {
             "title": "Die Pflege endet mit einem nachgewiesenen Ergebnis",
             "text": "Eine Modelländerung ist nachvollziehbar, wenn Grund, Fachquelle, tatsächliche Änderung und geprüfte Fassung zusammengehören. Kontrolliere nach der Übernahme das Ergebnis im gemeinsamen Modellbestand. Bei einer Fehlermeldung bewahre den Entwurf und notiere Arbeitsschritt und Meldung. Nach einer Unterbrechung bietet der echte Editor im selben Browserfenster Wiederherstellen an. Melde dich mit demselben Konto an und wähle denselben Modellbestand. Bei widersprüchlichen Änderungen wird nichts überschrieben; sichere die Eingaben und kläre den Konflikt. Wiederherstellen ersetzt Speichern nicht.",
             "steps": [
-              "Nutze das Handbuch für Rollen und Fehlerbehebung.",
+              "Nutze das Handbuch für Rollen und Fehlerbehebung. Zeigt GitHub beim Anmelden 404, starte über die Editor-Anmeldung erneut und lasse die Kontofreigabe beim Betreiber prüfen.",
               "Prüfe eine kleine konkrete Änderung statt mehrere Themen gleichzeitig."
             ],
             "focus": "local.vermerk",
@@ -676,6 +676,7 @@ window.EDITOR8_LEARNING = {
         "title": "Fachliche Rollen und Zugang",
         "paragraphs": [
           "Dein GitHub-Konto dient der Anmeldung und ordnet Änderungen sowie Prüfentscheidungen deiner Person zu. Welche Fachmodelle du lesen oder bearbeiten darfst, wird für den jeweiligen Modellbestand festgelegt. Die Auswahl eines Bestands erteilt keine zusätzlichen Rechte.",
+          "Bei einem neu eingerichteten Zugang müssen die Anmeldung im Editor, der Zugriff auf den gewählten Fachmodellbestand und deine fachliche Rolle freigegeben sein. Zugriff auf den Modellbestand allein schaltet die Anmeldung und die notarielle Fachprüfung nicht automatisch frei. Der Betreiber richtet diese Freigaben ein.",
           "Leseberechtigte verstehen und vergleichen die Vorlagen. Ontologiepfleger bearbeiten sie in Arbeitsentwürfen und reichen begründete Änderungen ein. Zur notariellen Fachprüfung berechtigte Notare können die Änderung einer anderen Person fachlich freigeben. Die Pflege gemeinsamer Begriffe ist eine zusätzliche fachliche Aufgabe.",
           "Fehlt dir ein Modellbestand oder eine nötige Funktion, wende dich an die dafür verantwortliche Person und nenne den Bestand sowie die gewünschte Tätigkeit. Diese Hilfe erklärt deine fachliche Arbeit im Editor. Zugang und fachliche Berechtigungen werden außerhalb deiner Modelländerung verwaltet."
         ],
@@ -717,6 +718,10 @@ window.EDITOR8_LEARNING = {
           [
             "Anmeldung nicht abgeschlossen",
             "Auf der Fehlerseite Erneut anmelden wählen. Bei erneutem Fehler nur Meldung und Diagnose-Kennung an den Betreiber geben; keine vollständige Anmeldeadresse weitergeben."
+          ],
+          [
+            "GitHub zeigt 404 beim Anmelden",
+            "Öffne https://www.ontologie8.de/login erneut und prüfe, ob du bei GitHub mit deinem freigegebenen Konto angemeldet bist. Bleibt die 404 auf GitHub, muss der Betreiber die Freigabe der GitHub-Anwendung für dein Konto prüfen. Zugang zu einem Fachmodellbestand allein reicht dafür nicht."
           ],
           [
             "Fachmodellbestand fehlt",

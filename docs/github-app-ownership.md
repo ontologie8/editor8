@@ -1,6 +1,6 @@
 # Editorbetreiber und Dateninstallation trennen
 
-Stand: 07.10.2026. Software und Azure-Auslieferung stammen aus `ontologie8/editor8`. Die Eigentumsübertragung der bestehenden GitHub-App von `notariat8` nach `ontologie8` ist durch die GitHub-API bestätigt. App-ID und Client-ID sind unverändert. Name **Ontologie8 Editor**, Kennung `ontologie8-editor` und Homepage `https://www.ontologie8.de` sind ebenfalls geprüft. Die Dateninstallation unter `notariat8` besteht getrennt davon weiter. Eine neue tatsächliche Anmeldung nach der Übertragung bleibt zu prüfen.
+Stand: 07.10.2026. Software und Azure-Auslieferung stammen aus `ontologie8/editor8`. Die Eigentumsübertragung der bestehenden GitHub-App von `notariat8` nach `ontologie8` ist durch die GitHub-API bestätigt. App-ID und Client-ID sind unverändert. Name **Ontologie8 Editor**, Kennung `ontologie8-editor` und Homepage `https://www.ontologie8.de` sind ebenfalls geprüft. Die Dateninstallation unter `notariat8` besteht getrennt davon weiter. Der Nutzer hat die anschließend angefragte Prüfung des geöffneten Editors und der Fachmodelle mit einem Screenshot belegt.
 
 ## Ziel und überprüfter Ausgangsstand
 
@@ -16,7 +16,13 @@ Stand: 07.10.2026. Software und Azure-Auslieferung stammen aus `ontologie8/edito
 
 Der alte Azure-Ressourcenname bezeichnet die bestehende Hostingressource, nicht den Eigentümer der GitHub-App. Sein Name entscheidet nicht über den Softwarestand. Bestehende Secrets liegen im Host beziehungsweise Key Vault und werden nicht zwischen Git-Repositories kopiert.
 
-**Aktuell verifiziert:** App-ID `5119378`, Eigentümer `ontologie8`, Name **Ontologie8 Editor**, Kennung `ontologie8-editor`, Homepage `https://www.ontologie8.de`. Die öffentliche App-Abfrage ist erfolgreich. Die Installation in `notariat8` meldet weiterhin diese App-ID, die neue Kennung, `repository_selection: selected` und keine Sperrung; ihre Rechte sind `contents: write`, `pull_requests: write`, `metadata: read`. Die genaue Repository-Auswahl und der angemeldete Zugriff bleiben zusätzlich zu prüfen. In `ontologie8` ist keine Installation vorhanden oder für Software-Schreibzugriff erforderlich.
+**Aktuell verifiziert:** App-ID `5119378`, Eigentümer `ontologie8`, Name **Ontologie8 Editor**, Kennung `ontologie8-editor`, Homepage `https://www.ontologie8.de`. Die öffentliche App-Abfrage ist erfolgreich. Die Installation in `notariat8` meldet weiterhin diese App-ID, die neue Kennung, `repository_selection: selected` und keine Sperrung; ihre Rechte sind `contents: write`, `pull_requests: write`, `metadata: read`. Die genaue Repository-Auswahl bleibt zusätzlich zu prüfen; den geöffneten Editor und die Fachmodelle belegt der folgende Nutzerbeleg. In `ontologie8` ist keine Installation vorhanden oder für Software-Schreibzugriff erforderlich.
+
+## Nutzerbeleg für den geöffneten Editor
+
+Am 07.10.2026 antwortete der Nutzer auf die Bitte, die Anmeldung nach der App-Übertragung neu zu starten und die Notar-Fachmodelle zu öffnen, mit einem Screenshot. Er zeigt das Konto **ofunk**, den ausgewählten Bestand **Notar-Fachmodelle**, den Baum mit 20 Vorgangsarten und den geladenen Graphen **Adoption / familienrechtliche Erklärungen**. Damit ist die angefragte Leseprüfung als Nutzerbeleg dokumentiert. Es handelt sich um einen vom Nutzer bereitgestellten Screenshot; eine automatisierte Prüfung einer geschützten Sitzung durch den Agenten wurde nicht durchgeführt.
+
+Der Bildausschnitt enthält keine Release-Anzeige. Den separaten technischen Nachweis für Commit `31825c0f95d0146cefad17a369979c9f7e088500`, aktive gesunde Azure-Revision `0000024`, öffentliche Release-Kennung und Assets liefert [Auslieferungslauf 37576616237](https://github.com/ontologie8/editor8/actions/runs/37576616237). Der Screenshot belegt weder die vollständige Liste der installierten Repositories noch Schreiben, Daten-PR oder notarielle Freigabe. Die genaue Installationsauswahl und diese fachlichen Abnahmen bleiben eigenständige Prüfungen.
 
 ## Erfolgte Übertragung prüfen
 

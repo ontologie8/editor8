@@ -340,7 +340,7 @@
           "title": "Die Pflege endet mit einem nachgewiesenen Ergebnis",
           "text": "Eine Modelländerung ist nachvollziehbar, wenn Grund, Fachquelle, tatsächliche Änderung und geprüfte Fassung zusammengehören. Kontrolliere nach der Übernahme das Ergebnis im gemeinsamen Modellbestand. Bei einer Fehlermeldung bewahre den Entwurf und notiere Arbeitsschritt und Meldung. Nach einer Unterbrechung bietet der echte Editor im selben Browserfenster Wiederherstellen an. Melde dich mit demselben Konto an und wähle denselben Modellbestand. Bei widersprüchlichen Änderungen wird nichts überschrieben; sichere die Eingaben und kläre den Konflikt. Wiederherstellen ersetzt Speichern nicht. Im gehosteten Editor können Anmeldung, Öffnen, Speichern, Einreichen und Prüfentscheidung für den Betreiber nachvollziehbar protokolliert werden. Ein Nutzungsbericht ersetzt die Fachprüfung nicht. Die Übungen hier bleiben künstliche Beispiele.",
           "steps": [
-            "Nutze das Handbuch für Rollen und Fehlerbehebung. Zeigt GitHub beim Anmelden 404, starte über die Editor-Anmeldung erneut und lasse die Kontofreigabe beim Betreiber prüfen.",
+            "Nutze das Handbuch für Rollen und Fehlerbehebung. Hilfe → Kontakt zeigt kontakt@ontologie8.de für Bedienfragen und Störungen. Zeigt GitHub beim Anmelden 404, starte über die Editor-Anmeldung erneut und lasse die Kontofreigabe beim Betreiber prüfen.",
             "Prüfe eine kleine konkrete Änderung statt mehrere Themen gleichzeitig."
           ],
           "focus": "local.vermerk",

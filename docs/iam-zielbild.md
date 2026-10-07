@@ -15,7 +15,7 @@ Das öffentliche Software-Repository vermittelt keine Zulassung zur bezahlten In
 
 ## Externe Identitäten ohne internes funktion8-Konto
 
-Im vorhandenen `f8`-Mandanten ist `funktion8.de` bestätigt und Entra P1 aktiv. Die Zuweisung von Gruppen zu Unternehmensanwendungen ist damit grundsätzlich verfügbar; anwendbare Benutzer- und Gastlizenzen bei Einrichtung prüfen. Der Vorschlag braucht keine internen Mitarbeiterkonten für Notare:
+Im vorhandenen Mandanten mit Anzeigename `f8` und ID `870c862b-56f7-4c9b-b0d9-f1f7d32c835c` sind `funktion8.de` und `ontologie8.de` bestätigt und Entra P1 aktiv. Der Name steht unter Entra ID → Übersicht → Eigenschaften. `kontakt@ontologie8.de` ist für App-Kontakt und Nutzungsbericht beauftragt, `admin@ontologie8.de` für die Administration vorgesehen. Beide Adressen sind aktuell Aliasse desselben bestehenden Benutzerobjekts; Details und verbleibende Verwendungen der bisherigen Adresse stehen unter [Betreiberidentitäten](operator-identities.md). Die Zuweisung von Gruppen zu Unternehmensanwendungen ist grundsätzlich verfügbar; anwendbare Benutzer- und Gastlizenzen bei Einrichtung prüfen. Der Vorschlag braucht keine internen Mitarbeiterkonten für Notare:
 
 - Eigenes Entra-Konto: als B2B-Gast einladen. Die Person authentifiziert sich beim eigenen Identitätsanbieter; das Gastobjekt im Ressourcenmandanten ermöglicht die ausdrückliche App- und Gruppenzuweisung.
 - Kein Entra-Konto, aber GitHub-Konto: Gast über eine bestätigte Kontakt-E-Mail mit E-Mail-Einmalcode zulassen und das GitHub-Konto durch eine separate bestätigte Anmeldung für die Datenrechte verknüpfen. Ein neu angelegtes Microsoft-Konto ist dafür nicht erforderlich.

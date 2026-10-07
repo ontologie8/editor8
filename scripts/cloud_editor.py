@@ -1,9 +1,9 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-"""Single-instance hosted NaC editor with GitHub App user authentication.
+"""Single-instance editor with operator admission and personal GitHub data access.
 
-Required environment: GITHUB_APP_CLIENT_ID, GITHUB_APP_CLIENT_SECRET,
-GITHUB_REPOSITORY (owner/repo), PUBLIC_ORIGIN (https://editor.example.org),
-EDITOR_USERS (comma-separated GitHub usernames).
+AUTH_PROVIDER=entra uses signed Entra identity, runtime groups and verified
+GitHub account links. The previous github provider remains available for a
+controlled migration, until the central permissions have been provisioned.
 TLS terminates at the trusted hosting proxy. Sessions are kept in memory and
 expire after eight hours; a restart signs editors out without losing Git data.
 """
@@ -38,6 +38,8 @@ from release_info import release_info
 from repository_registry import load_repositories
 from github_store import GitHubError, GitHubStore
 from usage_audit import audit_line, response_action
+from access_control import AccessControl, AccessDenied, AccessUnavailable, TableAccessStore
+from entra_identity import EntraIdentity
 
 
 ASSETS = APP_ROOT / "editor"
@@ -51,8 +53,17 @@ class AuthenticationRejected(PermissionError):
 
 
 def require_config() -> dict[str, str]:
-    names = ("GITHUB_APP_CLIENT_ID", "GITHUB_APP_CLIENT_SECRET", "GITHUB_REPOSITORY", "PUBLIC_ORIGIN", "EDITOR_USERS")
+    names = ("GITHUB_APP_CLIENT_ID", "GITHUB_APP_CLIENT_SECRET", "GITHUB_REPOSITORY", "PUBLIC_ORIGIN")
     config = {name: os.environ.get(name, "") for name in names}
+    config["AUTH_PROVIDER"] = os.environ.get("AUTH_PROVIDER", "github")
+    if config["AUTH_PROVIDER"] not in {"github", "entra"}:
+        raise ValueError("Ungültiger Anmeldeanbieter")
+    config["EDITOR_USERS"] = os.environ.get("EDITOR_USERS", "")
+    if config["AUTH_PROVIDER"] == "entra":
+        for name in ("ENTRA_TENANT_ID", "ENTRA_CLIENT_ID", "ENTRA_CLIENT_SECRET", "IAM_TABLE_ENDPOINT"):
+            config[name] = os.environ.get(name, "")
+            if not config[name]:
+                raise ValueError("Entra-Konfiguration und Berechtigungsdienst fehlen")
     config["NOTARY_REVIEWERS"] = os.environ.get("NOTARY_REVIEWERS", "")
     config["ONTOLOGY_MAINTAINERS"] = os.environ.get("ONTOLOGY_MAINTAINERS", "")
     if any(not config[name] for name in names):
@@ -67,6 +78,8 @@ def require_config() -> dict[str, str]:
     config["DATA_REPOSITORIES"] = load_repositories()
     if not any(entry["repository"] == config["GITHUB_REPOSITORY"] for entry in config["DATA_REPOSITORIES"]):
         raise ValueError("Das Standardrepository fehlt in config/data-repositories.json")
+    if config["AUTH_PROVIDER"] == "entra":
+        return config
     if not all(value.strip() for value in config["EDITOR_USERS"].split(",")):
         raise ValueError("EDITOR_USERS muss GitHub-Benutzernamen enthalten")
     editors = {value.strip().lower() for value in config["EDITOR_USERS"].split(",")}
@@ -99,6 +112,11 @@ class CloudServer(ThreadingHTTPServer):
         self.lock = threading.RLock()
         self.owner, self.repo = config["GITHUB_REPOSITORY"].split("/")
         self.repositories = config.get("DATA_REPOSITORIES", [{"repository": config["GITHUB_REPOSITORY"], "label": config["GITHUB_REPOSITORY"]}])
+        self.identity = None
+        self.access = None
+        if config.get("AUTH_PROVIDER") == "entra":
+            self.identity = EntraIdentity(config["ENTRA_TENANT_ID"], config["ENTRA_CLIENT_ID"], config["ENTRA_CLIENT_SECRET"], config["PUBLIC_ORIGIN"])
+            self.access = AccessControl(TableAccessStore(config["IAM_TABLE_ENDPOINT"]), self.identity)
 
 
 class CloudHandler(BaseHTTPRequestHandler):
@@ -140,7 +158,7 @@ class CloudHandler(BaseHTTPRequestHandler):
             self.send_header("Set-Cookie", cookie)
         self.end_headers()
 
-    def _session(self) -> dict:
+    def _session(self, validate=True) -> dict:
         jar = SimpleCookie()
         try:
             jar.load(self.headers.get("Cookie", ""))
@@ -149,37 +167,51 @@ class CloudHandler(BaseHTTPRequestHandler):
             sid = ""
         with self.server.lock:
             session = self.server.sessions.get(sid)
-            if session and time.time() - session["created"] < SESSION_LIFETIME:
-                self._audit_session = session
-                return session
-            self.server.sessions.pop(sid, None)
-        raise PermissionError("Bitte bei GitHub anmelden")
+            if not session or time.time() - session["created"] >= SESSION_LIFETIME:
+                self.server.sessions.pop(sid, None)
+                raise PermissionError("Bitte erneut anmelden")
+        self._audit_session = session
+        if validate and self.server.access:
+            self.server.access.grants(session)
+            if not session.get("user"):
+                raise PermissionError("Bitte das GitHub-Konto verknüpfen")
+        return session
 
     def _store(self, session: dict) -> GitHubStore:
         repository = session.get("repository", self.server.config["GITHUB_REPOSITORY"])
-        self._repository(repository, session["user"])
+        self._repository(repository, session["user"], session)
+        if self.server.access and repository not in self._github_repositories(session, session["token"]):
+            raise AccessDenied("Die GitHub-App ist für diesen Bestand nicht freigegeben.")
         owner, repo = repository.split("/")
         return GitHubStore(owner, repo, session["token"])
 
     def _request_lock(self):
         try:
-            session = self._session()
+            # Authentication and provider failures belong inside _get/_post,
+            # where they become a safe HTTP response. Lock lookup does no I/O.
+            session = self._session(validate=False)
         except PermissionError:
             return nullcontext()
         with self.server.lock:
             return session.setdefault("request_lock", threading.RLock())
 
-    def _repository(self, repository: str, username: str) -> dict:
+    def _repository(self, repository: str, username: str, session=None) -> dict:
+        if self.server.access:
+            return self.server.access.require(session or self._session(), repository)
         for entry in self.server.repositories:
             if entry["repository"] == repository and ("users" not in entry or username.lower() in {user.lower() for user in entry["users"]}):
                 return entry
         raise ValueError("Dieses Datenrepository ist nicht freigeschaltet")
 
-    def _available_repositories(self, username: str, token: str) -> list[dict]:
+    def _available_repositories(self, username: str, token: str, session=None) -> list[dict]:
         available = []
-        for entry in self.server.repositories:
+        entries = self.server.access.grants(session) if self.server.access else self.server.repositories
+        installed = self._github_repositories(session, token) if self.server.access else None
+        for entry in entries:
+            if installed is not None and entry["repository"] not in installed:
+                continue
             try:
-                self._repository(entry["repository"], username)
+                self._repository(entry["repository"], username, session)
             except ValueError:
                 continue
             try:
@@ -191,9 +223,52 @@ class CloudHandler(BaseHTTPRequestHandler):
             available.append({"repository": entry["repository"], "label": entry["label"]})
         return available
 
+    def _github_repositories(self, session, token, force=False):
+        cached = session.get("github_repository_cache")
+        token_key = hashlib.sha256(token.encode()).hexdigest()
+        if not force and cached and cached.get("token_key") == token_key and time.time() - cached["checked"] < 60:
+            return cached["repositories"]
+        repositories = set()
+        for page in range(1, 11):
+            response = github_json(f"https://api.github.com/user/installations?per_page=100&page={page}", token)
+            installations = response["installations"]
+            for installation in installations:
+                if installation.get("suspended_at"):
+                    continue
+                identifier = installation["id"]
+                if not isinstance(identifier, int) or isinstance(identifier, bool) or identifier <= 0:
+                    raise ValueError("Ungültige GitHub-Installation")
+                for repo_page in range(1, 11):
+                    items = github_json(f"https://api.github.com/user/installations/{identifier}/repositories?per_page=100&page={repo_page}", token)["repositories"]
+                    repositories.update(item["full_name"] for item in items)
+                    if len(items) < 100:
+                        break
+                else:
+                    raise AccessUnavailable("Die GitHub-Bestandsrechte sind nicht vollständig verfügbar.")
+            if len(installations) < 100:
+                break
+        else:
+            raise AccessUnavailable("Die GitHub-Installationen sind nicht vollständig verfügbar.")
+        session["github_repository_cache"] = {"checked": time.time(), "repositories": repositories, "token_key": token_key}
+        return repositories
+
+    def _require_action(self, session, role):
+        if self.server.access:
+            repository = session["repository"]
+            self.server.access.require(session, repository, role, force=True)
+            if repository not in self._github_repositories(session, session["token"], force=True):
+                raise AccessDenied("Die GitHub-App ist für diesen Bestand nicht freigegeben.")
+            metadata = github_json("https://api.github.com/repos/" + repository, session["token"])
+            if (metadata.get("permissions") or {}).get("push") is not True:
+                raise AccessDenied("GitHub-Schreibrechte für diesen Bestand fehlen.")
+
     def _role(self, field: str) -> set[str]:
         session = self._session()
         repository = session.get("repository", self.server.config["GITHUB_REPOSITORY"])
+        if self.server.access:
+            entry = self.server.access.require(session, repository)
+            role = {"NOTARY_REVIEWERS": "review", "ONTOLOGY_MAINTAINERS": "maintain"}[field]
+            return {session["user"].lower()} if role in entry["roles"] else set()
         entry = self._repository(repository, session["user"])
         if field.lower() in entry:
             return {name.lower() for name in entry[field.lower()]}
@@ -214,6 +289,20 @@ class CloudHandler(BaseHTTPRequestHandler):
         if hostname and hostname not in (urlparse(origin).hostname, "127.0.0.1", "localhost", "::1"):
             self._redirect(origin + "/login")
             return
+        if self.server.identity:
+            flow = self.server.identity.begin()
+            state = flow["state"]
+            with self.server.lock:
+                now = time.time()
+                self.server.pending = {key: value for key, value in self.server.pending.items() if now - value["created"] < AUTH_LIFETIME}
+                if len(self.server.pending) >= 100:
+                    raise ValueError("Zu viele laufende Anmeldungen")
+                self.server.pending[state] = {"created": now, "entra_flow": flow}
+            self._redirect(flow["auth_uri"], [f"entra_oauth_state={state}; Path=/entra/callback; Max-Age={AUTH_LIFETIME}; HttpOnly; Secure; SameSite=Lax"])
+            return
+        self._github_login()
+
+    def _github_login(self, identity_sid=None):
         state = secrets.token_urlsafe(24)
         verifier = secrets.token_urlsafe(48)
         challenge = base64.urlsafe_b64encode(hashlib.sha256(verifier.encode()).digest()).decode().rstrip("=")
@@ -223,15 +312,42 @@ class CloudHandler(BaseHTTPRequestHandler):
             self.server.sessions = {key: value for key, value in self.server.sessions.items() if now - value["created"] < SESSION_LIFETIME}
             if len(self.server.pending) >= 100:
                 raise ValueError("Zu viele laufende Anmeldungen. Bitte später erneut versuchen.")
-            self.server.pending[state] = {"verifier": verifier, "created": time.time()}
+            self.server.pending[state] = {"verifier": verifier, "created": time.time(), "identity_sid": identity_sid}
         params = {
             "client_id": self.server.config["GITHUB_APP_CLIENT_ID"],
             "redirect_uri": self.server.config["PUBLIC_ORIGIN"].rstrip("/") + "/callback",
             "state": state, "code_challenge": challenge, "code_challenge_method": "S256",
         }
-        self._redirect("https://github.com/login/oauth/authorize?" + urlencode(params), [
-            f"nac_oauth_state={state}; Path=/callback; Max-Age={AUTH_LIFETIME}; HttpOnly; Secure; SameSite=Lax"
-        ])
+        cookies = [f"nac_oauth_state={state}; Path=/callback; Max-Age={AUTH_LIFETIME}; HttpOnly; Secure; SameSite=Lax"]
+        if identity_sid:
+            cookies.extend([f"nac_session={identity_sid}; Path=/; Max-Age={SESSION_LIFETIME}; HttpOnly; Secure; SameSite=Lax",
+                            "entra_oauth_state=; Path=/entra/callback; Max-Age=0; HttpOnly; Secure; SameSite=Lax"])
+        self._redirect("https://github.com/login/oauth/authorize?" + urlencode(params), cookies)
+
+    def _entra_callback(self, query):
+        self._auth_stage = "entra-browser-state"
+        try:
+            state = query.get("state", [""])[0]
+            jar = SimpleCookie()
+            jar.load(self.headers.get("Cookie", ""))
+            if not state or "entra_oauth_state" not in jar or jar["entra_oauth_state"].value != state:
+                raise AccessDenied("Anmeldung stimmt nicht mit diesem Browser überein")
+            with self.server.lock:
+                pending = self.server.pending.pop(state, None)
+            if not pending or "entra_flow" not in pending or time.time() - pending["created"] > AUTH_LIFETIME:
+                raise AccessDenied("Anmeldung abgelaufen. Bitte erneut beginnen.")
+            self._auth_stage = "entra-confirm"
+            session = self.server.identity.complete(pending["entra_flow"], {key: value[0] for key, value in query.items()})
+            self.server.access.grants(session, force=True)
+            session.update(created=time.time(), csrf=secrets.token_urlsafe(32), branch="main")
+            sid = secrets.token_urlsafe(32)
+            with self.server.lock:
+                self.server.sessions[sid] = session
+            self._github_login(sid)
+        except AccessDenied as error:
+            self._auth_failure(403, str(error), "entra-rejected")
+        except Exception:
+            self._auth_failure(503, "Die Betreiberanmeldung konnte nicht geprüft werden. Bitte erneut anmelden.", "entra-unavailable")
 
     def _callback(self, query: dict[str, list[str]]) -> None:
         self._auth_stage = "browser-state"
@@ -239,6 +355,10 @@ class CloudHandler(BaseHTTPRequestHandler):
             self._authorize(query)
         except AuthenticationRejected as error:
             self._auth_failure(401, str(error), "rejected")
+        except AccessDenied as error:
+            self._auth_failure(403, str(error), "access-rejected")
+        except AccessUnavailable as error:
+            self._auth_failure(503, str(error), "access-unavailable")
         except HTTPError as error:
             message = "GitHub konnte die Anmeldung nicht bestätigen. Bitte die Anmeldung erneut beginnen."
             self._auth_failure(503 if error.code >= 500 or error.code == 429 else 403, message, "github-http-" + str(error.code))
@@ -286,6 +406,16 @@ class CloudHandler(BaseHTTPRequestHandler):
             pending = self.server.pending.pop(state, None)
         if not pending or time.time() - pending["created"] > AUTH_LIFETIME or not code:
             raise AuthenticationRejected("Anmeldung abgelaufen. Bitte erneut beginnen.")
+        identity_session = None
+        if self.server.access:
+            sid = pending.get("identity_sid")
+            if not sid or "nac_session" not in jar or jar["nac_session"].value != sid:
+                raise AuthenticationRejected("Bitte zuerst über den Betreiber anmelden")
+            with self.server.lock:
+                identity_session = self.server.sessions.get(sid)
+            if not identity_session or time.time() - identity_session["created"] >= SESSION_LIFETIME:
+                raise AuthenticationRejected("Betreiberanmeldung abgelaufen")
+            self.server.access.grants(identity_session, force=True)
         self._auth_stage = "token-exchange"
         params = {
             "client_id": self.server.config["GITHUB_APP_CLIENT_ID"],
@@ -310,24 +440,30 @@ class CloudHandler(BaseHTTPRequestHandler):
             raise AuthenticationRejected(errors.get(result.get("error"), "GitHub-Anmeldung fehlgeschlagen. Bitte erneut beginnen."))
         self._auth_stage = "github-user"
         user = github_json("https://api.github.com/user", token)
-        allowed = {name.strip().lower() for name in self.server.config["EDITOR_USERS"].split(",")}
-        if user["login"].lower() not in allowed:
-            raise AuthenticationRejected("Dieses GitHub-Konto ist nicht als Editor freigeschaltet")
+        if not self.server.access:
+            allowed = {name.strip().lower() for name in self.server.config["EDITOR_USERS"].split(",")}
+            if user["login"].lower() not in allowed:
+                raise AuthenticationRejected("Dieses GitHub-Konto ist nicht als Editor freigeschaltet")
         # A readable repo and a working user token are required; write permission
         # is enforced again by GitHub when creating branches or commits.
         self._auth_stage = "repository-access"
-        available = self._available_repositories(user["login"], token)
+        available = self._available_repositories(user["login"], token, identity_session)
         if not available:
             raise AuthenticationRejected("Kein freigeschaltetes Datenrepository ist für dieses Konto zugänglich")
+        if self.server.access:
+            self.server.access.store.bind(identity_session["principal"], user.get("id"))
         default = self.server.config["GITHUB_REPOSITORY"]
         repository = default if any(entry["repository"] == default for entry in available) else available[0]["repository"]
         self._auth_stage = "session-create"
         sid = secrets.token_urlsafe(32)
         with self.server.lock:
             self.server.sessions[sid] = {
+                **(identity_session or {}),
                 "token": token, "user": user["login"], "user_id": user.get("id"), "csrf": secrets.token_urlsafe(32),
                 "branch": "main", "repository": repository, "created": time.time(),
             }
+            if pending.get("identity_sid"):
+                self.server.sessions.pop(pending["identity_sid"], None)
             self._audit_session = self.server.sessions[sid]
         self._audit("login")
         self._redirect("/", [
@@ -356,6 +492,8 @@ class CloudHandler(BaseHTTPRequestHandler):
                 self._login()
             elif path.path == "/callback":
                 self._callback(parse_qs(path.query))
+            elif path.path == "/entra/callback" and self.server.identity:
+                self._entra_callback(parse_qs(path.query))
             elif path.path in ("/", "/index.html", "/app.js", "/interaction.js", "/recovery.js", "/comparison.js", "/style.css"):
                 filename = "index.html" if path.path == "/" else path.path.lstrip("/")
                 kind = {"index.html": "text/html", "app.js": "text/javascript", "interaction.js": "text/javascript", "recovery.js": "text/javascript", "comparison.js": "text/javascript", "style.css": "text/css"}
@@ -367,10 +505,11 @@ class CloudHandler(BaseHTTPRequestHandler):
                 self._send(200, (ASSETS / filename).read_bytes(), kind)
             elif path.path == "/api/status":
                 session = self._session()
-                self._json(200, {"token": session["csrf"], "branch": session["branch"], "purpose": session.get("purpose", "case"), "case": session.get("case", ""), "hosted": True, "user": session["user"], "notary_reviewer": session["user"].lower() in self._notaries(), "ontology_maintainer": session["user"].lower() in self._maintainers()})
+                roles = self.server.access.require(session, session["repository"])["roles"] if self.server.access else {"write"}
+                self._json(200, {"token": session["csrf"], "branch": session["branch"], "purpose": session.get("purpose", "case"), "case": session.get("case", ""), "hosted": True, "user": session["user"], "can_edit": "write" in roles, "auth_provider": "entra" if self.server.access else "github", "notary_reviewer": session["user"].lower() in self._notaries(), "ontology_maintainer": session["user"].lower() in self._maintainers()})
             elif path.path == "/api/repositories":
                 session = self._session()
-                self._json(200, {"selected": session.get("repository", self.server.config["GITHUB_REPOSITORY"]), "repositories": self._available_repositories(session["user"], session["token"])})
+                self._json(200, {"selected": session.get("repository", self.server.config["GITHUB_REPOSITORY"]), "repositories": self._available_repositories(session["user"], session["token"], session)})
             elif path.path == "/api/drafts":
                 session = self._session()
                 drafts = self._store(session).list_drafts(session["user"])
@@ -405,6 +544,15 @@ class CloudHandler(BaseHTTPRequestHandler):
                 detail = self._store(session).review_detail(number)
                 detail["can_review"] = session["user"].lower() != detail["author"].lower() and not detail["draft"]
                 detail["can_approve"] = session["user"].lower() in self._notaries() and session["user"].lower() != detail["author"].lower() and not detail["draft"] and not detail["problem"]
+                detail["can_merge"] = False
+                if self.server.access:
+                    roles = self.server.access.require(session, session["repository"])["roles"]
+                    detail["can_review"] = detail["can_review"] and "review" in roles
+                    try:
+                        self.server.access.other_author(session, detail.get("author_id"))
+                    except (AccessDenied, ValueError):
+                        detail["can_approve"] = False
+                    detail["can_merge"] = "merge" in roles and not detail["draft"] and not detail["problem"]
                 self._json(200, detail)
             elif path.path == "/api/vocabulary":
                 session = self._session()
@@ -446,6 +594,10 @@ class CloudHandler(BaseHTTPRequestHandler):
                 self._json(200, {"turtle": self._store(session).read_file(f"cases/{slug}/ontology.ttl", branch)})
             else:
                 self._json(404, {"error": "Nicht gefunden"})
+        except AccessDenied as error:
+            self._json(403, {"error": str(error)})
+        except AccessUnavailable as error:
+            self._json(503, {"error": str(error)})
         except PermissionError as error:
             self._json(401, {"error": str(error)})
         except GitHubError as error:
@@ -465,7 +617,9 @@ class CloudHandler(BaseHTTPRequestHandler):
         self._audit_session = None
         try:
             try:
-                session = self._session()
+                session = self._session(validate=self.path != "/api/logout")
+            except AccessDenied:
+                raise
             except PermissionError as error:
                 self._json(401, {"error": str(error)})
                 return
@@ -479,7 +633,10 @@ class CloudHandler(BaseHTTPRequestHandler):
             data = json.loads(self.rfile.read(length))
             if not isinstance(data, dict):
                 raise ValueError("Ungültige Anfrage")
-            store = self._store(session)
+            store = None if self.path in {"/api/logout", "/api/repositories/select", "/api/drafts/leave"} else self._store(session)
+            if self.server.access and self.path not in {"/api/logout", "/api/repositories/select", "/api/drafts/leave"}:
+                role = "merge" if self.path.endswith("/merge") else "review" if self.path.startswith("/api/reviews/") else "write"
+                self._require_action(session, role)
             if self.path == "/api/logout":
                 with self.server.lock:
                     for sid, candidate in list(self.server.sessions.items()):
@@ -491,7 +648,11 @@ class CloudHandler(BaseHTTPRequestHandler):
                 repository = data.get("repository")
                 if not isinstance(repository, str):
                     raise ValueError("Bitte ein Datenrepository wählen")
-                self._repository(repository, session["user"])
+                self._repository(repository, session["user"], session)
+                if self.server.access:
+                    self.server.access.require(session, repository, force=True)
+                    if repository not in self._github_repositories(session, session["token"]):
+                        raise AccessDenied("Die GitHub-App ist für diesen Bestand nicht freigegeben.")
                 if session["branch"] != "main":
                     raise ValueError("Bitte zuerst den geöffneten Entwurf ablegen")
                 github_json("https://api.github.com/repos/" + repository, session["token"])
@@ -552,8 +713,29 @@ class CloudHandler(BaseHTTPRequestHandler):
                 self._json(200, draft)
             elif self.path.startswith("/api/reviews/") and self.path.endswith("/review") and self.path.count("/") == 4:
                 number = int(self.path.split("/")[3])
-                url = store.submit_case_review(number, data.get("head_sha", ""), data.get("event", ""), data.get("body", ""), session["user"], self._notaries(), data.get("checks"))
+                author = None
+                if self.server.access:
+                    author = self.server.access.other_author(session, store.review_detail(number).get("author_id"))
+                options = {"return_receipt": True} if self.server.access else {}
+                result = store.submit_case_review(number, data.get("head_sha", ""), data.get("event", ""), data.get("body", ""), session["user"], self._notaries(), data.get("checks"), **options)
+                url = result["html_url"] if self.server.access else result
+                if self.server.access:
+                    self.server.access.store.record_review(session["repository"], {"id": result["id"], "head": data["head_sha"],
+                        "reviewer": session["principal"], "author": author, "github_id": session["user_id"], "event": data["event"]})
                 self._json(200, {"url": url})
+            elif self.path.startswith("/api/reviews/") and self.path.endswith("/merge") and self.path.count("/") == 4:
+                if not self.server.access:
+                    raise AccessDenied("Übernehmen benötigt die zentrale Benutzerverwaltung.")
+                number = int(self.path.split("/")[3])
+                def eligible(review, head, author_id):
+                    receipt = self.server.access.store.review_receipt(session["repository"], review["id"])
+                    author = self.server.access.store.principal_for_github(author_id)
+                    reviewer = self.server.access.store.principal_for_github(review["user"]["id"])
+                    return bool(receipt and author and reviewer and receipt["Head"] == head
+                        and receipt["Event"] == "APPROVE" and receipt["Author"] == author
+                        and receipt["Reviewer"] == reviewer and reviewer != author
+                        and receipt["GithubId"] == str(review["user"]["id"]))
+                self._json(200, store.merge_case_review(number, data.get("head_sha", ""), eligible))
             elif self.path.startswith("/api/vocabulary/") and self.path.count("/") == 3:
                 if session["user"].lower() not in self._maintainers():
                     raise PermissionError("Vokabularpflege ist nur für eingetragene Ontologie-Maintainer möglich")
@@ -603,6 +785,8 @@ class CloudHandler(BaseHTTPRequestHandler):
                     self._json(404, {"error": "Nicht gefunden"})
             else:
                 self._json(404, {"error": "Nicht gefunden"})
+        except AccessUnavailable as error:
+            self._json(503, {"error": str(error)})
         except PermissionError as error:
             self._json(403, {"error": str(error)})
         except HTTPError as error:

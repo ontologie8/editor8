@@ -4,7 +4,7 @@ Beim Bearbeiten sind deine Eingaben zunächst ungespeichert. Speichern öffnet d
 
 Unter Fachprüfung prüft eine andere berechtigte Person den Änderungsgrund, die Quellen und die Auswirkungen auf Begriffe und Beziehungen. Eine notarielle Freigabe benötigt die entsprechende fachliche Berechtigung. Du kannst deine eigene Änderung nicht selbst freigeben.
 
-Eine Freigabe gehört zur tatsächlich geprüften Fassung. Wird die Änderung danach weiter bearbeitet, muss die neue Fassung erneut beurteilt werden. Die verantwortliche Person für den Modellbestand übernimmt die Änderung erst nach der nötigen Fachfreigabe und erfolgreichen Prüfungen. Falls nötig, öffnet sie dafür den Änderungsvorschlag über In GitHub öffnen.
+Eine Freigabe gehört zur tatsächlich geprüften Fassung. Wird die Änderung danach weiter bearbeitet, muss die neue Fassung erneut beurteilt werden. Eine dafür berechtigte Person wählt unter Fachprüfung Übernehmen. Der Editor prüft den angezeigten Stand, eine unabhängige dokumentierte Freigabe und die technischen Prüfergebnisse erneut. Fehlende Freigaben, offene Änderungswünsche, fehlgeschlagene Prüfungen oder ein inzwischen geänderter Stand verhindern die Übernahme. Übernehmen ist verfügbar, sobald die zentrale Benutzerverwaltung eingerichtet und diese Tätigkeit freigegeben ist.
 
 Gespeicherte Arbeitsentwürfe kannst du später wieder öffnen. Entwurf ablegen beendet die aktuelle Bearbeitung, ohne bereits gespeicherte Änderungen zu löschen. Beim Abmelden fragt der Editor vor dem Verwerfen offener Eingaben. Ungespeicherte Eingaben sind beim Schließen des Browsers nicht dauerhaft gesichert.
 

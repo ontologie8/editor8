@@ -181,7 +181,7 @@ Unter Prüfen → Meine Änderung begründest du deine Änderung und nennst die 
 
 ### Eine neue Änderung braucht eine Prüfung des neuen Stands
 
-Eine notarielle Fachfreigabe gehört zur tatsächlich geprüften Fassung einer Änderung. Weitere Änderungen müssen erneut beurteilt werden. Die verantwortliche Person für den Modellbestand übernimmt die Änderung nach der nötigen Freigabe und erfolgreichen Prüfungen.
+Eine fachliche Freigabe gehört zur tatsächlich geprüften Fassung einer Änderung. Weitere Änderungen müssen erneut beurteilt werden. Eine für den Bestand zur Übernahme berechtigte Person wählt im Editor unter Fachprüfung Übernehmen. Bei eingerichtetem zentralem Zugang prüft der Editor die unabhängige Freigabe, offene Änderungswünsche, den aktuellen Stand und die technischen Ergebnisse erneut. In dieser künstlichen Übung wird keine echte Freigabe oder Übernahme ausgeführt.
 
 - Prüfe Begriffe, Quellen und Beziehungen.
 - Prüfe vor der Übernahme, ob Freigabe und Prüfergebnisse zur aktuellen Fassung gehören.
@@ -196,7 +196,7 @@ Eine Änderung vollständig und wiederholbar abschließen.
 
 ### Ein kleiner Pflegeauftrag ist leichter zu prüfen
 
-Beschreibe Anlass, betroffene Vorgangsart und erwartete Änderung vor dem Bearbeiten. Arbeite am ausgewählten Fachmodellbestand. Ein Entwurf sollte einen klaren fachlichen Zweck haben, etwa eine unklare Bezeichnung zu präzisieren.
+Beschreibe Anlass, betroffene Vorgangsart und erwartete Änderung vor dem Bearbeiten. Arbeite am ausgewählten Fachmodellbestand. Die App-Zulassung, deine Tätigkeit in diesem Bestand und die Datenrechte deines verknüpften GitHub-Kontos werden getrennt freigegeben. Eine Pflegerrolle im Notar-Bestand erlaubt keine Änderungen in einem anderen Bestand. Du bearbeitest und prüfst im Editor; GitHub verwaltet die Änderungsstände im Hintergrund. Ein Entwurf sollte einen klaren fachlichen Zweck haben, etwa eine unklare Bezeichnung zu präzisieren.
 
 - Notiere die fragliche Bezeichnung oder Verbindung.
 - Nenne den erwarteten Unterschied in einem Satz.

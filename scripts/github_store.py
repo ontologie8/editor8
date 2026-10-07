@@ -429,12 +429,12 @@ class GitHubStore:
             problem = "Keine fachliche Änderung erkennbar. Bitte den GitHub-Diff prüfen."
         return {
             "number": number, "title": pr["title"], "case": slug,
-            "author": pr["user"]["login"], "draft": pr["draft"],
+            "author": pr["user"]["login"], "author_id": pr["user"].get("id"), "draft": pr["draft"],
             "url": pr["html_url"], "body": pr.get("body") or "",
             "head_sha": head, "changes": changes, "problem": problem, "comparison": graph_comparison,
         }
 
-    def submit_case_review(self, number: int, head_sha: str, event: str, body: str, reviewer: str, notaries: set[str], checks: dict | None = None) -> str:
+    def submit_case_review(self, number: int, head_sha: str, event: str, body: str, reviewer: str, notaries: set[str], checks: dict | None = None, *, return_receipt=False):
         detail = self.review_detail(number)
         if detail["head_sha"] != head_sha:
             raise ValueError("Die Änderung hat inzwischen einen neuen Stand. Bitte neu laden.")
@@ -453,4 +453,46 @@ class GitHubStore:
         result = self.request("POST", f"/pulls/{number}/reviews", {
             "commit_id": head_sha, "event": event, "body": body.strip(),
         })
-        return result["html_url"]
+        return result if return_receipt else result["html_url"]
+
+    def merge_case_review(self, number, head_sha, eligible):
+        """Merge only the displayed head with an independent editor review and green CI.
+
+GitHub enforces its repository rules too. No bypass flag or direct main write.
+Unknown, stale or incomplete evidence denies the merge.
+"""
+        detail = self.review_detail(number)
+        if not SHA.fullmatch(head_sha) or detail["head_sha"] != head_sha:
+            raise ValueError("Die Änderung hat inzwischen einen neuen Stand. Bitte neu laden.")
+        if detail["draft"] or detail["problem"]:
+            raise ValueError("Diese Änderung ist noch nicht übernahmefähig")
+        latest = {}
+        for page in range(1, 11):
+            reviews = self.request("GET", f"/pulls/{number}/reviews?per_page=100&page={page}")
+            for review in reviews:
+                if review["state"] in {"APPROVED", "REQUEST_CHANGES", "DISMISSED"}:
+                    latest[review["user"]["id"]] = review
+            if len(reviews) < 100:
+                break
+        else:
+            raise ValueError("Die vollständige Prüfgeschichte konnte nicht bestätigt werden")
+        if any(review["state"] == "REQUEST_CHANGES" for review in latest.values()):
+            raise ValueError("Es bestehen noch Änderungswünsche")
+        if not any(review["state"] == "APPROVED" and review["commit_id"] == head_sha
+                   and eligible(review, head_sha, detail.get("author_id")) for review in latest.values()):
+            raise ValueError("Eine unabhängige fachliche Freigabe dieses Standes im Editor fehlt")
+        checks = self.request("GET", f"/commits/{head_sha}/check-runs?per_page=100")
+        status = self.request("GET", f"/commits/{head_sha}/status")
+        runs = checks.get("check_runs", [])
+        if checks.get("total_count", len(runs)) > len(runs):
+            raise ValueError("Die technischen Prüfungen sind nicht vollständig verfügbar")
+        if not runs and not status.get("statuses"):
+            raise ValueError("Technische Prüfungen dieses Standes fehlen")
+        if any(run.get("status") != "completed" or run.get("conclusion") not in {"success", "neutral", "skipped"} for run in runs):
+            raise ValueError("Die technischen Prüfungen sind noch nicht erfolgreich abgeschlossen")
+        if status.get("statuses") and status.get("state") != "success":
+            raise ValueError("Die technischen Prüfungen sind noch nicht erfolgreich abgeschlossen")
+        result = self.request("PUT", f"/pulls/{number}/merge", {"sha": head_sha, "merge_method": "merge"})
+        if result.get("merged") is not True:
+            raise ValueError("GitHub hat die Übernahme nicht bestätigt. Bitte neu laden.")
+        return {"merged": True, "commit": result["sha"]}

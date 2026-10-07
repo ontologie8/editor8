@@ -1,6 +1,6 @@
 # Einstieg und Orientierung
 
-Öffne https://www.ontologie8.de und melde dich mit deinem zugelassenen GitHub-Konto an. Wähle links den Fachmodellbestand, den du pflegen möchtest. Die Auswahl zeigt die für dich zugänglichen Bestände. Fehlt ein benötigter Bestand, wende dich an dessen fachlich verantwortliche Person.
+Öffne https://www.ontologie8.de und beginne die Anmeldung im Editor. Bei zentral verwaltetem Zugang meldest du dich zuerst mit deinem eingeladenen Konto an und bestätigst anschließend dein persönliches GitHub-Konto für den Fachmodellbestand. Bearbeiten, Speichern und Prüfen erfolgen im Editor. Wähle links den Bestand, den du pflegen möchtest. Die Auswahl zeigt nur freigegebene und für dich zugängliche Bestände. Fehlt ein benötigter Bestand, wende dich an dessen fachlich verantwortliche Person.
 
 Links außen stehen Verstehen, Bearbeiten und Prüfen. Daneben findest du die Auswahl der Fachmodelle und den aufklappbaren Baum. In der Mitte siehst du die Zusammenhänge; rechts erscheinen Details oder Bearbeitungsfelder zum gewählten Baustein.
 

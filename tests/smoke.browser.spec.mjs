@@ -413,3 +413,31 @@ test('review notes survive reload after the model is saved and are cleared on lo
   await page.route('**/api/logout',route=>route.fulfill({json:{ok:true}}));await page.route('**/login',route=>route.fulfill({contentType:'text/html',body:'<h1>Neue Anmeldung</h1>'}));
   await page.locator('#logout').click();await expect(page.getByRole('heading',{name:'Neue Anmeldung'})).toBeVisible();expect(await page.evaluate(()=>Object.keys(sessionStorage).some(key=>key.startsWith('editor8:inputs:v1:')))).toBe(false);
 });
+
+test('a reader can open and understand a model while editing commands and context actions remain disabled',async ({page})=>{
+  await page.route('**/api/status',async route=>{
+    const response=await route.fetch(); const status=await response.json();
+    await route.fulfill({json:{...status,can_edit:false,auth_provider:'entra'}});
+  });
+  const writes=[];page.on('request',request=>{if(request.method()==='POST')writes.push(request.url());});
+  await page.goto('/?case=demo-eins');await expect(page.locator('#case-title')).toHaveText('Künstlicher Fall demo-eins');
+  await page.locator('.tree-node[data-context-node=demo0]').click({button:'right'});
+  await expect(page.getByRole('menuitem',{name:'Bearbeiten',exact:true})).toBeDisabled();
+  await page.keyboard.press('Escape');await page.locator('[data-area=edit]').click();
+  await expect(page.locator('#edit-overview')).toBeDisabled();await expect(page.locator('#edit-node')).toBeDisabled();
+  await page.locator('#edit-node').hover();await expect(page.getByRole('tooltip')).toContainText('gesonderte Freigabe');
+  expect(writes).toEqual([]);
+});
+
+test('an authorized operator submits the displayed review head for merging entirely in the editor',async ({page})=>{
+  await page.route('**/api/reviews',route=>route.fulfill({json:[{number:99,case:'demo-eins',author:'artificial-author',draft:false}]}));
+  const head='a'.repeat(40);
+  await page.route('**/api/reviews/99',route=>route.fulfill({json:{number:99,title:'Künstliche Übernahme',case:'demo-eins',author:'artificial-author',draft:false,url:'https://example.org/review/99',body:'Künstlicher Prüfgrund',head_sha:head,changes:[],comparison:null,can_review:false,can_approve:false,can_merge:true,problem:''}}));
+  let submission;
+  await page.route('**/api/reviews/99/merge',async route=>{submission=route.request().postDataJSON();await route.fulfill({json:{merged:true,commit:'b'.repeat(40)}});});
+  await page.goto('/?case=demo-eins');await expect(page.locator('#case-count')).toHaveText('2');
+  await page.evaluate(()=>setView('fachpruefung'));await page.locator('#review-list .review-item').click();
+  await expect(page.locator('#merge-review')).toBeVisible();await expect(page.locator('#approve-review')).toBeDisabled();
+  page.once('dialog',dialog=>dialog.accept());await page.locator('#merge-review').click();
+  await expect(page.locator('#notice')).toContainText('Geprüfte Änderung übernommen');expect(submission).toEqual({head_sha:head});
+});

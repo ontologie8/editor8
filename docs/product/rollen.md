@@ -1,10 +1,10 @@
 # Fachliche Rollen und Zugang
 
-Dein GitHub-Konto dient der Anmeldung und ordnet Änderungen sowie Prüfentscheidungen deiner Person zu. Welche Fachmodelle du lesen oder bearbeiten darfst, wird für den jeweiligen Modellbestand festgelegt. Die Auswahl eines Bestands erteilt keine zusätzlichen Rechte.
+Die Zulassung zur gehosteten App, der Zugriff auf einen Fachmodellbestand und fachliche Tätigkeiten sind getrennte Freigaben. Bei zentral verwaltetem Zugang erteilt der Betreiber die App-Zulassung und deine Tätigkeiten je Bestand. Dein persönliches GitHub-Konto weist zusätzlich deine Rechte am Datenbestand nach und ordnet Änderungen sowie Prüfentscheidungen deinem Konto zu. Für die fachliche Arbeit brauchst du GitHub nicht selbst zu bedienen.
 
 Bei einem neu eingerichteten Zugang müssen die Anmeldung im Editor, der Zugriff auf den gewählten Fachmodellbestand und deine fachliche Rolle freigegeben sein. Zugriff auf den Modellbestand allein schaltet die Anmeldung und die notarielle Fachprüfung nicht automatisch frei. Der Betreiber richtet diese Freigaben ein.
 
-Leseberechtigte verstehen und vergleichen die Vorlagen. Ontologiepfleger bearbeiten sie in Arbeitsentwürfen und reichen begründete Änderungen ein. Zur notariellen Fachprüfung berechtigte Notare können die Änderung einer anderen Person fachlich freigeben. Die Pflege gemeinsamer Begriffe ist eine zusätzliche fachliche Aufgabe.
+Leseberechtigte verstehen und vergleichen die Vorlagen. Ontologiepfleger bearbeiten sie in Arbeitsentwürfen und reichen begründete Änderungen ein. Fachprüfer können die Änderung einer anderen Person fachlich freigeben; bei Notar-Fachmodellen braucht es die entsprechende notarielle Berechtigung. Die Pflege gemeinsamer Begriffe und die Übernahme geprüfter Änderungen sind jeweils zusätzliche Tätigkeiten. Eine Berechtigung in einem Bestand gilt nicht automatisch in einem anderen.
 
 Fehlt dir ein Modellbestand oder eine nötige Funktion, wende dich an die dafür verantwortliche Person und nenne den Bestand sowie die gewünschte Tätigkeit. Diese Hilfe erklärt deine fachliche Arbeit im Editor. Zugang und fachliche Berechtigungen werden außerhalb deiner Modelländerung verwaltet.
 

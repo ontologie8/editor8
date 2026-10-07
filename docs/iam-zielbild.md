@@ -1,6 +1,6 @@
 # Benutzerverwaltung ohne Softwareauslieferung
 
-Stand: 07.10.2026. Status: Nutzer bestätigt die getrennten Verantwortungen und Entra-Gruppen für den App-Zugang; externe Identitäten werden unten konkretisiert. Noch keine Umstellung des produktiven Identitätsanbieters. Neue Nutzer und geänderte Rollen dürfen weder einen Image-Build noch eine neue Container-Revision benötigen.
+Stand: 07.10.2026. Status: Der beauftragte hybride Weg ist in der Software implementiert: Entra für App- und Bestandszulassung, persönlich verknüpftes GitHub-Konto für Datenrechte und Änderungszuordnung. Einrichtung und produktive Aktivierung sind noch offen. Der erste Einrichtungsaufruf wurde durch automatische Freigabeprüfung vor Ausführung abgewiesen. [Implementierung, konkreter Plan und Abnahme](iam-implementation.md) sind die führenden Umsetzungsnachweise. Neue Nutzer und geänderte Rollen dürfen nach Aktivierung weder einen Image-Build noch eine neue Container-Revision benötigen.
 
 ## Bestätigte Verantwortungen
 

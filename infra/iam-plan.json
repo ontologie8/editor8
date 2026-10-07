@@ -1,0 +1,53 @@
+{
+  "tenant": "870c862b-56f7-4c9b-b0d9-f1f7d32c835c",
+  "subscription": "37cd9645-6cb9-4278-88ee-e80377cd951c",
+  "resourceGroup": "rg-nac-ontology-editor",
+  "application": {
+    "name": "editor8 Fachmodelle",
+    "audience": "AzureADMyOrg",
+    "callback": "https://www.ontologie8.de/entra/callback",
+    "assignmentRequired": true,
+    "role": "App.Use",
+    "delegatedGraphPermission": "User.Read"
+  },
+  "appGroup": "editor8-nutzer",
+  "repository": "notariat8/ontology",
+  "label": "Notar-Fachmodelle",
+  "groups": {
+    "read": "editor8-notariat-lesen",
+    "write": "editor8-notariat-pflegen",
+    "review": "editor8-notariat-pruefen",
+    "maintain": "editor8-notariat-begriffe",
+    "merge": "editor8-notariat-uebernehmen"
+  },
+  "operatorMemberships": {
+    "objectId": "94f4a71c-ff52-4074-b215-8cc138be329b",
+    "roles": [
+      "app",
+      "read",
+      "write",
+      "maintain",
+      "merge"
+    ]
+  },
+  "externalInvitations": [],
+  "storage": {
+    "account": "steditor8iam37cd",
+    "region": "germanywestcentral",
+    "table": "editor8access",
+    "sku": "Standard_LRS",
+    "sharedKeyAccess": false,
+    "publicBlobAccess": false,
+    "role": "Storage Table Data Contributor",
+    "scopedPrincipals": [
+      "94f4a71c-ff52-4074-b215-8cc138be329b",
+      "4d1c8002-6d52-40f7-96fe-957feb967608"
+    ]
+  },
+  "clientSecret": {
+    "destination": "kv-nac-ontology8/entra-client-secret",
+    "lifetimeDays": 180
+  },
+  "activationRequested": false,
+  "expectedCommit": ""
+}

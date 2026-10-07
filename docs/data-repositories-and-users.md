@@ -1,5 +1,7 @@
 # Datenrepositories und Benutzer
 
+**IAM-Umstellung, 07.10.2026:** Der neue Entra/GitHub-Weg ist implementiert; die produktive Aktivierung ist separat offen. Im Entra-Betrieb stammen Bestände und fachliche Gruppen aus der zentralen Laufzeittabelle. Die unten beschriebenen Host- und Image-Listen gelten ausschließlich für den bisherigen GitHub-Pilotbetrieb. Für die Benutzerverwaltung ohne Build gilt [IAM-Implementierung](iam-implementation.md).
+
 Die Software und ihre Release-Kennung gehören zu editor8. Die Liste erlaubter Datenziele steht in `config/data-repositories.json`; zurzeit ist ausschließlich das bereits eingerichtete `notariat8/ontology` enthalten. Ein Listeneintrag erteilt keine GitHub-Rechte und installiert keine GitHub App.
 
 Die GitHub-App **Ontologie8 Editor** ist beim Editorbetreiber `ontologie8` registriert. Die Installation beim Datenbetreiber `notariat8` ist getrennt davon. Ein weiterer Datenbetreiber installiert die bestehende Editor-App auf seinen ausgewählten Datenrepositories; er benötigt keine eigene Registrierung und keine Software-Schreibrechte. Aktueller Nachweis: [App-Eigentum und Dateninstallation](github-app-ownership.md).

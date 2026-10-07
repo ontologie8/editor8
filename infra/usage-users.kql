@@ -1,0 +1,4 @@
+activity
+| summarize LastActivity = max(TimeGenerated), Logins = countif(Action == 'login'), Opened = countif(Action in ('repository_open', 'repository_select', 'model_open')), SavedChanges = countif(Action == 'draft_save' and tobool(event.changed) == true), Submitted = countif(Action == 'change_submit'), Reviews = countif(Action == 'review_decision'), Denied = countif(Action in ('access_denied', 'login_denied')) by Actor, User, Repository
+| project Nutzer = iff(isempty(User), 'Nicht zugeordnet', User), Kennung = Actor, Datenbestand = Repository, Letzte_Aktivitaet_UTC = format_datetime(LastActivity, 'yyyy-MM-dd HH:mm'), Anmeldungen = Logins, Oeffnungen = Opened, Gespeicherte_Aenderungen = SavedChanges, Eingereicht = Submitted, Pruefentscheidungen = Reviews, Abgewiesen = Denied
+| order by Nutzer asc, Datenbestand asc

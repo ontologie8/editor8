@@ -131,6 +131,20 @@
     popup.style.left=Math.max(8,Math.min(x,innerWidth-rect.width-8))+"px";
     popup.style.top=Math.max(8,Math.min(y,innerHeight-rect.height-8))+"px";
   }
+  function fitHint(target,popup) {
+    const anchor=target.getBoundingClientRect();
+    const controls=[...document.querySelectorAll("button,input,select,textarea,[role=menuitem]")]
+      .filter(control=>control!==target&&control.getClientRects().length)
+      .map(control=>control.getBoundingClientRect());
+    const overlap=(a,b)=>Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))*Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
+    const candidates=[[anchor.left,anchor.bottom+4],[anchor.left,anchor.top-popup.height-4],[anchor.right+4,anchor.top],[anchor.left-popup.width-4,anchor.top],[anchor.right-popup.width,anchor.bottom+4],[anchor.right-popup.width,anchor.top-popup.height-4]]
+      .map(([x,y],order)=>{
+        const left=Math.max(8,Math.min(x,innerWidth-popup.width-8)),top=Math.max(8,Math.min(y,innerHeight-popup.height-8));
+        const bounds={left,top,right:left+popup.width,bottom:top+popup.height};
+        return {left,top,score:overlap(bounds,anchor)*1000+controls.reduce((sum,control)=>sum+overlap(bounds,control),0)+order/100};
+      }).sort((a,b)=>a.score-b.score);
+    fit(tooltip,candidates[0].left,candidates[0].top);
+  }
   function showTip(target,delay=450) {
     if(target===suppressed||(!menu.hidden&&!menu.contains(target)))return;
     stopTip();const hint=describe(target);if(!hint)return;
@@ -147,7 +161,7 @@
         if(bounds.right+4+popup.width<=innerWidth-8)fit(tooltip,bounds.right+4,rect.top);
         else if(bounds.left-popup.width-4>=8)fit(tooltip,bounds.left-popup.width-4,rect.top);
         else fit(tooltip,bounds.left,bounds.bottom+4+popup.height<=innerHeight-8?bounds.bottom+4:bounds.top-popup.height-4);
-      }else fit(tooltip,rect.left,rect.bottom+4+popup.height>innerHeight-8?rect.top-popup.height-4:rect.bottom+4);
+      }else fitHint(target,popup);
       const ids=new Set((target.getAttribute("aria-describedby")||"").split(/\s+/).filter(Boolean));ids.add(tooltip.id);target.setAttribute("aria-describedby",[...ids].join(" "));
     },delay);
   }

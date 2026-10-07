@@ -12,6 +12,7 @@ Die fachliche Nutzung erklärt das [Produkthandbuch](../product/README.md); der 
 - [Datenrepositories und Benutzer](../data-repositories-and-users.md): Registry, App-Installation, Zulassung und fachliche Rollen.
 - [Nutzer und Notare zulassen](../editor-user-onboarding.md): externe Konten, GitHub-404 bei der Anmeldung und getrennte Freigaben.
 - [IAM-Zielbild](../iam-zielbild.md): zentrale Benutzerverwaltung ohne Image-Build oder neue Container-Revision; recherchierte Alternativen und ausstehende Migration.
+- [Nutzungsbericht](../usage-report.md): erlaubte Ereignisse, Wochenbericht in Azure und getrennte Freigabe des E-Mail-Versands.
 - [Datenvertrag](../data-contract.md): Adapter und Schnittstelle zu den Fachmodellen.
 - [Datenintegration in CI](../editor-integration-ci.md): getrennte Software- und Datenstände prüfen.
 - [HTTPS und Domainbetrieb](../custom-domain.md): Zertifikat, öffentliche Adresse und technische Anmeldeprüfung.

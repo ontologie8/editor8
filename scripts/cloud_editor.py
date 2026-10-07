@@ -37,6 +37,7 @@ from learning_assets import LEARNING_ASSETS
 from release_info import release_info
 from repository_registry import load_repositories
 from github_store import GitHubError, GitHubStore
+from usage_audit import audit_line, response_action
 
 
 ASSETS = APP_ROOT / "editor"
@@ -123,7 +124,13 @@ class CloudHandler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def _json(self, status: int, payload: dict | list) -> None:
+        action = response_action(self.command, urlparse(self.path).path, status)
+        if action:
+            self._audit(action, status=status, changed=payload.get("changed") if isinstance(payload, dict) else None)
         self._send(status, json.dumps(payload, ensure_ascii=False).encode("utf-8"), "application/json")
+
+    def _audit(self, action: str, *, status: int = 200, changed: bool | None = None) -> None:
+        print(audit_line(action, getattr(self, "_audit_session", None), status=status, changed=changed, release=release_info()["commit"]), flush=True)
 
     def _redirect(self, target: str, cookies: list[str] | None = None) -> None:
         self.send_response(302)
@@ -143,6 +150,7 @@ class CloudHandler(BaseHTTPRequestHandler):
         with self.server.lock:
             session = self.server.sessions.get(sid)
             if session and time.time() - session["created"] < SESSION_LIFETIME:
+                self._audit_session = session
                 return session
             self.server.sessions.pop(sid, None)
         raise PermissionError("Bitte bei GitHub anmelden")
@@ -248,6 +256,7 @@ class CloudHandler(BaseHTTPRequestHandler):
         request_id = secrets.token_hex(6)
         # Never log exception text, provider response bodies, URLs or credentials.
         self.log_message("auth_failure id=%s stage=%s category=%s status=%s", request_id, self._auth_stage, category, status)
+        self._audit("login_denied", status=status)
         login = self.server.config["PUBLIC_ORIGIN"].rstrip("/") + "/login"
         body = (
             '<!doctype html><html lang="de"><head><meta charset="utf-8">'
@@ -316,9 +325,11 @@ class CloudHandler(BaseHTTPRequestHandler):
         sid = secrets.token_urlsafe(32)
         with self.server.lock:
             self.server.sessions[sid] = {
-                "token": token, "user": user["login"], "csrf": secrets.token_urlsafe(32),
+                "token": token, "user": user["login"], "user_id": user.get("id"), "csrf": secrets.token_urlsafe(32),
                 "branch": "main", "repository": repository, "created": time.time(),
             }
+            self._audit_session = self.server.sessions[sid]
+        self._audit("login")
         self._redirect("/", [
             f"nac_session={sid}; Path=/; Max-Age={SESSION_LIFETIME}; HttpOnly; Secure; SameSite=Lax",
             "nac_oauth_state=; Path=/callback; Max-Age=0; HttpOnly; Secure; SameSite=Lax",
@@ -334,6 +345,7 @@ class CloudHandler(BaseHTTPRequestHandler):
             self._get()
 
     def _get(self) -> None:
+        self._audit_session = None
         try:
             path = urlparse(self.path)
             if path.path == "/healthz":
@@ -450,6 +462,7 @@ class CloudHandler(BaseHTTPRequestHandler):
             self._post()
 
     def _post(self) -> None:
+        self._audit_session = None
         try:
             try:
                 session = self._session()
@@ -610,6 +623,7 @@ def main() -> None:
     config = require_config()
     with CloudServer((args.host, args.port), config) as server:
         print(f"NaC editor listening on port {server.server_port}")
+        print(audit_line("service_started", release=release_info()["commit"]), flush=True)
         server.serve_forever()
 
 

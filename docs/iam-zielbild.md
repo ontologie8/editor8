@@ -1,6 +1,29 @@
 # Benutzerverwaltung ohne Softwareauslieferung
 
-Stand: 06.10.2026. Status: recherchiertes Zielbild zur Entscheidung; noch keine Umstellung des produktiven Identitätsanbieters. Nutzeranforderung: neue Nutzer und geänderte Rollen dürfen weder einen Image-Build noch eine neue Container-Revision benötigen.
+Stand: 07.10.2026. Status: Nutzer bestätigt die getrennten Verantwortungen und Entra-Gruppen für den App-Zugang; externe Identitäten werden unten konkretisiert. Noch keine Umstellung des produktiven Identitätsanbieters. Neue Nutzer und geänderte Rollen dürfen weder einen Image-Build noch eine neue Container-Revision benötigen.
+
+## Bestätigte Verantwortungen
+
+| Freigabe | Führendes System | Verantwortlich |
+| --- | --- | --- |
+| Editor entwickeln | Schreib- und Verwaltungsrechte an `ontologie8/editor8` | Betreiber als Entwickler |
+| Gehostete App nutzen | Ausdrückliche Zuweisung zur Entra-Unternehmensanwendung, beispielsweise über `editor8-nutzer` | Betreiber |
+| Daten lesen oder bearbeiten | Rechte am jeweiligen GitHub-Datenrepository | Jeweiliger Repository-Verantwortlicher |
+| Fachlich freigeben | Zusätzliche Fachprüferrolle für den jeweiligen Datenbestand | Fachlich Verantwortlicher |
+
+Das öffentliche Software-Repository vermittelt keine Zulassung zur bezahlten Instanz. Fachanwender benötigen keine Azure-Verwaltungsrechte und keine Mitgliedschaft im Softwareprojekt. `notariat8/ontology` wurde am 07.10.2026 auf ausdrücklichen Nutzerauftrag öffentlich gestellt; GitHub aktiviert damit Forks. Das ändert keine App-Zulassung und keine Schreibrechte. Die Hauptzweig-Sperre bleibt auf Nutzerwunsch bis zur Wiedervorlage am 09.10.2026 unverändert. Der frühere Tarifblocker für Branch Protection im privaten Repository gilt für den jetzt öffentlichen Bestand nicht mehr.
+
+## Externe Identitäten ohne internes funktion8-Konto
+
+Im vorhandenen `f8`-Mandanten ist `funktion8.de` bestätigt und Entra P1 aktiv. Die Zuweisung von Gruppen zu Unternehmensanwendungen ist damit grundsätzlich verfügbar; anwendbare Benutzer- und Gastlizenzen bei Einrichtung prüfen. Der Vorschlag braucht keine internen Mitarbeiterkonten für Notare:
+
+- Eigenes Entra-Konto: als B2B-Gast einladen. Die Person authentifiziert sich beim eigenen Identitätsanbieter; das Gastobjekt im Ressourcenmandanten ermöglicht die ausdrückliche App- und Gruppenzuweisung.
+- Kein Entra-Konto, aber GitHub-Konto: Gast über eine bestätigte Kontakt-E-Mail mit E-Mail-Einmalcode zulassen und das GitHub-Konto durch eine separate bestätigte Anmeldung für die Datenrechte verknüpfen. Ein neu angelegtes Microsoft-Konto ist dafür nicht erforderlich.
+- `Guest` ist ein Kontotyp, keine Schreib- oder Fachprüferrolle. Ein vorhandenes Gastobjekt allein erhält keinen App-Zugang. `editor8-nutzer` erlaubt nur die App; GitHub-Rechte und bestandsbezogene Fachrollen werden separat geprüft.
+
+GitHub ist kein direkt aufgeführter B2B-Identitätsanbieter des bestehenden Workforce-Mandanten. Eine ausschließlich auf GitHub-Anmeldung beruhende Zulassung wäre ein eigener GitHub-Weg mit separat verwalteter Zugangsliste; sie darf nicht als bereits vorhandene Entra-Gruppenfreigabe dargestellt werden. Die endgültige externe Anmeldeerfahrung bleibt zu bestätigen; diese Dokumentation richtet noch keine Unternehmensanwendung, Gruppe oder Einladung ein.
+
+Quellen: [B2B-Identitätsanbieter](https://learn.microsoft.com/en-us/entra/external-id/identity-providers), [E-Mail-Einmalcode](https://learn.microsoft.com/en-us/entra/external-id/one-time-passcode), [Gruppenzuweisung](https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/assign-user-or-group-access-portal).
 
 ## Aktueller Befund
 

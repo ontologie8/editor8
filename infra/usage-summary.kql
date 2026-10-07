@@ -1,0 +1,6 @@
+let users = toscalar(activity | where isnotempty(Actor) | summarize by Actor | count);
+let started = toscalar(audit | summarize min(TimeGenerated));
+let release = toscalar(audit | top 1 by TimeGenerated desc | project tostring(event.release));
+activity
+| summarize Ereignisse = count(), Anmeldungen = countif(Action == 'login'), Abgewiesen = countif(Action in ('login_denied', 'access_denied'))
+| extend Nutzer = users, Erfassung_seit_UTC = format_datetime(started, 'yyyy-MM-dd HH:mm'), Letztes_Release = release

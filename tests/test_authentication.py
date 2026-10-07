@@ -167,12 +167,18 @@ class AuthenticationTests(unittest.TestCase):
                 def provider(url, token):
                     self.assertEqual(token, 'synthetic-token')
                     if url.endswith('/user'):
-                        return {'login': 'tester'}
+                        return {'login': 'tester', 'id': 42}
                     if not accessible:
                         raise HTTPError(url, 404, 'Unavailable', {}, None)
                     return {'full_name': 'example/data'}
-                with patch('cloud_editor.urlopen', return_value=BytesIO(b'{"access_token":"synthetic-token"}')) as exchange, patch('cloud_editor.github_json', side_effect=provider):
+                with patch('cloud_editor.urlopen', return_value=BytesIO(b'{"access_token":"synthetic-token"}')) as exchange, patch('cloud_editor.github_json', side_effect=provider), patch('builtins.print') as audit:
                     status, headers, body = self.callback(state)
+                events = [json.loads(call.args[0][14:]) for call in audit.call_args_list if call.args and str(call.args[0]).startswith('editor8_audit ')]
+                self.assertEqual(len(events), 1)
+                self.assertEqual(events[0]['action'], 'login' if accessible else 'login_denied')
+                self.assertEqual(events[0]['actor'], 'github:42' if accessible else '')
+                self.assertNotIn('synthetic-token', str(audit.call_args_list))
+                self.assertNotIn('synthetic-code', str(audit.call_args_list))
                 params = parse_qs(exchange.call_args.args[0].data.decode())
                 self.assertEqual(params['redirect_uri'], ['https://www.ontologie8.de/callback'])
                 self.assertIn('code_verifier', params)

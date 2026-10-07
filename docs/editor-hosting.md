@@ -1,5 +1,7 @@
 > Herkunft: aus dem ontology-Editorzweig übernommen. Historische Azure-/PR-Nachweise sind keine neue Deploymentbestätigung. Softwarepflege erfolgt seit 2026-10-01 in editor8; Daten bleiben in notariat8/ontology.
 
+**App-Eigentum, geprüft am 07.10.2026:** Die bestehende Registrierung **Ontologie8 Editor** gehört jetzt dem Editorbetreiber `ontologie8`; App-ID und Client-ID blieben unverändert. Die Installation für Fachmodelle liegt getrennt unter `notariat8`. Aktuelle Metadaten, Betriebslinks und verbliebene Abnahmen: [App-Eigentum und Dateninstallation](github-app-ownership.md). Hinweise auf die frühere Registrierung bei `notariat8` in den datierten Pilotnachweisen sind historisch.
+
 # Gehosteter NaC-Fall-Editor: Betriebsvertrag
 
 Eigene Domain: [HTTPS für www.ontologie8.de](custom-domain.md) dokumentiert DNS, das ausgestellte Azure-Zertifikat, den vom Betreiber bestätigten GitHub-Redirect-Eintrag und die durchgeführte Änderung des Anmeldeursprungs.
@@ -59,7 +61,7 @@ Die folgenden Werte werden **ausschließlich im Geheimnisspeicher des Hosts** ge
 
 | Variable | Inhalt |
 | --- | --- |
-| `GITHUB_APP_CLIENT_ID` | Client-ID der für dieses Repository installierten GitHub App |
+| `GITHUB_APP_CLIENT_ID` | Client-ID der beim Editorbetreiber `ontologie8` registrierten App; ihre Dateninstallation liegt getrennt im jeweiligen Datenkonto |
 | `GITHUB_APP_CLIENT_SECRET` | Client-Secret der App; niemals in Git speichern |
 | `GITHUB_REPOSITORY` | `owner/repo` der Ontologie |
 | `PUBLIC_ORIGIN` | HTTPS-Ursprung des Editors ohne Pfad; Callback ist `<PUBLIC_ORIGIN>/callback` |

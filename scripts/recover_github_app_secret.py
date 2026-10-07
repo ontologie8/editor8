@@ -16,15 +16,16 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import parse_qs
 
 from register_github_app import put_secret, run_az
+from github_app_identity import APP_OWNER, existing_app, validate_targets
 
 
 def recover(args: argparse.Namespace) -> None:
-    if args.client_id != "Iv23liPjhZBeInpKOJOr":
-        raise ValueError("Unerwartete GitHub-App-Client-ID")
+    validate_targets(args.app_owner, args.data_repository)
+    app = existing_app(args.app_slug, args.client_id)
     server = HTTPServer(("127.0.0.1", 0), BaseHTTPRequestHandler)
     token = secrets.token_urlsafe(32)
     result: dict[str, str] = {}
-    settings_url = "https://github.com/organizations/notariat8/settings/apps"
+    settings_url = app['settings_url']
 
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, _format: str, *_values: object) -> None:
@@ -50,13 +51,13 @@ def recover(args: argparse.Namespace) -> None:
                 return
             body = (
                 "<!doctype html><html lang='de'><meta charset='utf-8'>"
-                "<title>NaC GitHub App verbinden</title>"
+                "<title>editor8 GitHub App verbinden</title>"
                 "<style>body{font:18px system-ui;max-width:42rem;margin:3rem auto;line-height:1.5}"
                 "input{font:inherit;width:100%;padding:.5rem}button{font:inherit;padding:.7rem 1rem}</style>"
                 "<h1>GitHub App verbinden</h1>"
                 "<p>Öffne die <a href='" + settings_url + "' target='_blank' rel='noreferrer'>"
                 "GitHub-App-Einstellungen</a>, bearbeite"
-                " <strong>NaC Ontology Editor notariat8</strong> und wähle"
+                " <strong>" + html.escape(app['name']) + "</strong> beim Editorbetreiber " + APP_OWNER + " und wähle"
                 " <strong>Generate a new client secret</strong>.</p>"
                 "<p>Füge das neue Secret ausschließlich hier ein. Diese Seite läuft nur auf"
                 " 127.0.0.1; sie schreibt das Secret direkt in Azure Key Vault."
@@ -108,8 +109,8 @@ def recover(args: argparse.Namespace) -> None:
                     "<!doctype html><html lang='de'><meta charset='utf-8'>"
                     "<h1>Azure-Verbindung eingerichtet</h1>"
                     "<p>Das neue Secret liegt im Key Vault. Entferne das ältere,"
-                    " verlorene Secret in GitHub und installiere die App nur"
-                    " auf notariat8/ontology.</p></html>",
+                    " verlorene Secret in GitHub. Die getrennte Dateninstallation ist ausschließlich"
+                    " für " + html.escape(args.data_repository) + " vorgesehen.</p></html>",
                 )
             except Exception as error:
                 result["status"] = "failed"
@@ -143,6 +144,9 @@ def main() -> None:
     parser.add_argument("--resource-group", required=True)
     parser.add_argument("--container-app", required=True)
     parser.add_argument("--client-id", required=True)
+    parser.add_argument("--app-owner", default=APP_OWNER)
+    parser.add_argument("--app-slug", required=True)
+    parser.add_argument("--data-repository", required=True)
     parser.add_argument("--timeout", type=int, default=900)
     recover(parser.parse_args())
 

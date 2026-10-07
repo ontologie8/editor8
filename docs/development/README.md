@@ -8,6 +8,7 @@ Die fachliche Nutzung erklärt das [Produkthandbuch](../product/README.md); der 
 
 - [Lokaler Start und Softwaretests](../../README.md): ausdrücklich separater Datencheckout, Python, JavaScript und Browserprüfungen.
 - [Hosting und GitHub-Anmeldung](../editor-hosting.md): Server, Azure und Zugangskonfiguration.
+- [App-Eigentum und Dateninstallation](../github-app-ownership.md): Registrierung bei `ontologie8`, getrennte Installation beim Datenbetreiber und Identitätsprüfung der Betriebshelfer.
 - [Datenrepositories und Benutzer](../data-repositories-and-users.md): Registry, App-Installation, Zulassung und fachliche Rollen.
 - [Nutzer und Notare zulassen](../editor-user-onboarding.md): externe Konten, GitHub-404 bei der Anmeldung und getrennte Freigaben.
 - [IAM-Zielbild](../iam-zielbild.md): zentrale Benutzerverwaltung ohne Image-Build oder neue Container-Revision; recherchierte Alternativen und ausstehende Migration.

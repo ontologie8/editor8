@@ -19,7 +19,8 @@ class GitHubAppBootstrapTests(unittest.TestCase):
             "https://editor.example.org",
             "http://127.0.0.1:1234/complete",
         )
-        self.assertFalse(configuration["public"])
+        self.assertTrue(configuration["public"])
+        self.assertEqual(configuration["name"], "Ontologie8 Editor")
         self.assertEqual(configuration["default_permissions"], {
             "contents": "write",
             "pull_requests": "write",

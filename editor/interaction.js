@@ -41,6 +41,7 @@
     "submit-review":["Zur Fachprüfung einreichen","Gibt deinen gespeicherten Entwurf mit Begründung und Quellenstand an eine andere prüfende Person."],
     "vocab-submit":["Zur Fachprüfung einreichen","Gibt die gespeicherten Änderungen an gemeinsamen Begriffen zur notariellen Prüfung."],
     "approve-review":["Fachlich freigeben","Dokumentiert deine begründete notarielle Prüfung einer Änderung einer anderen Person."],
+    "merge-review":["Übernehmen","Übernimmt den angezeigten Stand nach erneuter Prüfung der unabhängigen Fachfreigabe und technischen Ergebnisse."],
     "request-changes":["Änderung anfordern","Beschreibt, welche fachliche Korrektur vor einer Freigabe erforderlich ist."],
     "vocab-edit":["Begriff bearbeiten","Ändert einen gemeinsamen Begriff. Prüfe seine Verwendung in anderen Vorgangsarten."],
     "vocab-add":["Neuer Begriff","Ergänzt einen wiederverwendbaren Begriff mit dauerhafter Kennung."],
@@ -98,7 +99,8 @@
     let hint=hints[target.id];
     if(hint){
       let text=hint[1];
-      if(["save","save-current"].includes(target.id)&&target.disabled)text=saveFlow.pending?"Bitte den laufenden Speichervorgang abwarten.":!state.dirty?"Es gibt noch keine ungespeicherten Änderungen. Bearbeite zuerst einen Baustein in deinem Entwurf.":"Wechsle zum passenden Arbeitsentwurf, um diese Änderungen zu speichern.";
+      if(!state.canEdit && ["save","save-current","start-branch","edit-node","new-node","add-node"].includes(target.id))text="Du darfst diesen Bestand lesen. Für Änderungen benötigst du eine gesonderte Freigabe.";
+      else if(["save","save-current"].includes(target.id)&&target.disabled)text=saveFlow.pending?"Bitte den laufenden Speichervorgang abwarten.":!state.dirty?"Es gibt noch keine ungespeicherten Änderungen. Bearbeite zuerst einen Baustein in deinem Entwurf.":"Wechsle zum passenden Arbeitsentwurf, um diese Änderungen zu speichern.";
       else if(["new-node","add-node"].includes(target.id)&&target.disabled)text="Erstelle zuerst einen Arbeitsentwurf für die geöffnete Vorgangsart.";
       else if(target.id==="edit-node"&&state.nodeEditing)text="Zeigt den Baustein wieder als Lesefassung. Deine Eingaben bleiben im Entwurf erhalten.";
       else if(target.id==="edit-node"&&target.disabled)text=saveFlow.pending||nodeEditPending?"Bitte den laufenden Vorgang abwarten.":"Schließe zuerst den Entwurf für die andere Vorgangsart.";
@@ -195,8 +197,8 @@
     if(context.kind==="node"){
       const node=context.slug===state.current?.slug&&state.current.nodes.find(item=>item.id===context.id);if(!node)return [];
       add("open","Öffnen",waiting||state.view==="vokabular", "Zeigt die Inhalte dieses Bausteins.","file-open");
-      const mayEdit=!waiting&&state.view!=="vokabular"&&(state.branch==="main"||caseEditable());
-      add("edit","Bearbeiten",!mayEdit,waiting?"Bitte den laufenden Vorgang abwarten.":mayEdit?"Ändert diesen Baustein in deinem Arbeitsentwurf.":"Schließe zuerst den Entwurf für den anderen Arbeitsbereich.","start-branch");
+      const mayEdit=state.canEdit&&!waiting&&state.view!=="vokabular"&&(state.branch==="main"||caseEditable());
+      add("edit","Bearbeiten",!mayEdit,!state.canEdit?"Du darfst diesen Bestand lesen. Für Änderungen benötigst du eine gesonderte Freigabe.":waiting?"Bitte den laufenden Vorgang abwarten.":mayEdit?"Ändert diesen Baustein in deinem Arbeitsentwurf.":"Schließe zuerst den Entwurf für den anderen Arbeitsbereich.","start-branch");
       add("relations","Verbindungen",waiting||state.view==="vokabular","Zeigt die Beziehungen dieses Bausteins.");
       if(node.id.startsWith("local."))add("delete","Entfernen",waiting||!caseEditable(),"Entfernt diesen zusätzlich angelegten Baustein und seine Verbindungen nach deiner Bestätigung.");
       add("separator");

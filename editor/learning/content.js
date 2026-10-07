@@ -282,7 +282,7 @@ window.EDITOR8_LEARNING = {
           {
             "id": "speichern-3",
             "title": "Eine neue Änderung braucht eine Prüfung des neuen Stands",
-            "text": "Eine notarielle Fachfreigabe gehört zur tatsächlich geprüften Fassung einer Änderung. Weitere Änderungen müssen erneut beurteilt werden. Die verantwortliche Person für den Modellbestand übernimmt die Änderung nach der nötigen Freigabe und erfolgreichen Prüfungen.",
+            "text": "Eine fachliche Freigabe gehört zur tatsächlich geprüften Fassung einer Änderung. Weitere Änderungen müssen erneut beurteilt werden. Eine für den Bestand zur Übernahme berechtigte Person wählt im Editor unter Fachprüfung Übernehmen. Bei eingerichtetem zentralem Zugang prüft der Editor die unabhängige Freigabe, offene Änderungswünsche, den aktuellen Stand und die technischen Ergebnisse erneut. In dieser künstlichen Übung wird keine echte Freigabe oder Übernahme ausgeführt.",
             "steps": [
               "Prüfe Begriffe, Quellen und Beziehungen.",
               "Prüfe vor der Übernahme, ob Freigabe und Prüfergebnisse zur aktuellen Fassung gehören."
@@ -306,7 +306,7 @@ window.EDITOR8_LEARNING = {
           {
             "id": "routine-1",
             "title": "Ein kleiner Pflegeauftrag ist leichter zu prüfen",
-            "text": "Beschreibe Anlass, betroffene Vorgangsart und erwartete Änderung vor dem Bearbeiten. Arbeite am ausgewählten Fachmodellbestand. Ein Entwurf sollte einen klaren fachlichen Zweck haben, etwa eine unklare Bezeichnung zu präzisieren.",
+            "text": "Beschreibe Anlass, betroffene Vorgangsart und erwartete Änderung vor dem Bearbeiten. Arbeite am ausgewählten Fachmodellbestand. Die App-Zulassung, deine Tätigkeit in diesem Bestand und die Datenrechte deines verknüpften GitHub-Kontos werden getrennt freigegeben. Eine Pflegerrolle im Notar-Bestand erlaubt keine Änderungen in einem anderen Bestand. Du bearbeitest und prüfst im Editor; GitHub verwaltet die Änderungsstände im Hintergrund. Ein Entwurf sollte einen klaren fachlichen Zweck haben, etwa eine unklare Bezeichnung zu präzisieren.",
             "steps": [
               "Notiere die fragliche Bezeichnung oder Verbindung.",
               "Nenne den erwarteten Unterschied in einem Satz."
@@ -449,7 +449,7 @@ window.EDITOR8_LEARNING = {
         "id": "einstieg",
         "title": "Einstieg und Orientierung",
         "paragraphs": [
-          "Öffne https://www.ontologie8.de und melde dich mit deinem zugelassenen GitHub-Konto an. Wähle links den Fachmodellbestand, den du pflegen möchtest. Die Auswahl zeigt die für dich zugänglichen Bestände. Fehlt ein benötigter Bestand, wende dich an dessen fachlich verantwortliche Person.",
+          "Öffne https://www.ontologie8.de und beginne die Anmeldung im Editor. Bei zentral verwaltetem Zugang meldest du dich zuerst mit deinem eingeladenen Konto an und bestätigst anschließend dein persönliches GitHub-Konto für den Fachmodellbestand. Bearbeiten, Speichern und Prüfen erfolgen im Editor. Wähle links den Bestand, den du pflegen möchtest. Die Auswahl zeigt nur freigegebene und für dich zugängliche Bestände. Fehlt ein benötigter Bestand, wende dich an dessen fachlich verantwortliche Person.",
           "Links außen stehen Verstehen, Bearbeiten und Prüfen. Daneben findest du die Auswahl der Fachmodelle und den aufklappbaren Baum. In der Mitte siehst du die Zusammenhänge; rechts erscheinen Details oder Bearbeitungsfelder zum gewählten Baustein.",
           "Allgemeine Anleitungen stehen oben unter Hilfe. Hilfe → Kontakt zeigt kontakt@ontologie8.de für Fragen zur Bedienung und technische Störungen. Das Fragezeichen am ausgewählten Baustein erläutert dessen fachlichen Kontext. Unter Informationen findest du Beschreibung, Quellen und frühere Fassungen der Vorgangsart.",
           "Mit Strg+F1 oder einem Doppelklick auf eine Registerkarte klappst du das Menüband ein oder aus. Die Menü-Schaltfläche oben links blendet den inneren Baum ein oder aus. Menüs und Auswahl bleiben erreichbar, während du innerhalb des Arbeitsbereichs blätterst oder scrollst.",
@@ -636,7 +636,7 @@ window.EDITOR8_LEARNING = {
         "paragraphs": [
           "Beim Bearbeiten sind deine Eingaben zunächst ungespeichert. Speichern öffnet den Vergleich; Speichern bestätigen sichert die gezeigten Änderungen in deinem Arbeitsentwurf. Einreichen gibt den gespeicherten Entwurf zur Fachprüfung. Die gemeinsam verwendete Vorlage wird dadurch noch nicht ersetzt.",
           "Unter Fachprüfung prüft eine andere berechtigte Person den Änderungsgrund, die Quellen und die Auswirkungen auf Begriffe und Beziehungen. Eine notarielle Freigabe benötigt die entsprechende fachliche Berechtigung. Du kannst deine eigene Änderung nicht selbst freigeben.",
-          "Eine Freigabe gehört zur tatsächlich geprüften Fassung. Wird die Änderung danach weiter bearbeitet, muss die neue Fassung erneut beurteilt werden. Die verantwortliche Person für den Modellbestand übernimmt die Änderung erst nach der nötigen Fachfreigabe und erfolgreichen Prüfungen. Falls nötig, öffnet sie dafür den Änderungsvorschlag über In GitHub öffnen.",
+          "Eine Freigabe gehört zur tatsächlich geprüften Fassung. Wird die Änderung danach weiter bearbeitet, muss die neue Fassung erneut beurteilt werden. Eine dafür berechtigte Person wählt unter Fachprüfung Übernehmen. Der Editor prüft den angezeigten Stand, eine unabhängige dokumentierte Freigabe und die technischen Prüfergebnisse erneut. Fehlende Freigaben, offene Änderungswünsche, fehlgeschlagene Prüfungen oder ein inzwischen geänderter Stand verhindern die Übernahme. Übernehmen ist verfügbar, sobald die zentrale Benutzerverwaltung eingerichtet und diese Tätigkeit freigegeben ist.",
           "Gespeicherte Arbeitsentwürfe kannst du später wieder öffnen. Entwurf ablegen beendet die aktuelle Bearbeitung, ohne bereits gespeicherte Änderungen zu löschen. Beim Abmelden fragt der Editor vor dem Verwerfen offener Eingaben. Ungespeicherte Eingaben sind beim Schließen des Browsers nicht dauerhaft gesichert.",
           "Gespeichert wird genau die bestätigte Vorschau. Änderst du die Eingaben während ihrer Vorbereitung, wähle Speichern erneut. Während des Schreibens wartest du auf die Bestätigung. Bei einem Fehler bleiben die Eingaben erhalten und die Vorschau erlaubt einen erneuten Versuch.",
           "Unter Informationen kannst du frühere Fassungen ansehen. Die Wiederaufnahme einer früheren Fassung erzeugt nach Vergleich einen neuen Arbeitsentwurf. Auch dieser braucht Begründung und Fachprüfung.",
@@ -676,9 +676,9 @@ window.EDITOR8_LEARNING = {
         "id": "rollen",
         "title": "Fachliche Rollen und Zugang",
         "paragraphs": [
-          "Dein GitHub-Konto dient der Anmeldung und ordnet Änderungen sowie Prüfentscheidungen deiner Person zu. Welche Fachmodelle du lesen oder bearbeiten darfst, wird für den jeweiligen Modellbestand festgelegt. Die Auswahl eines Bestands erteilt keine zusätzlichen Rechte.",
+          "Die Zulassung zur gehosteten App, der Zugriff auf einen Fachmodellbestand und fachliche Tätigkeiten sind getrennte Freigaben. Bei zentral verwaltetem Zugang erteilt der Betreiber die App-Zulassung und deine Tätigkeiten je Bestand. Dein persönliches GitHub-Konto weist zusätzlich deine Rechte am Datenbestand nach und ordnet Änderungen sowie Prüfentscheidungen deinem Konto zu. Für die fachliche Arbeit brauchst du GitHub nicht selbst zu bedienen.",
           "Bei einem neu eingerichteten Zugang müssen die Anmeldung im Editor, der Zugriff auf den gewählten Fachmodellbestand und deine fachliche Rolle freigegeben sein. Zugriff auf den Modellbestand allein schaltet die Anmeldung und die notarielle Fachprüfung nicht automatisch frei. Der Betreiber richtet diese Freigaben ein.",
-          "Leseberechtigte verstehen und vergleichen die Vorlagen. Ontologiepfleger bearbeiten sie in Arbeitsentwürfen und reichen begründete Änderungen ein. Zur notariellen Fachprüfung berechtigte Notare können die Änderung einer anderen Person fachlich freigeben. Die Pflege gemeinsamer Begriffe ist eine zusätzliche fachliche Aufgabe.",
+          "Leseberechtigte verstehen und vergleichen die Vorlagen. Ontologiepfleger bearbeiten sie in Arbeitsentwürfen und reichen begründete Änderungen ein. Fachprüfer können die Änderung einer anderen Person fachlich freigeben; bei Notar-Fachmodellen braucht es die entsprechende notarielle Berechtigung. Die Pflege gemeinsamer Begriffe und die Übernahme geprüfter Änderungen sind jeweils zusätzliche Tätigkeiten. Eine Berechtigung in einem Bestand gilt nicht automatisch in einem anderen.",
           "Fehlt dir ein Modellbestand oder eine nötige Funktion, wende dich an die dafür verantwortliche Person und nenne den Bestand sowie die gewünschte Tätigkeit. Diese Hilfe erklärt deine fachliche Arbeit im Editor. Zugang und fachliche Berechtigungen werden außerhalb deiner Modelländerung verwaltet.",
           "Der Betreiber protokolliert für seine gehostete App erfolgreiche Anmeldungen, geöffnete Modellbestände, gespeicherte Änderungen, eingereichte Vorschläge und Prüfentscheidungen. Ein Wochenbericht ordnet diese Arbeit deinem Konto und dem gewählten Bestand zu. Fachinhalte und Zugangsdaten werden dabei nicht übernommen; der Bericht ist keine notarielle Freigabe und misst keine Arbeitsdauer. Öffentlich lesbare Fachmodelle erlauben weder die Nutzung dieser App noch eigene Änderungen am gemeinsamen Bestand ohne entsprechende Freigabe."
         ],
@@ -727,11 +727,11 @@ window.EDITOR8_LEARNING = {
           ],
           [
             "Fachmodellbestand fehlt",
-            "Zugang bei der verantwortlichen Person für diesen Bestand klären lassen."
+            "Zulassung für genau diesen Bestand und den Zugriff deines verknüpften GitHub-Kontos bei der verantwortlichen Person klären lassen. Ein öffentlich lesbarer Bestand erscheint dadurch noch nicht automatisch in deiner Auswahl."
           ],
           [
             "Speichern deaktiviert",
-            "Prüfen, ob du eine Änderung eingegeben hast und ein passender Arbeitsentwurf geöffnet ist. Eine laufende Speicherung zunächst abwarten."
+            "Prüfen, ob du eine Änderung eingegeben hast, ein passender Arbeitsentwurf geöffnet ist und du diesen Bestand bearbeiten darfst. Eine laufende Speicherung zunächst abwarten. Reine Leser können keine Änderungen beginnen."
           ],
           [
             "Stand hat sich inzwischen geändert",

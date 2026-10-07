@@ -2,6 +2,8 @@
 
 Stand: 07.10.2026. Diese Betriebsanleitung richtet sich an den Betreiber. Fachliche Nutzer pflegen Modelle in getrennten Datenrepositories; sie entwickeln die Editorsoftware nicht.
 
+**Neue zentrale Benutzerverwaltung:** Die [Entra/GitHub-Implementierung](iam-implementation.md) ersetzt nach kontrollierter Aktivierung die unten beschriebenen Azure- und Image-Listen. Der Betreiber lädt ein bestätigtes Entra-Gastkonto ein, weist App-Gruppe und Tätigkeiten je Bestand zu und prüft die persönlichen GitHub-Rechte. Die Person verknüpft beide Konten durch Anmeldung im Editor. Gruppenänderungen benötigen dann keinen neuen Build und keine Container-Revision. Solange die Einrichtung und reale Anmeldung nicht bestätigt sind, gelten die folgenden Pilotanweisungen.
+
 ## Vier getrennte Freigaben
 
 1. **GitHub-Anwendung autorisieren:** Die bestehende öffentliche App **Ontologie8 Editor** (`ontologie8-editor`) gehört seit der bestätigten Übertragung am 07.10.2026 dem Editorbetreiber `ontologie8`. Ihre Installation für Fachmodelle liegt getrennt beim Datenbetreiber `notariat8`. Eine private organisationsgebundene GitHub-App kann nur von Organisationsmitgliedern autorisiert werden; externe Mitarbeiter können dabei bereits vor dem Callback scheitern. Deshalb wurde die App am 06.10.2026 öffentlich registriert. Öffentliche Registrierung und Eigentumsübertragung erteilen keine Repository-Rechte oder Editor-Zulassung. Details: [App-Eigentum und Dateninstallation](github-app-ownership.md).

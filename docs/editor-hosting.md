@@ -1,5 +1,7 @@
 > Herkunft: aus dem ontology-Editorzweig übernommen. Historische Azure-/PR-Nachweise sind keine neue Deploymentbestätigung. Softwarepflege erfolgt seit 2026-10-01 in editor8; Daten bleiben in notariat8/ontology.
 
+**IAM-Software, 07.10.2026:** Entra-Zulassung und bestandsbezogene Rollen sowie persönliche GitHub-Datenrechte sind implementiert. Die erforderlichen Hosteinstellungen, Laufzeittabelle und kontrollierte Aktivierung stehen unter [IAM-Implementierung](iam-implementation.md). Bis zur tatsächlichen Aktivierung bleiben die bisherigen Zulassungslisten wirksam.
+
 **App-Eigentum, geprüft am 07.10.2026:** Die bestehende Registrierung **Ontologie8 Editor** gehört jetzt dem Editorbetreiber `ontologie8`; App-ID und Client-ID blieben unverändert. Die Installation für Fachmodelle liegt getrennt unter `notariat8`. Aktuelle Metadaten, Betriebslinks und verbliebene Abnahmen: [App-Eigentum und Dateninstallation](github-app-ownership.md). Hinweise auf die frühere Registrierung bei `notariat8` in den datierten Pilotnachweisen sind historisch.
 
 # Gehosteter NaC-Fall-Editor: Betriebsvertrag

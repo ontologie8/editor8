@@ -121,7 +121,7 @@ jobs:
                 done
                 release=$(curl --fail --silent --show-error "$base/api/release" | python -c 'import json,sys; print(json.load(sys.stdin)["commit"])')
                 test "$release" = "$GITHUB_SHA"
-                curl --fail --silent --show-error --dump-header - --output /dev/null "$base/login" | python -c 'import sys; from urllib.parse import urlparse,parse_qs; headers=sys.stdin.read().splitlines(); target=next(line.split(":",1)[1].strip() for line in headers if line.lower().startswith("location:")); assert parse_qs(urlparse(target).query)["redirect_uri"] == ["https://www.ontologie8.de/callback"]'
+                curl --fail --silent --show-error --dump-header - --output /dev/null "$base/login" | python -c 'import sys; from urllib.parse import urlparse,parse_qs; headers=sys.stdin.read().splitlines(); target=urlparse(next(line.split(":",1)[1].strip() for line in headers if line.lower().startswith("location:"))); callbacks={"github.com": "https://www.ontologie8.de/callback", "login.microsoftonline.com": "https://www.ontologie8.de/entra/callback"}; assert target.scheme == "https"; assert parse_qs(target.query)["redirect_uri"] == [callbacks[target.hostname]]'
                 exit 0
               fi
             fi

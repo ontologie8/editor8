@@ -1,5 +1,7 @@
 # Roadmap für editor8
 
+**IAM-Aktualisierung, 07.10.2026:** Der beauftragte Entra/GitHub-Weg ist implementiert und synthetisch prüfbar. Benutzer und Bestandsrollen liegen im neuen Betriebsmodus außerhalb des Images. Einrichtung der Cloudrichtlinien, bestätigte Gastadressen, produktive Aktivierung und reale Anmeldung sind noch offen; [IAM-Implementierung](iam-implementation.md) führt den konkreten Umfang und die Abnahme. Die folgenden älteren Planungsabsätze bleiben als Herkunft erhalten.
+
 Stand: 06.10.2026. editor8 pflegt Software, Oberfläche, Anmeldung, Datenadapter und Betrieb. Fachmodelle liegen im ausdrücklich gewählten Datenrepository. Die 20 kanonischen Vorgangsarten gehören zu `notariat8/ontology`; der Editor übernimmt die Fallanzahl aus dem jeweiligen Katalog.
 
 Herkunft: Die ursprüngliche Planung wurde aus dem ontology-Editorzweig übernommen. Historische Nachweise dieses Zweigs sind keine Deploymentbestätigung für editor8. Der heutige Stand und verbleibende Abnahmen sind hier getrennt aufgeführt.

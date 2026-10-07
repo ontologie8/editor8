@@ -21,7 +21,7 @@ const relations = {
 const $ = id => document.getElementById(id);
 const displayAccount = login => String(login || '').toLowerCase()==='ofunk' ? 'admin@ontologie8.de' : login;
 const svgNS = "http://www.w3.org/2000/svg";
-let state = { token: "", branch: "", purpose: "case", activeCase: "", hosted: false, user: "", notaryReviewer: false, ontologyMaintainer: false, reviewDetail: null, current: null, cases: [], selected: null, nodeEditing: false, dirty: false, graphFocused: false, graphMode: "linked", graphZoom: 1, graphSearchTarget: "node", view: "fall", vocabulary: null, vocabSelected: null, vocabEditing: false, vocabNew: false, vocabularyImpact: null, impactLoading: false, impactError: "", caseIndex: null, caseIndexPromise: null, caseHistory: null, historyTarget: "", drafts: [] };
+let state = { token: "", branch: "", purpose: "case", activeCase: "", hosted: false, user: "", canEdit: true, notaryReviewer: false, ontologyMaintainer: false, reviewDetail: null, current: null, cases: [], selected: null, nodeEditing: false, dirty: false, graphFocused: false, graphMode: "linked", graphZoom: 1, graphSearchTarget: "node", view: "fall", vocabulary: null, vocabSelected: null, vocabEditing: false, vocabNew: false, vocabularyImpact: null, impactLoading: false, impactError: "", caseIndex: null, caseIndexPromise: null, caseHistory: null, historyTarget: "", drafts: [] };
 const saveFlow = {pending: "", preview: null};
 let caseLoadSequence = 0;
 let viewSequence = 0;
@@ -93,7 +93,7 @@ function nodeLabel(id) {
   return node ? displayNodeLabel(node) : id;
 }
 function caseEditable() {
-  return state.branch !== "main" && state.purpose === "case" && (!state.hosted || state.activeCase === state.current?.slug);
+  return state.canEdit && state.branch !== "main" && state.purpose === "case" && (!state.hosted || state.activeCase === state.current?.slug);
 }
 function refreshBranch() {
   $("branch").textContent = state.branch && state.branch!=="main" ? (state.hosted && state.purpose==="case" && !caseEditable() ? "Anderen Fall ansehen" : "Mein Entwurf") : "Lesemodus";
@@ -101,15 +101,15 @@ function refreshBranch() {
   $("branch").title = state.branch && state.branch!=="main" ? `GitHub-Zweig: ${state.branch}${activeTitle ? " · Entwurf für " + activeTitle : ""}` : "Aktueller Katalogstand";
   $("draft-panel").hidden = state.branch !== "main" || !state.drafts.length;
   $("start-branch").hidden = state.branch !== "main" || (state.view==="vokabular" && !state.ontologyMaintainer);
-  $("start-branch").disabled = !state.current;
+  $("start-branch").disabled = !state.current || !state.canEdit;
   $("leave-draft").hidden = !state.hosted || state.branch === "main";
   $("save").hidden = false;
-  $("save").disabled = !!saveFlow.pending || !state.dirty || (state.view==="vokabular" ? state.purpose!=="vocabulary" : !caseEditable());
+  $("save").disabled = !state.canEdit || !!saveFlow.pending || !state.dirty || (state.view==="vokabular" ? state.purpose!=="vocabulary" : !caseEditable());
   $("add-node").hidden=!caseEditable();
   $("edge-create").hidden=!caseEditable();
   for(const id of ["add-node","add-edge","submit-review"]) $(id).disabled=!caseEditable();
-  $("edit-overview").disabled=state.branch!=="main" && !caseEditable();
-  $("edit-node").disabled=nodeEditPending || !!saveFlow.pending || (state.branch!=="main" && !caseEditable());
+  $("edit-overview").disabled=!state.canEdit || (state.branch!=="main" && !caseEditable());
+  $("edit-node").disabled=!state.canEdit || nodeEditPending || !!saveFlow.pending || (state.branch!=="main" && !caseEditable());
   $("vocab-add").hidden=!state.ontologyMaintainer || (state.branch!=="main" && state.purpose!=="vocabulary");
   $("vocab-submit").disabled=state.branch==="main" || state.purpose!=="vocabulary";
   renderOffice();
@@ -319,11 +319,13 @@ async function loadReview(number) {
   $("review-problem").hidden=!detail.problem;$("review-problem").textContent=detail.problem;
   $("request-changes").disabled=!detail.can_review;
   $("approve-review").disabled=!detail.can_approve;
+  $("merge-review").hidden=!detail.can_merge;
+  $("merge-review").disabled=!detail.can_merge;
   $("review-checklist").hidden=!detail.can_approve;
   $("review-permission").textContent=detail.draft ? "Diese Änderung ist noch in Arbeit." :
-    !detail.can_review ? "Eigene Änderungen können hier nicht selbst geprüft werden." :
+    !detail.can_review ? (detail.author.toLowerCase()===state.user.toLowerCase() ? "Eigene Änderungen können hier nicht selbst geprüft werden." : "Für die Fachprüfung dieses Bestands benötigst du eine gesonderte Berechtigung.") :
     detail.problem ? "Eine Freigabe ist erst nach Klärung der angezeigten Abweichung möglich." :
-    !detail.can_approve ? "Fachliche Freigaben sind nur für eingetragene Notarkonten möglich." :
+    !detail.can_approve ? "Für die fachliche Freigabe dieses Bestands benötigst du die entsprechende Berechtigung." :
     "Prüfe Begriffe, Quellen und Beziehungen. Deine Entscheidung wird deinem GitHub-Konto zugeordnet.";
   $("review-comment").value="";$("review-result").hidden=true;
   for(const id of ["review-terms","review-sources","review-relations"])$(id).checked=false;
@@ -342,7 +344,20 @@ async function submitCaseReview(event) {
     notice(event==="APPROVE" ? "Fachliche Freigabe in GitHub dokumentiert." : "Änderungswunsch in GitHub dokumentiert.","success");
   }catch(error){notice(error.message,"error");}
 }
+async function mergeReview() {
+  const detail=state.reviewDetail;
+  if(!detail || !detail.can_merge)return;
+  if(!window.confirm("Die ausgewählte, fachlich freigegebene Änderung übernehmen? Der aktuelle Stand und die technischen Prüfungen werden vor der Übernahme erneut geprüft."))return;
+  $("merge-review").disabled=true;
+  try{
+    await api(`/api/reviews/${detail.number}/merge`,{head_sha:detail.head_sha});
+    state.reviewDetail=null;$("review-detail").hidden=true;
+    await loadReviewQueue();
+    notice("Geprüfte Änderung übernommen.","success");
+  }catch(error){notice(error.message,"error");$("merge-review").disabled=false;}
+}
 async function beginBranch(purpose="case") {
+  if(!state.canEdit) throw new Error("Du darfst diesen Bestand lesen. Für Änderungen benötigst du eine gesonderte Freigabe.");
   if(state.dirty) throw new Error("Bitte ungespeicherte Änderungen vor einem neuen Arbeitszweig prüfen.");
   const result=await api("/api/start-branch",{purpose,case:purpose==="case" ? state.current.slug : ""});state.branch=result.branch;state.purpose=result.purpose || purpose;state.activeCase=result.case || "";refreshBranch();
   if(purpose==="vocabulary") await loadVocabulary(true);
@@ -1040,7 +1055,7 @@ async function init() {
     const initialNavigation=viewSequence;
     const initialView=window.location.hash.slice(1);
     const requestedCase=new URLSearchParams(window.location.search).get("case");
-    const status=await api("/api/status");state.token=status.token;state.branch=status.branch;state.purpose=status.purpose || "case";state.activeCase=status.case || "";state.hosted=!!status.hosted;state.ontologyMaintainer=!!status.ontology_maintainer;refreshBranch();
+    const status=await api("/api/status");state.token=status.token;state.branch=status.branch;state.purpose=status.purpose || "case";state.activeCase=status.case || "";state.hosted=!!status.hosted;state.canEdit=status.can_edit!==false;state.ontologyMaintainer=!!status.ontology_maintainer;refreshBranch();
     if(status.user){state.user=status.user;state.notaryReviewer=!!status.notary_reviewer;$("session-user").textContent=displayAccount(status.user);$("logout").hidden=false;$("review-nav").hidden=false;}
     if (state.hosted) {
       const sources = await api("/api/repositories");
@@ -1164,6 +1179,7 @@ async function init() {
     $("refresh-reviews").addEventListener("click",()=>loadReviewQueue().catch(error=>notice(error.message,"error")));
     $("request-changes").addEventListener("click",()=>submitCaseReview("REQUEST_CHANGES"));
     $("approve-review").addEventListener("click",()=>submitCaseReview("APPROVE"));
+    $("merge-review").addEventListener("click",mergeReview);
     $("source-open").addEventListener("click",()=>$("case-sources").showModal());
     $("source-close").addEventListener("click",()=>$("case-sources").close());
     $("inspector-close").addEventListener("click",()=>{closeGraphInspector();state.selected=null;renderAll();$("graph-find").focus({preventScroll:true});});

@@ -37,7 +37,7 @@ Die App zeigt den ausgelieferten Softwarecommit als „Editor-Release“ mit ein
 python scripts/cloud_editor.py
 ```
 
-Der Container startet diesen Server. `GITHUB_REPOSITORY` bezeichnet das Datenrepository, etwa `notariat8/ontology`, niemals `ontologie8/editor8`. GitHub-App-Zugang, erlaubte Nutzer, Reviewer und HTTPS-Ursprung werden im Host konfiguriert. [Datenvertrag](docs/data-contract.md), [Betrieb](docs/editor-hosting.md), [Produktstand](docs/editor-produktstand.md) und [Migration](docs/migration.md) erklären Voraussetzungen und Prüfgrenzen. Secrets ausschließlich im Host speichern.
+Der Container startet diesen Server. `GITHUB_REPOSITORY` bezeichnet das Datenrepository, etwa `notariat8/ontology`, niemals `ontologie8/editor8`. Die GitHub-App-Registrierung gehört dem Editorbetreiber `ontologie8`; die Installation für Datenrechte bleibt beim jeweiligen Datenbetreiber. [App-Eigentum und Dateninstallation](docs/github-app-ownership.md) beschreibt die bestätigte Trennung und Betriebshelfer. GitHub-App-Zugang, erlaubte Nutzer, Reviewer und HTTPS-Ursprung werden im Host konfiguriert. [Datenvertrag](docs/data-contract.md), [Betrieb](docs/editor-hosting.md), [Produktstand](docs/editor-produktstand.md) und [Migration](docs/migration.md) erklären Voraussetzungen und Prüfgrenzen. Secrets ausschließlich im Host speichern.
 
 ### Software prüfen
 

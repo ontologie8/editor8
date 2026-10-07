@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-"""Register the private editor GitHub App via GitHub's browser manifest flow.
+"""Register an editor-owned public GitHub App via GitHub's manifest flow.
 
 The one-time registration code and generated credentials stay in this process.
 Credentials are written directly to Azure Key Vault, never to Git or stdout.
@@ -22,16 +22,18 @@ import webbrowser
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import parse_qs, urlparse
 
+from github_app_identity import APP_NAME, APP_OWNER, validate_targets
+
 
 def manifest(origin: str, redirect_url: str) -> dict:
     return {
-        "name": "NaC Ontology Editor notariat8",
+        "name": APP_NAME,
         "url": origin,
-        "description": "GitOps editor for the 20 NaC notarial case ontologies",
+        "description": "Editor für versionierte Fachmodelle in getrennten Datenrepositories",
         "redirect_url": redirect_url,
         "callback_urls": [origin + "/callback"],
         "hook_attributes": {"url": origin + "/github-webhook", "active": False},
-        "public": False,
+        "public": True,
         "default_events": [],
         "default_permissions": {"contents": "write", "pull_requests": "write"},
         "request_oauth_on_install": False,
@@ -75,7 +77,7 @@ def exchange_manifest_code(code: str) -> dict:
         "https://api.github.com/app-manifests/" + code + "/conversions",
         data=b"",
         method="POST",
-        headers={"Accept": "application/vnd.github+json", "User-Agent": "nac-ontology-editor-bootstrap"},
+        headers={"Accept": "application/vnd.github+json", "User-Agent": "editor8-bootstrap"},
     )
     with urllib.request.urlopen(request, timeout=30) as response:
         return json.load(response)
@@ -86,13 +88,12 @@ def register(args: argparse.Namespace) -> None:
     parsed = urlparse(origin)
     if parsed.scheme != "https" or not parsed.netloc or parsed.path or parsed.query or parsed.fragment:
         raise ValueError("--origin muss ein HTTPS-Ursprung ohne Pfad sein")
-    if args.org != "notariat8" or args.repo != "ontology":
-        raise ValueError("Dieses Bootstrap-Skript ist auf notariat8/ontology begrenzt")
+    validate_targets(args.app_owner, args.data_repository)
     server = HTTPServer(("127.0.0.1", 0), BaseHTTPRequestHandler)
     state = secrets.token_urlsafe(32)
     redirect_url = "http://127.0.0.1:" + str(server.server_port) + "/complete/" + state
     app_manifest = manifest(origin, redirect_url)
-    registration_url = "https://github.com/organizations/notariat8/settings/apps/new"
+    registration_url = "https://github.com/organizations/" + APP_OWNER + "/settings/apps/new"
     result: dict[str, str] = {}
 
     class Handler(BaseHTTPRequestHandler):
@@ -119,14 +120,15 @@ def register(args: argparse.Namespace) -> None:
                 content = html.escape(json.dumps(app_manifest, ensure_ascii=False), quote=True)
                 page = (
                     "<!doctype html><html lang='de'><meta charset='utf-8'>"
-                    "<title>NaC Editor: GitHub App</title>"
+                    "<title>editor8: GitHub App</title>"
                     "<style>body{font:18px system-ui;max-width:42rem;margin:3rem auto;line-height:1.5}"
                     "button{font:inherit;padding:.7rem 1rem}</style>"
-                    "<h1>GitHub App für den NaC Editor</h1>"
-                    "<p>Der folgende Schritt legt die App in der Organisation notariat8 an."
+                    "<h1>GitHub App für editor8</h1>"
+                    "<p>Dieser Bootstrap legt eine neue öffentliche App beim Editorbetreiber " + APP_OWNER + " an."
+                    " Für die bestehende App stattdessen die Eigentumsübertragung verwenden."
                     "GitHub zeigt die Rechte vor der Bestätigung an: Inhalte und Pull Requests"
-                    " lesen und schreiben. Nachher wird die App nur auf das Repository"
-                    " notariat8/ontology installiert.</p>"
+                    " lesen und schreiben. Die getrennte Dateninstallation wird ausschließlich für "
+                    + html.escape(args.data_repository) + " eingerichtet.</p>"
                     "<form method='post' action='" + registration_url + "'>"
                     "<input type='hidden' name='manifest' value='" + content + "'>"
                     "<input type='hidden' name='state' value='" + html.escape(state, quote=True) + "'>"
@@ -144,7 +146,7 @@ def register(args: argparse.Namespace) -> None:
             code = query["code"][0]
             try:
                 app = exchange_manifest_code(code)
-                if app.get("owner", {}).get("login", "").lower() != args.org:
+                if app.get("owner", {}).get("login", "").lower() != APP_OWNER.lower():
                     raise RuntimeError("GitHub-App gehört nicht zur erwarteten Organisation")
                 if not all(app.get(key) for key in ("client_id", "client_secret", "pem", "slug")):
                     raise RuntimeError("GitHub lieferte unvollständige App-Daten")
@@ -174,8 +176,9 @@ def register(args: argparse.Namespace) -> None:
                     "<!doctype html><html lang='de'><meta charset='utf-8'>"
                     "<h1>GitHub App eingerichtet</h1>"
                     "<p>Die Zugangsdaten sind im Azure Key Vault gespeichert."
-                    " Installiere die App jetzt in notariat8 und wähle dort"
-                    " <strong>nur notariat8/ontology</strong>.</p>"
+                    " Die App gehört zum Editorbetreiber " + APP_OWNER + ". Installiere sie im Datenkonto "
+                    + html.escape(args.data_repository.split('/')[0]) + " und wähle dort"
+                    " <strong>nur " + html.escape(args.data_repository) + "</strong>.</p>"
                     "<p><a href='" + html.escape(install_url, quote=True)
                     + "'>GitHub App gezielt installieren</a></p></html>",
                 )
@@ -213,8 +216,8 @@ def register(args: argparse.Namespace) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--origin", required=True)
-    parser.add_argument("--org", default="notariat8")
-    parser.add_argument("--repo", default="ontology")
+    parser.add_argument("--app-owner", default=APP_OWNER)
+    parser.add_argument("--data-repository", required=True)
     parser.add_argument("--vault", required=True)
     parser.add_argument("--resource-group", required=True)
     parser.add_argument("--container-app", required=True)

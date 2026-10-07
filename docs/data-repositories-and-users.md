@@ -2,6 +2,8 @@
 
 Die Software und ihre Release-Kennung gehören zu editor8. Die Liste erlaubter Datenziele steht in `config/data-repositories.json`; zurzeit ist ausschließlich das bereits eingerichtete `notariat8/ontology` enthalten. Ein Listeneintrag erteilt keine GitHub-Rechte und installiert keine GitHub App.
 
+Die GitHub-App **Ontologie8 Editor** ist beim Editorbetreiber `ontologie8` registriert. Die Installation beim Datenbetreiber `notariat8` ist getrennt davon. Ein weiterer Datenbetreiber installiert die bestehende Editor-App auf seinen ausgewählten Datenrepositories; er benötigt keine eigene Registrierung und keine Software-Schreibrechte. Aktueller Nachweis: [App-Eigentum und Dateninstallation](github-app-ownership.md).
+
 ## Datenziel auswählen
 
 Nach der Anmeldung zeigt die Oberfläche eine Auswahl „Datenrepository“. Sie enthält nur eingetragene Ziele, auf die das angemeldete GitHub-Konto mit dem GitHub-App-Benutzertoken zugreifen kann. Die Auswahl gilt für die einzelne Sitzung. Andere Nutzer behalten ihr Datenziel.

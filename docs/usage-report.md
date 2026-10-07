@@ -1,6 +1,6 @@
 # Nutzungsbericht der gehosteten App
 
-Betreiberdokumentation, Stand 07.10.2026. Auftrag: wöchentlicher Bericht an `ofunk@funktion8.de`. App-Nutzung, GitHub-Datenrechte und Fachfreigaben bleiben getrennt. Dieser Bericht ist kein Freigabenachweis und misst keine Arbeitsdauer.
+Betreiberdokumentation, Stand 07.10.2026. Auftrag: wöchentlicher Bericht an `kontakt@ontologie8.de`. Dieselbe Adresse steht in der App unter Hilfe → Kontakt. Das Betreiberkonto wird als `admin@ontologie8.de` angezeigt; die bestätigte Entscheidung verwendet vorerst die vorhandenen E-Mail-Aliasse. Kontaktadresse, Absenderverbindung und Administratorrechte sind getrennte Einstellungen. Den aktuellen Konto- und Aliasbestand beschreibt [Betreiberidentitäten](operator-identities.md). App-Nutzung, GitHub-Datenrechte und Fachfreigaben bleiben getrennt. Dieser Bericht ist kein Freigabenachweis und misst keine Arbeitsdauer.
 
 ## Aufzeichnung
 
@@ -27,7 +27,7 @@ Die verwaltete Identität der Logic App erhält `Log Analytics Reader` ausschlie
 1. In Azure die API-Verbindung `editor8-report-outlook` öffnen, unter **Edit API connection** das vorgesehene Absenderkonto autorisieren und speichern. Das Konto muss zum vorgesehenen Betreiber gehören; keine fremde Unternehmens-Mailverbindung verwenden.
 2. Den tatsächlichen angemeldeten Absender und den Status `Connected` prüfen.
 3. Den Betriebshelfer mit `--send-mail` ausführen. Ohne verbundene API-Verbindung verweigert er die Versandaktivierung.
-4. Den Wochenablauf manuell ausführen und den Eingang bei `ofunk@funktion8.de` nachweisen. Erst dann ist die E-Mail-Auslieferung abgeschlossen.
+4. Den Wochenablauf manuell ausführen und den Eingang bei `kontakt@ontologie8.de` nachweisen. Erst dann ist die E-Mail-Auslieferung abgeschlossen.
 
 Vorher kann der Ablauf manuell mit deaktiviertem Versand geprüft werden. Er muss Logabfragen, Tabellen und Bericht erfolgreich erzeugen; das Ergebnis lautet ausdrücklich, dass die Mailfreigabe noch fehlt. Eine erfolgreiche Azure-Ressourcenbereitstellung allein beweist keinen E-Mail-Versand.
 

@@ -6,6 +6,7 @@ Die fachliche Nutzung erklärt das [Produkthandbuch](../product/README.md); der 
 
 ## Technische Dokumentation
 
+- [Kontakt und Administratoridentität](../operator-identities.md): Kontaktadresse, Statistikempfänger, tatsächliche Aliaszuordnung und Entra-Mandant.
 - [Lokaler Start und Softwaretests](../../README.md): ausdrücklich separater Datencheckout, Python, JavaScript und Browserprüfungen.
 - [Hosting und GitHub-Anmeldung](../editor-hosting.md): Server, Azure und Zugangskonfiguration.
 - [App-Eigentum und Dateninstallation](../github-app-ownership.md): Registrierung bei `ontologie8`, getrennte Installation beim Datenbetreiber und Identitätsprüfung der Betriebshelfer.

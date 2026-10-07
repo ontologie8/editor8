@@ -1,6 +1,6 @@
 # Wenn etwas nicht funktioniert
 
-Notiere bei einem Fehler den ausgewählten Fachmodellbestand, die Vorgangsart, deinen Arbeitsschritt und die angezeigte Fehlermeldung. Gib bei einer technischen Störung auch den Editor-Release aus der Fußzeile an. Melde die Störung dem Betreiber; fachliche Unklarheiten gehen an die verantwortliche Person für den Modellbestand.
+Notiere bei einem Fehler den ausgewählten Fachmodellbestand, die Vorgangsart, deinen Arbeitsschritt und die angezeigte Fehlermeldung. Gib bei einer technischen Störung auch den Editor-Release aus der Fußzeile an. Melde die Störung über Hilfe → Kontakt an kontakt@ontologie8.de; fachliche Unklarheiten gehen an die verantwortliche Person für den Modellbestand.
 
 Gib keine Anmeldedaten oder vollständigen Rückkehradressen der Anmeldung weiter. Bewahre gespeicherte Entwürfe, solange ein Fehler ungeklärt ist. Nach einem Speicherfehler bleiben Eingaben offen: Warte auf die Meldung, prüfe die Vorschau und versuche die Speicherung erneut.
 

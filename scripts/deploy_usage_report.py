@@ -60,7 +60,7 @@ def template():
     api_id = "concat(subscription().id, '/providers/Microsoft.Web/locations/" + LOCATION + "/managedApis/office365')"
     return {
         "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#", "contentVersion": "1.0.0.0",
-        "parameters": {"workspaceId": {"type": "string"}, "workspaceResourceId": {"type": "string"}, "recipient": {"type": "string", "defaultValue": "ofunk@funktion8.de"}, "sendMail": {"type": "bool", "defaultValue": False}, "createConnection": {"type": "bool", "defaultValue": True}},
+        "parameters": {"workspaceId": {"type": "string"}, "workspaceResourceId": {"type": "string"}, "recipient": {"type": "string", "defaultValue": "kontakt@ontologie8.de"}, "sendMail": {"type": "bool", "defaultValue": False}, "createConnection": {"type": "bool", "defaultValue": True}},
         "resources": [
             {"type": "Microsoft.Web/connections", "apiVersion": "2016-06-01", "name": CONNECTION, "location": LOCATION, "condition": "[parameters('createConnection')]", "properties": {"displayName": "editor8-Berichtsversand", "api": {"id": "[" + api_id + "]"}}},
             {"type": "Microsoft.Logic/workflows", "apiVersion": "2019-05-01", "name": WORKFLOW, "location": LOCATION, "identity": {"type": "SystemAssigned"}, "dependsOn": ["[" + connection_id + "]"], "properties": {

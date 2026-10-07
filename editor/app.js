@@ -19,6 +19,7 @@ const relations = {
   bestimmt: "bestimmt"
 };
 const $ = id => document.getElementById(id);
+const displayAccount = login => String(login || '').toLowerCase()==='ofunk' ? 'admin@ontologie8.de' : login;
 const svgNS = "http://www.w3.org/2000/svg";
 let state = { token: "", branch: "", purpose: "case", activeCase: "", hosted: false, user: "", notaryReviewer: false, ontologyMaintainer: false, reviewDetail: null, current: null, cases: [], selected: null, nodeEditing: false, dirty: false, graphFocused: false, graphMode: "linked", graphZoom: 1, graphSearchTarget: "node", view: "fall", vocabulary: null, vocabSelected: null, vocabEditing: false, vocabNew: false, vocabularyImpact: null, impactLoading: false, impactError: "", caseIndex: null, caseIndexPromise: null, caseHistory: null, historyTarget: "", drafts: [] };
 const saveFlow = {pending: "", preview: null};
@@ -251,7 +252,7 @@ async function loadCaseHistory() {
     const info=element("div");
     info.append(element("strong",item.message || "Änderung der Fallvorlage"));
     const date=item.date ? new Date(item.date).toLocaleDateString("de-DE") : "Datum unbekannt";
-    info.append(element("small",`${date} · ${item.author} · ${item.sha.slice(0,10)}`));
+    info.append(element("small",`${date} · ${displayAccount(item.author)} · ${item.sha.slice(0,10)}`));
     const actions=element("div",undefined,"history-actions");
     const link=element("a","Auf GitHub ansehen ↗");link.href=item.url;link.target="_blank";link.rel="noopener noreferrer";
     const button=element("button","Fassung prüfen");button.type="button";
@@ -268,7 +269,7 @@ async function previewCaseHistory(item) {
   });
   state.historyTarget=item.sha;
   $("history-preview").hidden=false;
-  $("history-target").textContent=`Frühere Fassung ${item.sha.slice(0,10)} von ${item.author}. Der aktuelle Fall wird dadurch nicht direkt geändert.`;
+  $("history-target").textContent=`Frühere Fassung ${item.sha.slice(0,10)} von ${displayAccount(item.author)}. Der aktuelle Fall wird dadurch nicht direkt geändert.`;
   const list=$("history-changes");list.replaceChildren();
   result.changes.forEach(change=>list.append(element("li",change)));
   if(!result.changed)list.append(element("li","Diese Fassung entspricht bereits dem aktuellen Fall."));
@@ -293,7 +294,7 @@ async function loadReviewQueue() {
   reviews.forEach(item=>{
     const card=element("button",undefined,"review-item"+(state.reviewDetail?.number===item.number ? " active" : ""));card.type="button";
     const caseTitle=item.case==="vocabulary" ? "Gemeinsames Vokabular" : state.cases.find(entry=>entry.slug===item.case)?.title || item.case;
-    card.append(element("strong",caseTitle),element("span",`#${item.number} · von ${item.author} · ${item.draft ? "noch in Arbeit" : "zur Prüfung"}`));
+    card.append(element("strong",caseTitle),element("span",`#${item.number} · von ${displayAccount(item.author)} · ${item.draft ? "noch in Arbeit" : "zur Prüfung"}`));
     card.addEventListener("click",()=>loadReview(item.number).catch(error=>notice(error.message,"error")));root.append(card);
   });
   notice("Prüfkorb geladen.","quiet");
@@ -301,7 +302,7 @@ async function loadReviewQueue() {
 async function loadReview(number) {
   const detail=await api("/api/reviews/"+number);state.reviewDetail=detail;
   $("review-detail").hidden=false;$("review-title").textContent=detail.title;
-  $("review-meta").textContent=`${detail.case==="vocabulary" ? "Gemeinsames Vokabular" : "Fall: " + (state.cases.find(item=>item.slug===detail.case)?.title || detail.case)} · erstellt von ${detail.author} · ${detail.draft ? "noch in Arbeit" : "zur Prüfung bereit"}`;
+  $("review-meta").textContent=`${detail.case==="vocabulary" ? "Gemeinsames Vokabular" : "Fall: " + (state.cases.find(item=>item.slug===detail.case)?.title || detail.case)} · erstellt von ${displayAccount(detail.author)} · ${detail.draft ? "noch in Arbeit" : "zur Prüfung bereit"}`;
   $("review-pr-link").href=detail.url;
   const body=$("review-body");body.replaceChildren();
   const sections=(detail.body || "").split(/^## /m);
@@ -1040,7 +1041,7 @@ async function init() {
     const initialView=window.location.hash.slice(1);
     const requestedCase=new URLSearchParams(window.location.search).get("case");
     const status=await api("/api/status");state.token=status.token;state.branch=status.branch;state.purpose=status.purpose || "case";state.activeCase=status.case || "";state.hosted=!!status.hosted;state.ontologyMaintainer=!!status.ontology_maintainer;refreshBranch();
-    if(status.user){state.user=status.user;state.notaryReviewer=!!status.notary_reviewer;$("session-user").textContent=status.user;$("logout").hidden=false;$("review-nav").hidden=false;}
+    if(status.user){state.user=status.user;state.notaryReviewer=!!status.notary_reviewer;$("session-user").textContent=displayAccount(status.user);$("logout").hidden=false;$("review-nav").hidden=false;}
     if (state.hosted) {
       const sources = await api("/api/repositories");
       const select = $("repository-select");
@@ -1247,6 +1248,12 @@ function showHelp(topic='start'){
     const frame=document.createElement('iframe');frame.id='learning-frame';frame.title=topic==='training'?'Training: Ontologien verstehen und pflegen':'Handbuch für Ontologiepflege und notarielle Prüfung';frame.src='/learning/?embedded=1&mode='+topic;frame.addEventListener('load',()=>{if($("learning-frame")!==frame)return;renderOffice();frame.contentDocument.addEventListener('learning-change',()=>renderOffice());});root.append(frame);return;
   }
   renderOffice();
+  if(topic==='contact'){
+    root.append(element('h2','Kontakt'),element('p','Bei Fragen zur Bedienung oder einer technischen Störung erreichst du den Betreiber unter:'));
+    const contact=element('a','kontakt@ontologie8.de');contact.href='mailto:kontakt@ontologie8.de';
+    root.append(contact,element('h3','Eine Störung melden'),element('p','Nenne den Editor-Release aus der Fußzeile, den ausgewählten Fachmodellbestand, deinen Arbeitsschritt und die Fehlermeldung. Gib keine Passwörter, Anmeldedaten, vollständigen Anmeldeadressen oder Akteninhalte weiter.'),element('h3','Fachliche Fragen'),element('p','Unklare Begriffe, Quellen und Freigaben klärst du mit der verantwortlichen Person für den ausgewählten Modellbestand.'));
+    renderOffice();return;
+  }
   root.append(element('h2',topic==='example'?'Beispiel':topic==='terms'?'Begriffe':'Kurzanleitung'));
   const blocks=topic==='example'?[
     ['Künstliches Beispiel','Eine Angabenfrage „Angabe A“ ist mit einem Dokumenttyp „Nachweis A“ verbunden. Beide Namen sind ausschließlich ein künstliches Beispiel.'],
@@ -1269,7 +1276,7 @@ function showHelp(topic='start'){
     ['Menüband','Strg+F1 oder Doppelklick reduziert das Menüband. Ein Klick auf eine Registerkarte öffnet die Befehle vorübergehend. Der Schalter rechts hält sie dauerhaft sichtbar. Die Baum-Navigation wird unabhängig über das Menü-Symbol links gesteuert.'],
     ['Hinweise und Kontextmenü','Halte den Mauszeiger kurz über einen Befehl, ein Feld oder einen Baustein, um einen Hinweis zu lesen. Rechtsklick auf einen Baustein öffnet Öffnen, Bearbeiten, Verbindungen und Hilfe zur Auswahl. Mit Umschalt+F10 öffnest du das Menü auch per Tastatur; Escape schließt es.']
   ];blocks.forEach(([title,text])=>root.append(element('h3',title),element('p',text)));
-  root.append(element('h3','Herkunft und Lizenz'),element('p','Based on NaC: Notariat as Code by funktion8 / ofunk. Code: AGPL-3.0-or-later; Dokumentation: CC-BY-4.0.'));
+  root.append(element('h3','Herkunft und Lizenz'),element('p','Based on NaC: Notariat as Code. Code: AGPL-3.0-or-later; Dokumentation: CC-BY-4.0. Herkunft und Autoren stehen in den verlinkten Lizenzhinweisen.'));
   const attribution=element('p');const source=element('a','NaC-Originalprojekt');source.href='https://github.com/notariat8/NaC';const license=element('a','Lizenz und Markenhinweise');license.href='https://github.com/ontologie8/editor8/blob/main/LICENSES/README.md';attribution.append(source,document.createTextNode(' · '),license);root.append(attribution);
   renderOffice();
 }

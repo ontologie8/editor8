@@ -8,6 +8,8 @@ Deine Änderungen betreffen den ausgewählten Fachmodellbestand, beispielsweise 
 
 Die Hilfe führt durch Verstehen, Bearbeiten und Prüfen. Training und Übungen verwenden vollständig künstliche Beispiele. Sie erläutern die Bedienung und ersetzen keine notarielle Beurteilung eines tatsächlichen Fachmodells.
 
+Den Betreiber erreichst du für Bedienfragen und technische Störungen über Hilfe → Kontakt unter kontakt@ontologie8.de. Sein Konto erscheint in der App als admin@ontologie8.de; fachliche Zuständigkeiten und Freigaben gehören weiterhin zum jeweiligen Modellbestand.
+
 ## Referenz
 
 | Begriff oder Meldung | Erläuterung |

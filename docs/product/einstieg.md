@@ -4,7 +4,7 @@
 
 Links außen stehen Verstehen, Bearbeiten und Prüfen. Daneben findest du die Auswahl der Fachmodelle und den aufklappbaren Baum. In der Mitte siehst du die Zusammenhänge; rechts erscheinen Details oder Bearbeitungsfelder zum gewählten Baustein.
 
-Allgemeine Anleitungen stehen oben unter Hilfe. Das Fragezeichen am ausgewählten Baustein erläutert dessen fachlichen Kontext. Unter Informationen findest du Beschreibung, Quellen und frühere Fassungen der Vorgangsart.
+Allgemeine Anleitungen stehen oben unter Hilfe. Hilfe → Kontakt zeigt kontakt@ontologie8.de für Fragen zur Bedienung und technische Störungen. Das Fragezeichen am ausgewählten Baustein erläutert dessen fachlichen Kontext. Unter Informationen findest du Beschreibung, Quellen und frühere Fassungen der Vorgangsart.
 
 Mit Strg+F1 oder einem Doppelklick auf eine Registerkarte klappst du das Menüband ein oder aus. Die Menü-Schaltfläche oben links blendet den inneren Baum ein oder aus. Menüs und Auswahl bleiben erreichbar, während du innerhalb des Arbeitsbereichs blätterst oder scrollst.
 

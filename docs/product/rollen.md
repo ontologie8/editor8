@@ -8,6 +8,8 @@ Leseberechtigte verstehen und vergleichen die Vorlagen. Ontologiepfleger bearbei
 
 Fehlt dir ein Modellbestand oder eine nötige Funktion, wende dich an die dafür verantwortliche Person und nenne den Bestand sowie die gewünschte Tätigkeit. Diese Hilfe erklärt deine fachliche Arbeit im Editor. Zugang und fachliche Berechtigungen werden außerhalb deiner Modelländerung verwaltet.
 
+Der Betreiber protokolliert für seine gehostete App erfolgreiche Anmeldungen, geöffnete Modellbestände, gespeicherte Änderungen, eingereichte Vorschläge und Prüfentscheidungen. Ein Wochenbericht ordnet diese Arbeit deinem Konto und dem gewählten Bestand zu. Fachinhalte und Zugangsdaten werden dabei nicht übernommen; der Bericht ist keine notarielle Freigabe und misst keine Arbeitsdauer. Öffentlich lesbare Fachmodelle erlauben weder die Nutzung dieser App noch eigene Änderungen am gemeinsamen Bestand ohne entsprechende Freigabe.
+
 ## Referenz
 
 | Begriff oder Meldung | Erläuterung |

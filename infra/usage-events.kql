@@ -1,0 +1,9 @@
+let audit = ContainerAppConsoleLogs_CL
+| where ContainerAppName_s == 'ca-nac-ontology-editor'
+| where Log_s startswith 'editor8_audit '
+| extend event = parse_json(substring(Log_s, 14))
+| where toint(event.schema) == 1;
+let activity = audit
+| where TimeGenerated >= ago(7d)
+| where tostring(event.action) != 'service_started'
+| extend Actor = tostring(event.actor), User = tostring(event.user), Repository = tostring(event.repository), Action = tostring(event.action);

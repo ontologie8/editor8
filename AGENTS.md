@@ -3,6 +3,7 @@
 - Dieses Repository enthält Oberfläche, Server, Anmeldung, Datenadapter, Tests und Betrieb des Editors.
 - Führende Notar-Fachmodelle liegen ausschließlich in `notariat8/ontology`; NaC bleibt Quelle für Prozessabläufe und Usecase-IDs. Keine Fachmodelle, Aktenwerte oder Secrets hier speichern.
 - Datenziele ausdrücklich konfigurieren: `GITHUB_REPOSITORY` für den Cloudbetrieb, `EDITOR8_DATA_ROOT` für lokale Entwicklung. Dieses Software-Repository darf kein Datenziel sein.
+- Vier Freigaben getrennt behandeln: Entwicklung des Editors, Nutzung der vom Betreiber bezahlten App, Rechte am jeweiligen Datenrepository und fachliche Freigabe im jeweiligen Datenbestand. Öffentlich lesbarer Quellcode oder ein Entra-Gastkonto allein erteilt keine App-Zulassung, Schreibrechte oder Fachprüferrolle.
 - Der NaC-Adapter übernimmt die IDs des Datenkatalogs unverändert. Die 20-Fall-Grenze gehört zum Notardatenprojekt; der Editor hat keine fest codierte Fallanzahl.
 - Änderungen an Software und Daten in getrennten Arbeitsverzeichnissen prüfen, committen und synchronisieren. Repositoryübergreifende Arbeit ist erlaubt, wenn der Nutzer sie beauftragt. Nachrichten an andere Codex-Chats benötigen seine ausdrückliche Beauftragung.
 - Vor Lieferung: Python-Tests, JavaScript-Syntax und synthetische Browserprüfung. Datenintegration zusätzlich mit einem ausdrücklich angegebenen separaten Checkout testen.

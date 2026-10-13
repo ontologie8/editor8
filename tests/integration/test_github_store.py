@@ -204,6 +204,9 @@ class GitHubStoreTests(unittest.TestCase):
 
         def request(method, path, payload=None):
             calls.append((method, path, payload))
+            if method == "GET" and path == "/contents/ontology/core.ttl?ref=new-commit":
+                core = (ROOT / "ontology/core.ttl").read_bytes()
+                return {"encoding": "base64", "content": base64.b64encode(core).decode()}
             if method == "GET" and path == "/git/commits/parent":
                 return {"tree": {"sha": "old-tree"}}
             if method == "POST" and path == "/git/trees":

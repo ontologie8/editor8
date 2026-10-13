@@ -162,7 +162,7 @@
         {
           "id": "beziehungen-3",
           "title": "Neue Beziehungen brauchen zwei vorhandene Bausteine",
-          "text": "Im Editor öffnest du Ansicht → Verbindungen und wählst Quelle, Typ und Ziel. Prüfe den Satz vor dem Hinzufügen. Eine sachlich passende Verbindung kann Kategorien übergreifen.",
+          "text": "Wähle im Editor Ausgang, Beziehung und Ziel. Der vollständige Satz erscheint vor dem Hinzufügen. Prüfe die Richtung und lies vorhandene Vokabularhinweise. Eine bereits vorhandene Verbindung lässt sich nicht nochmals hinzufügen. Eine sachlich passende Verbindung kann Kategorien übergreifen; Hinweise ersetzen keine fachliche Prüfung.",
           "steps": [
             "Suche Quelle und Ziel anhand ihrer Bezeichnungen.",
             "Prüfe Richtung und Typ im gespeicherten Vergleich."

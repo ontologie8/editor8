@@ -164,7 +164,7 @@ window.EDITOR8_LEARNING = {
           {
             "id": "beziehungen-3",
             "title": "Neue Beziehungen brauchen zwei vorhandene Bausteine",
-            "text": "Im Editor öffnest du Ansicht → Verbindungen und wählst Quelle, Typ und Ziel. Prüfe den Satz vor dem Hinzufügen. Eine sachlich passende Verbindung kann Kategorien übergreifen.",
+            "text": "Wähle im Editor Ausgang, Beziehung und Ziel. Der vollständige Satz erscheint vor dem Hinzufügen. Prüfe die Richtung und lies vorhandene Vokabularhinweise. Eine bereits vorhandene Verbindung lässt sich nicht nochmals hinzufügen. Eine sachlich passende Verbindung kann Kategorien übergreifen; Hinweise ersetzen keine fachliche Prüfung.",
             "steps": [
               "Suche Quelle und Ziel anhand ihrer Bezeichnungen.",
               "Prüfe Richtung und Typ im gespeicherten Vergleich."
@@ -546,7 +546,9 @@ window.EDITOR8_LEARNING = {
           "Eine Umbenennung präzisiert einen vorhandenen Gegenstand. Ein neuer Baustein ist sinnvoll, wenn ein eigenständiger Gegenstand fehlt. Er braucht eine passende Art, eine verständliche Bezeichnung, eine Erläuterung und die nötigen Beziehungen. Vor dem Löschen prüfst du die verbundenen Bausteine und Quellen.",
           "Die künstliche Übung „Fantasiewerkstatt“ präzisiert „Benötigte Schutzausrüstung“ zu „Benötigte Schutzausrüstung für den Workshop“. Der Gegenstand, seine Kennung und seine Beziehungen bleiben erhalten. In der Übung änderst du ausschließlich das Beispiel; echte Fachmodelle bleiben unberührt.",
           "Du kannst Bearbeiten auch per Rechtsklick auf den gewünschten Baustein wählen. Der Editor beginnt bei Bedarf einen Arbeitsentwurf und öffnet genau diesen Baustein. Speichern zeigt weiterhin zuerst den Vergleich; erst deine Bestätigung sichert die Änderung. Entfernen ist nur für zusätzlich angelegte Bausteine verfügbar und fragt vorher nach. Ein Baustein aus der Vorlage wird dadurch nicht gelöscht.",
-          "Beim Bearbeiten von Text bleiben Ausschneiden, Kopieren und Einfügen über die rechte Maustaste verfügbar. Ungespeicherte Eingaben bleiben beim Wechsel der Bausteinauswahl im Entwurf erhalten. Für den Wechsel zu einer anderen Vorgangsart prüfe zuerst den Speicherstatus."
+          "Beim Bearbeiten von Text bleiben Ausschneiden, Kopieren und Einfügen über die rechte Maustaste verfügbar. Ungespeicherte Eingaben bleiben beim Wechsel der Bausteinauswahl im Entwurf erhalten. Für den Wechsel zu einer anderen Vorgangsart prüfe zuerst den Speicherstatus.",
+          "Beim Hinzufügen einer Verbindung zeigt der Editor den Satz aus Ausgang, Beziehung und Ziel vorab. Prüfe die Richtung und Bedeutung, bevor du Hinzufügen wählst. Eine bereits vorhandene Verbindung kann nicht nochmals hinzugefügt werden. Vokabularhinweise erläutern den Bezug; sie ersetzen keine fachliche Prüfung.",
+          "Die Hinweise unter Eingabefeldern erläutern deren Verwendung. Erläuterungen aus dem ausgewählten Vokabular ergänzen die Pflegehilfe. Fachliche Zuständigkeiten oder Datenschutzangaben im Modell erteilen keine technischen Zugriffsrechte."
         ],
         "steps": [
           "Unter Verstehen die Vorgangsart, den betroffenen Baustein, seine Beziehungen und Quellen prüfen.",

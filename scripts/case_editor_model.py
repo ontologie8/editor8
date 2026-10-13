@@ -15,6 +15,7 @@ from rdflib.compare import to_isomorphic
 from data_contract import CATEGORIES, EDGES, APP_ROOT, DATA_ROOT, local_root, parse_baseline
 from case_document import render
 from turtle_edit import minimal_turtle
+from editing_guidance import profile as editing_profile
 
 
 ROOT = DATA_ROOT
@@ -120,6 +121,8 @@ def load_case(slug: str, root: Path | None = None) -> dict:
     catalog = Graph().parse(root / "catalog/nac-usecases.ttl", format="turtle")
     model["title"] = _one(catalog, case_uri(slug), SKOS.prefLabel)
     model["bpmn_source"] = _one(catalog, case_uri(slug), N8.hatBpmnModell)
+    core = root / "ontology/core.ttl"
+    model["editing_profile"] = editing_profile(core.read_text(encoding="utf-8") if core.is_file() else "")
     return model
 
 

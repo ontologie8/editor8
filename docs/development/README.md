@@ -6,6 +6,7 @@ Die fachliche Nutzung erklärt das [Produkthandbuch](../product/README.md); der 
 
 ## Technische Dokumentation
 
+- [Eigenständige Funktionen und schema-Anschluss](eigenstaendige-funktionen.md): eigene Umsetzung der Produktideen, bestätigter Umfang und Trennung vom noch ausstehenden JSON-/Paketadapter.
 - [Kontakt und Administratoridentität](../operator-identities.md): Kontaktadresse, Statistikempfänger, tatsächliche Aliaszuordnung und Entra-Mandant.
 - [Lokaler Start und Softwaretests](../../README.md): ausdrücklich separater Datencheckout, Python, JavaScript und Browserprüfungen.
 - [Hosting und GitHub-Anmeldung](../editor-hosting.md): Server, Azure und Zugangskonfiguration.

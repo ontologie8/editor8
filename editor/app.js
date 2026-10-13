@@ -113,6 +113,7 @@ function refreshBranch() {
   $("vocab-add").hidden=!state.ontologyMaintainer || (state.branch!=="main" && state.purpose!=="vocabulary");
   $("vocab-submit").disabled=state.branch==="main" || state.purpose!=="vocabulary";
   renderOffice();
+  renderConnectionGuidance();
   document.dispatchEvent(new Event("editor-state-change"));
 }
 function renderCaseList() {
@@ -845,16 +846,10 @@ function focusGraphNode(id) {
   renderCaseList();
   $("inspector-title").focus({preventScroll:true});
 }
-function field(root, label, value, onChange, multiline = false, hint = "") {
-  const wrap = element("div");
-  const caption = element("label",label + (hint ? " · " + hint : ""));
-  const control = element(multiline ? "textarea" : "input");
-  control.value = value ?? "";
-  control.disabled=!caseEditable();
-  if (multiline) control.rows = 3;
-  control.addEventListener("input",() => {onChange(control.value);dirty();});
-  caption.append(control); wrap.append(caption); root.append(wrap);
-  return control;
+function field(root, label, value, onChange, multiline = false, hint = "", fieldName = "") {
+  return window.EditorGuidance.field(root,label,value,value=>{onChange(value);dirty();},{
+    multiline,hint,disabled:!caseEditable(),description:state.current?.editing_profile?.fields?.[fieldName]?.description || ""
+  });
 }
 function renderNodeForm() {
   const root = $("node-form"); root.replaceChildren();
@@ -869,6 +864,8 @@ function renderNodeForm() {
   if (!node) {read.append(element("p","Wähle links oder im Bild einen Baustein aus.","empty"));return;}
   const type=groups.find(([key])=>key===node.category)?.[1] || "Baustein";
   read.append(element("p",type + " · " + (node.id.startsWith("local.") ? "Neu ergänzter Baustein" : "Aus der NaC-Vorlage übernommen"),"node-meta"));
+  const typeDescription=state.current.editing_profile?.types?.[node.category]?.description;
+  if(typeDescription)read.append(element("p",typeDescription,"field-guidance"));
   const facts=[
     ["Fachfrage",node.question],
     ["Abschnitt der Vorlage",node.section],
@@ -893,7 +890,7 @@ function renderNodeForm() {
   const id=field(root,"Kennung",node.id,()=>{});id.readOnly=true;
   const label = field(root,"Bezeichnung",node.label,value => {
     node.label=value; $("detail-title").textContent=displayNodeLabel(node);renderNodes();renderGraph();renderGraphList();renderGraphSearch();renderEdges();renderRelationContext();fillNodeSelects();
-  });
+  },false,"","label");
   label.maxLength=2000;
   const categoryWrap=element("div");
   const categoryLabel=element("label","Bausteintyp");
@@ -905,18 +902,18 @@ function renderNodeForm() {
   categoryLabel.append(categorySelect);categoryWrap.append(categoryLabel);root.append(categoryWrap);
   const status=field(root,node.id.startsWith("local.") ? "Pflegestatus des lokalen Entwurfs" : "Status der NaC-Vorlage",node.status,value=>node.status=value);
   if (!node.id.startsWith("local.")) status.readOnly=true;
-  field(root,"Offene Fachfrage",node.question,value=>node.question=value,true);
-  field(root,"Abschnitt der Vorlage",node.section,value=>node.section=value);
-  field(root,"Fachliche Erläuterung",node.detail,value=>node.detail=value,true);
+  field(root,"Offene Fachfrage",node.question,value=>node.question=value,true,"","question");
+  field(root,"Abschnitt der Vorlage",node.section,value=>node.section=value,false,"","section");
+  field(root,"Fachliche Erläuterung",node.detail,value=>node.detail=value,true,"","detail");
   const advanced=element("details",undefined,"advanced-fields");
   advanced.append(element("summary","Weitere Angaben für die Datenpflege"));
   root.append(advanced);
   const grid=element("div",undefined,"grid");advanced.append(grid);
-  field(grid,"Verantwortliche Rolle",node.owner_role,value=>node.owner_role=value);
-  field(grid,"Datenschutzklasse",node.privacy_class,value=>node.privacy_class=value);
+  field(grid,"Verantwortliche Rolle",node.owner_role,value=>node.owner_role=value,false,"","owner_role");
+  field(grid,"Datenschutzklasse",node.privacy_class,value=>node.privacy_class=value,false,"","privacy_class");
   field(advanced,"Benötigt für",node.required_for.join("\n"),value=>node.required_for=value.split("\n").map(v=>v.trim()).filter(Boolean),true,"eine Angabe pro Zeile");
   field(advanced,"Entscheidungsoptionen",node.options.join("\n"),value=>node.options=value.split("\n").map(v=>v.trim()).filter(Boolean),true,"eine Option pro Zeile");
-  field(advanced,"Dokumentquelle",node.document_source,value=>node.document_source=value);
+  field(advanced,"Dokumentquelle",node.document_source,value=>node.document_source=value,false,"","document_source");
   const privacy=element("label","Kann Personendaten enthalten?");
   const select=element("select");
   select.disabled=!caseEditable();
@@ -932,6 +929,17 @@ function fillNodeSelects() {
     if(!node)$(id).value="";
     $(id+"-choose").textContent=node ? displayNodeLabel(node) : id==="edge-from" ? "Ausgang wählen" : "Ziel wählen";
   }
+  renderConnectionGuidance();
+}
+function renderConnectionGuidance() {
+  if(!$("edge-sentence") || !state.current)return;
+  const edge={from:$("edge-from").value,type:$("edge-type").value,to:$("edge-to").value};
+  const nodes=state.current.nodes.map(node=>({...node,label:displayNodeLabel(node)}));
+  const result=window.EditorGuidance.connection(nodes,edge,relations,state.current.editing_profile?.relations);
+  const duplicate=state.current.edges.some(item=>item.from===edge.from && item.to===edge.to && item.type===edge.type);
+  $("edge-sentence").textContent=result.sentence;
+  $("edge-guidance").textContent=duplicate ? "Diese Verbindung besteht bereits. Wähle eine andere Verbindung." : result.hints || "";
+  $("add-edge").disabled=!caseEditable() || !!saveFlow.pending || !result.ready || duplicate;
 }
 function renderEdges() {
   const root=$("edge-list");root.replaceChildren();
@@ -1132,6 +1140,7 @@ async function init() {
     $("graph-find").addEventListener("click",()=>openGraphSearch());
     $("edge-from-choose").addEventListener("click",()=>openGraphSearch("edge-from"));
     $("edge-to-choose").addEventListener("click",()=>openGraphSearch("edge-to"));
+    $("edge-type").addEventListener("change",renderConnectionGuidance);
     $("graph-query").addEventListener("input",renderGraphSearch);
     $("case-node-search-close").addEventListener("click",()=>$("case-node-search").close());
     $("summary").addEventListener("input",event=>{state.current.summary=event.target.value;renderOverview();dirty();});
@@ -1164,6 +1173,7 @@ async function init() {
       state.selected=null;state.nodeEditing=false;dirty();renderAll();
     });
     $("add-edge").addEventListener("click",()=>{
+      if(!caseEditable() || saveFlow.pending)return;
       const edge={from:$("edge-from").value,type:$("edge-type").value,to:$("edge-to").value};
       if(!edge.from || !edge.to){notice("Bitte Ausgang und Ziel auswählen.","error");return;}
       if(state.current.edges.some(item=>item.from===edge.from && item.type===edge.type && item.to===edge.to)){notice("Diese Beziehung besteht bereits.","error");return;}

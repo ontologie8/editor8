@@ -162,6 +162,9 @@ class GitHubStore:
         head = self.ref(branch)
         with self.model_root(slug, head) as root:
             model = load_case(slug, root)
+        from editing_guidance import profile
+        model["editing_profile"] = profile(self.read_file("ontology/core.ttl", head))
+        model["editing_profile"]["source_ref"] = head
         model["expected_ref"] = head
         return model
 

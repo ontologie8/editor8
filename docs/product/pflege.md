@@ -10,6 +10,10 @@ Du kannst Bearbeiten auch per Rechtsklick auf den gewünschten Baustein wählen.
 
 Beim Bearbeiten von Text bleiben Ausschneiden, Kopieren und Einfügen über die rechte Maustaste verfügbar. Ungespeicherte Eingaben bleiben beim Wechsel der Bausteinauswahl im Entwurf erhalten. Für den Wechsel zu einer anderen Vorgangsart prüfe zuerst den Speicherstatus.
 
+Beim Hinzufügen einer Verbindung zeigt der Editor den Satz aus Ausgang, Beziehung und Ziel vorab. Prüfe die Richtung und Bedeutung, bevor du Hinzufügen wählst. Eine bereits vorhandene Verbindung kann nicht nochmals hinzugefügt werden. Vokabularhinweise erläutern den Bezug; sie ersetzen keine fachliche Prüfung.
+
+Die Hinweise unter Eingabefeldern erläutern deren Verwendung. Erläuterungen aus dem ausgewählten Vokabular ergänzen die Pflegehilfe. Fachliche Zuständigkeiten oder Datenschutzangaben im Modell erteilen keine technischen Zugriffsrechte.
+
 ## Vorgehen
 
 1. Unter Verstehen die Vorgangsart, den betroffenen Baustein, seine Beziehungen und Quellen prüfen.

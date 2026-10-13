@@ -105,7 +105,7 @@ Lies den Pfeil als Quelle, Beziehung, Ziel. Im Beispiel: „Benötigte Schutzaus
 
 ### Neue Beziehungen brauchen zwei vorhandene Bausteine
 
-Im Editor öffnest du Ansicht → Verbindungen und wählst Quelle, Typ und Ziel. Prüfe den Satz vor dem Hinzufügen. Eine sachlich passende Verbindung kann Kategorien übergreifen.
+Wähle im Editor Ausgang, Beziehung und Ziel. Der vollständige Satz erscheint vor dem Hinzufügen. Prüfe die Richtung und lies vorhandene Vokabularhinweise. Eine bereits vorhandene Verbindung lässt sich nicht nochmals hinzufügen. Eine sachlich passende Verbindung kann Kategorien übergreifen; Hinweise ersetzen keine fachliche Prüfung.
 
 - Suche Quelle und Ziel anhand ihrer Bezeichnungen.
 - Prüfe Richtung und Typ im gespeicherten Vergleich.

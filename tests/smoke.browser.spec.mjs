@@ -2,6 +2,53 @@
 import {test, expect} from '@playwright/test';
 import fs from 'node:fs';
 const course = JSON.parse(fs.readFileSync(new URL('../training/course.json', import.meta.url), 'utf8'));
+
+test('connection composer explains direction before changing the model and refuses duplicates', async ({page}) => {
+  await page.goto('/');
+  await expect(page.locator('#case-title')).toContainText('Künstlicher Fall');
+  await page.locator('[data-area=edit]').click();
+  await page.locator('#start-branch').click();
+  await page.locator('[data-menu=view]').click();
+  await page.locator('[data-command-group=view] [data-view-button=verbindungen]').click();
+  await page.locator('#edge-create summary').click();
+  await expect(page.locator('#add-edge')).toBeDisabled();
+  await page.locator('#edge-from-choose').click();
+  await page.locator('#graph-query').fill('Angabenfrage');
+  await page.locator('#graph-results button').first().click();
+  await page.locator('#edge-to-choose').click();
+  await page.locator('#graph-query').fill('Dokumenttyp');
+  await page.locator('#graph-results button').first().click();
+  await expect(page.locator('#edge-sentence')).toContainText('erfordert');
+  await expect(page.locator('#edge-guidance')).toContainText('besteht bereits');
+  await expect(page.locator('#add-edge')).toBeDisabled();
+  const count=await page.locator('#edge-list .edge-row').count();
+  await page.locator('#edge-type').selectOption('informiert');
+  await expect(page.locator('#edge-sentence')).toContainText('informiert');
+  await expect(page.locator('#edge-guidance')).toContainText('ersetzen keine fachliche Prüfung');
+  expect(await page.locator('#edge-list .edge-row').count()).toBe(count);
+  await page.locator('#add-edge').click();
+  await expect(page.locator('#edge-list .edge-row')).toHaveCount(count+1);
+});
+
+test('field hints are accessible plain text and cannot turn model descriptions into markup', async ({page}) => {
+  await page.route('**/api/cases/*',async route=>{
+    const response=await route.fetch();
+    const model=await response.json();
+    model.editing_profile.fields.question.description='<b>Eigenes Testfeld</b>';
+    await route.fulfill({response,json:model});
+  });
+  await page.goto('/');
+  await expect(page.locator('#case-title')).toContainText('Künstlicher Fall');
+  await page.locator('[data-area=edit]').click();
+  await page.locator('.tree-node').first().click();
+  await page.locator('#edit-node').click();
+  const control=page.getByLabel('Offene Fachfrage',{exact:true});
+  await expect(control).toBeEnabled();
+  await expect(control).toHaveAccessibleDescription('<b>Eigenes Testfeld</b>');
+  await expect(page.locator('#node-form .field-guidance b')).toHaveCount(0);
+  await control.fill('Eigene künstliche Fachfrage');
+  await expect(control).toHaveValue('Eigene künstliche Fachfrage');
+});
 test.beforeEach(async ({context,request})=>{
   await context.addCookies([{name:'nac_session',value:'browser-session',url:'http://127.0.0.1:18767'}]);
   const status=await context.request.get('/api/status');expect(status.status()).toBe(200);

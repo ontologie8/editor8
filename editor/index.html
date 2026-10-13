@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/style.css">
   <script src="/recovery.js" defer></script>
   <script src="/comparison.js" defer></script>
+  <script src="/guidance.js" defer></script>
   <script src="/app.js" defer></script>
   <script src="/interaction.js" defer></script>
 </head>
@@ -113,6 +114,8 @@
         <div class="edge-choose"><span>Zu</span><button id="edge-to-choose" type="button" aria-haspopup="dialog" aria-controls="case-node-search">Ziel wählen</button><input id="edge-to" type="hidden"></div>
         <button id="add-edge" type="button">Hinzufügen</button>
       </div>
+      <p id="edge-sentence" class="connection-sentence" aria-live="polite"></p>
+      <p id="edge-guidance" class="field-guidance"></p>
       </details>
     </section>
     <section class="card submission" data-view="pruefung" hidden>

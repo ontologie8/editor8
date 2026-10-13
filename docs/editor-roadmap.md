@@ -1,5 +1,7 @@
 # Roadmap für editor8
 
+**Schema und Bearbeitungshilfen, 13.10.2026:** Der bestätigte Umfang ist die Pflege von Schemadefinitionen und Fachmodellen; Datensätze bleiben in den nutzenden Anwendungen. Das führende Projekt `ontologie8/schema` verwendet JSON Schema 2020-12. Das aktuelle Paket ergänzt den bestehenden NaC-Adapter um Feld-, Typ- und Beziehungshinweise sowie eine deutsche Verbindungsvorschau. Der JSON-/Paketadapter und die geführte Pflege von Schemadefinitionen sind noch offen. [Eigenständige Funktionen und schema-Anschluss](development/eigenstaendige-funktionen.md) nennt den geprüften Quellstand, die Akzeptanzbedingungen und Folgepakete. Diese Umsetzungserklärung ersetzt keinen Azure-Auslieferungsnachweis.
+
 **IAM-Aktualisierung, 07.10.2026:** Der beauftragte Entra/GitHub-Weg ist implementiert und synthetisch prüfbar. Benutzer und Bestandsrollen liegen im neuen Betriebsmodus außerhalb des Images. Einrichtung der Cloudrichtlinien, bestätigte Gastadressen, produktive Aktivierung und reale Anmeldung sind noch offen; [IAM-Implementierung](iam-implementation.md) führt den konkreten Umfang und die Abnahme. Die folgenden älteren Planungsabsätze bleiben als Herkunft erhalten.
 
 Stand: 06.10.2026. editor8 pflegt Software, Oberfläche, Anmeldung, Datenadapter und Betrieb. Fachmodelle liegen im ausdrücklich gewählten Datenrepository. Die 20 kanonischen Vorgangsarten gehören zu `notariat8/ontology`; der Editor übernimmt die Fallanzahl aus dem jeweiligen Katalog.
@@ -28,7 +30,7 @@ GitHub bleibt die versionierte Datenquelle. Turtle ist Pflegequelle, Mermaid wir
 | **P1 – Bedienqualität und Wartbarkeit** | Office-Struktur, kompakte Desktopmaße, fachliche Hilfe, Hover-/Fokushinweise und Kontextmenüs; eigene Interaktions- und Wiederaufnahmeschicht; offene Modelleingaben und Begründungen nach Neuladen oder erneuter Anmeldung prüfen und wieder aufnehmen | Übrige `app.js` in klare Zustände und Ansichten ordnen; weitere Fehler und leere Ansichten prüfen; abschließende Bedienabnahme |
 | **P2 – Änderungsfolgen sichtbar machen** | Text und grafischer Vorher/Nachher-Vergleich aus tatsächlichen RDF-Differenzen für Fallmodelle und gemeinsame Begriffe, einschließlich direktem Umfeld und Prüfkorb | Darstellung großer Änderungsumfänge und fachliche Verständlichkeit gemeinsam abnehmen; technische Verwendung bleibt von tatsächlicher Aktennutzung getrennt |
 | **P3 – Rückfragen am Gegenstand** | Prüfkorb, begründete Änderungswünsche und commitgebundene Freigabe | Direkt zum betroffenen Baustein oder zur Beziehung springen; Rückfragen mit stabilen Kennungen und geprüftem Stand verbinden |
-| **P4 – Geführte deutsche Formulierungen** | Strukturierte Felder und Beziehungsauswahl | Kontrollierte Sätze aus vorhandenen Bausteinen und zulässigen Beziehungen; fachlich freigegebene Anzeigenamen |
+| **P4 – Geführte deutsche Formulierungen** | Strukturierte Felder, Erläuterungen aus dem ausgewählten Vokabular und deutsche Verbindungsvorschau mit Duplikaterkennung | Fachlich freigegebene Anzeigenamen; Anschluss an veröffentlichte schema-Definitionen |
 | **P5 – SHACL pflegen** | Als spätere Prüfschicht geplant | Regelkatalog und Shapes-Vertrag entscheiden; Regeln im Datenrepository versionieren und Befunde im Editor erklären |
 
 ### P0: echter Schreib- und Prüfweg
